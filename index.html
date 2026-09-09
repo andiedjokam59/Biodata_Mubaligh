@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Biodata Muballigh - Dashboard Tawangmangu</title>
     
-    <!-- Meta PWA -->
-    <meta name="theme-color" content="#0284c7">
+    <!-- Meta PWA & Favicon Logo Insan Qurani -->
+    <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+    <link rel="apple-touch-icon" href="logo insan qurany.png">
+    <link rel="icon" type="image/png" href="logo insan qurany.png">
 
     <!-- Tailwind CSS & Font Inter -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Supabase & SheetJS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -22,15 +22,12 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* Shimmer Wave Effect */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        @keyframes customPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.96); }
         }
-        .skeleton {
-            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        .animate-brand {
+            animation: customPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         @media print {
@@ -43,11 +40,39 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen pb-24 antialiased">
 
+    <!-- ELEGANT FULLSCREEN SPLASH SCREEN -->
+    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-between py-12 px-6 transition-opacity duration-500 no-print">
+        <div class="w-full"></div> <!-- Spacer -->
+
+        <!-- Branding Logo Center -->
+        <div class="flex flex-col items-center text-center space-y-4 animate-brand">
+            <div class="relative flex items-center justify-center">
+                <!-- Glowing Effect -->
+                <div class="absolute w-28 h-28 bg-sky-500/20 rounded-full blur-xl"></div>
+                <div class="w-24 h-24 rounded-3xl bg-slate-900/80 border border-slate-700/80 p-3 shadow-2xl flex items-center justify-center relative z-10">
+                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
+                </div>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-tight">Tawangmangu</h1>
+                <p class="text-xs text-sky-400 font-medium tracking-widest uppercase mt-0.5">Forum Muballigh-Muballighot</p>
+            </div>
+        </div>
+
+        <!-- Minimalist Progress Bar -->
+        <div class="w-full max-w-[160px] space-y-2">
+            <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-sky-400 rounded-full animate-pulse w-full"></div>
+            </div>
+            <p class="text-[10px] text-slate-500 text-center font-medium tracking-wider uppercase">Menghubungkan...</p>
+        </div>
+    </div>
+
     <!-- Top Header App Bar -->
     <header class="px-5 pt-5 pb-3 flex justify-between items-center max-w-md mx-auto no-print">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 font-bold">
-                FM
+            <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 p-1.5 flex items-center justify-center shrink-0">
+                <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
             </div>
             <div>
                 <h1 class="text-base font-bold text-white tracking-tight">Tawangmangu</h1>
@@ -65,13 +90,13 @@
         <!-- ================= TAB 1: HOME DASHBOARD ================= -->
         <section id="tab-home" class="tab-content space-y-5">
             
-            <!-- Hero Gradient Card (Statistik Utama) -->
+            <!-- Hero Gradient Card -->
             <div class="rounded-3xl p-6 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-xl shadow-sky-900/30 text-white relative overflow-hidden">
                 <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
                 <div class="flex items-baseline gap-2 mb-4">
-                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">--</h2>
+                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
                     <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personel</span>
                 </div>
 
@@ -96,15 +121,15 @@
             <div class="grid grid-cols-3 gap-2.5">
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-emerald-400 uppercase">Aktif</p>
-                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">--</h4>
+                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
                 </div>
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-amber-400 uppercase">Purna</p>
-                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">--</h4>
+                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
                 </div>
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-rose-400 uppercase">Klp. Kosong</p>
-                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">--</h4>
+                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">0</h4>
                 </div>
             </div>
 
@@ -116,15 +141,7 @@
                 </div>
 
                 <div id="desaMonitoringContainer" class="space-y-3">
-                    <!-- Placeholder Loading Skeleton -->
-                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl space-y-3">
-                        <div class="h-3 w-1/3 skeleton rounded-lg"></div>
-                        <div class="flex flex-wrap gap-1.5">
-                            <div class="h-5 w-16 skeleton rounded-md"></div>
-                            <div class="h-5 w-20 skeleton rounded-md"></div>
-                            <div class="h-5 w-14 skeleton rounded-md"></div>
-                        </div>
-                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Memuat status desa...</div>
                 </div>
             </div>
 
@@ -157,15 +174,7 @@
 
             <!-- Mobile Card View List -->
             <div id="fullListContainer" class="space-y-3">
-                <!-- Skeleton Placeholder -->
-                <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl flex items-center gap-3">
-                    <div class="w-12 h-16 skeleton rounded-xl"></div>
-                    <div class="space-y-2 flex-1">
-                        <div class="h-3 w-1/4 skeleton rounded"></div>
-                        <div class="h-4 w-3/4 skeleton rounded"></div>
-                        <div class="h-3 w-1/2 skeleton rounded"></div>
-                    </div>
-                </div>
+                <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
             </div>
         </section>
 
@@ -494,38 +503,25 @@
         let dataList = [];
         let activeModalType = null;
 
-        // SHOW SKELETON PLACEHOLDERS
-        function showSkeletons() {
+        // SHOW & HIDE SPLASH SCREEN
+        function showSplashScreen() {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                splash.classList.remove('hidden');
+                splash.classList.remove('opacity-0');
+            }
             const refreshIcon = document.getElementById('refreshIcon');
             if (refreshIcon) refreshIcon.classList.add('rotate-180');
-            
-            const desaContainer = document.getElementById('desaMonitoringContainer');
-            if (desaContainer) {
-                desaContainer.innerHTML = `
-                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl space-y-3">
-                        <div class="h-3 w-1/3 skeleton rounded-lg"></div>
-                        <div class="flex flex-wrap gap-1.5">
-                            <div class="h-5 w-16 skeleton rounded-md"></div>
-                            <div class="h-5 w-20 skeleton rounded-md"></div>
-                            <div class="h-5 w-14 skeleton rounded-md"></div>
-                        </div>
-                    </div>
-                `;
-            }
+        }
 
-            const fullContainer = document.getElementById('fullListContainer');
-            if (fullContainer) {
-                fullContainer.innerHTML = `
-                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl flex items-center gap-3">
-                        <div class="w-12 h-16 skeleton rounded-xl"></div>
-                        <div class="space-y-2 flex-1">
-                            <div class="h-3 w-1/4 skeleton rounded"></div>
-                            <div class="h-4 w-3/4 skeleton rounded"></div>
-                            <div class="h-3 w-1/2 skeleton rounded"></div>
-                        </div>
-                    </div>
-                `;
+        function hideSplashScreen() {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                splash.classList.add('opacity-0');
+                setTimeout(() => splash.classList.add('hidden'), 500);
             }
+            const refreshIcon = document.getElementById('refreshIcon');
+            if (refreshIcon) refreshIcon.classList.remove('rotate-180');
         }
 
         // DROPDOWN DINAMIS KELOMPOK
@@ -649,9 +645,9 @@
             return dateStr ? new Date(dateStr).getFullYear() : null;
         }
 
-        // FETCH DATA FROM SUPABASE
+        // FETCH DATA FROM SUPABASE WITH SPLASH SCREEN
         window.fetchBiodata = async function() {
-            showSkeletons();
+            showSplashScreen();
             try {
                 const { data, error } = await supabase
                     .from('muballigh_biodata')
@@ -669,8 +665,7 @@
                 console.error(err);
                 showModal({ type: 'error', title: 'Gagal Memuat', message: err.message });
             } finally {
-                const refreshIcon = document.getElementById('refreshIcon');
-                if (refreshIcon) refreshIcon.classList.remove('rotate-180');
+                setTimeout(hideSplashScreen, 600);
             }
         };
 
@@ -838,6 +833,8 @@
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('edit_id').value;
             btn.disabled = true;
+
+            showSplashScreen();
 
             try {
                 let fotoUrl = document.getElementById('existing_foto_url').value || null;
@@ -1055,7 +1052,7 @@
             });
         };
 
-        // PEMANGGILAN OTOMATIS SAAT APLIKASI PERTAMA KALI DIBUKA
+        // PEMANGGILAN OTOMATIS SAAT PERTAMA KALI MEMBUKA APLIKASI
         document.addEventListener('DOMContentLoaded', fetchBiodata);
     </script>
 </body>
