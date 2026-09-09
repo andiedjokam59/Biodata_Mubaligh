@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Biodata Muballigh - Dashboard Tawangmangu</title>
+    
+    <!-- Meta PWA -->
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+
+    <!-- Tailwind CSS & Font Inter -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase & SheetJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-24 antialiased">
+
+    <!-- Top Header App Bar -->
+    <header class="px-5 pt-5 pb-3 flex justify-between items-center max-w-md mx-auto no-print">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 font-bold">
+                FM
+            </div>
+            <div>
+                <h1 class="text-base font-bold text-white tracking-tight">Tawangmangu</h1>
+                <p class="text-[10px] text-slate-400">Forum Muballigh-Muballighot</p>
+            </div>
+        </div>
+        <button onclick="fetchBiodata()" title="Refresh Data" class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:scale-95 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
+    </header>
+
+    <!-- Main Content App Container -->
+    <main class="max-w-md mx-auto px-4 space-y-5 no-print">
+
+        <!-- ================= TAB 1: HOME DASHBOARD ================= -->
+        <section id="tab-home" class="tab-content space-y-5">
+            
+            <!-- Hero Gradient Card (Statistik Utama) -->
+            <div class="rounded-3xl p-6 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-xl shadow-sky-900/30 text-white relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
+                <div class="flex items-baseline gap-2 mb-4">
+                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personel</span>
+                </div>
+
+                <!-- Quick Action Buttons -->
+                <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
+                    <button onclick="switchTab('input')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
+                        <span class="text-base">➕</span>
+                        <span>Tambah</span>
+                    </button>
+                    <button onclick="switchTab('daftar')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
+                        <span class="text-base">📋</span>
+                        <span>Daftar</span>
+                    </button>
+                    <button onclick="exportToExcel()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
+                        <span class="text-base">📥</span>
+                        <span>Export</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Monitoring Cards (Purna & Kelompok Kosong) -->
+            <div class="grid grid-cols-3 gap-2.5">
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
+                    <p class="text-[9px] font-bold text-emerald-400 uppercase">Aktif</p>
+                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
+                    <p class="text-[9px] font-bold text-amber-400 uppercase">Purna</p>
+                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
+                    <p class="text-[9px] font-bold text-rose-400 uppercase">Klp. Kosong</p>
+                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">0</h4>
+                </div>
+            </div>
+
+            <!-- Monitoring Sebaran Kelompok Per Desa -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center px-1">
+                    <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Sebaran Tugas Per Desa</h3>
+                    <span class="text-[10px] text-slate-400">Total 38 Kelompok</span>
+                </div>
+
+                <div id="desaMonitoringContainer" class="space-y-3">
+                    <div class="p-4 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Memuat status desa...</div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= TAB 2: DAFTAR BIODATA ================= -->
+        <section id="tab-daftar" class="tab-content hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-white">Daftar Biodata</h2>
+                <span id="badgeCount" class="text-xs bg-sky-500/20 text-sky-400 font-semibold px-2.5 py-1 rounded-full border border-sky-500/30">0 Data</span>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="space-y-2">
+                <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-sky-500 capitalize">
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="filterStatus" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 outline-none focus:border-sky-500">
+                        <option value="">-- Semua Status --</option>
+                        <option value="AKTIF">Tugas Aktif</option>
+                        <option value="PURNA">Purna Tugas</option>
+                    </select>
+
+                    <select id="filterTahun" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 outline-none focus:border-sky-500">
+                        <option value="">-- Semua Tahun --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Mobile Card View List -->
+            <div id="fullListContainer" class="space-y-3">
+                <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: INPUT / EDIT DATA ================= -->
+        <section id="tab-input" class="tab-content hidden">
+            <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 space-y-5">
+                <div class="flex justify-between items-center border-b border-slate-700/80 pb-3">
+                    <h3 id="formTitle" class="text-sm font-bold text-sky-400 flex items-center gap-2">
+                        <span>📝</span> Formulir Biodata
+                    </h3>
+                    <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded-lg">
+                        Batal
+                    </button>
+                </div>
+
+                <form id="biodataForm" class="space-y-5 text-xs">
+                    <input type="hidden" id="edit_id">
+                    <input type="hidden" id="existing_foto_url">
+
+                    <!-- Seksi D: Penempatan Tugas -->
+                    <div class="space-y-3">
+                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
+                        
+                        <div>
+                            <label class="block text-slate-400 mb-1">Status Tugasan *</label>
+                            <select id="status_tugas" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 font-semibold">
+                                <option value="AKTIF">🟢 AKTIF (Sedang Bertugas)</option>
+                                <option value="PURNA">🟡 PURNA (Sudah Selesai Tugas)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1">Pilih Desa Penempatan *</label>
+                            <select id="penempatan_desa" required onchange="updateKelompokOptions()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                                <option value="">-- Pilih Desa --</option>
+                                <option value="Desa Krangean">Desa Krangean</option>
+                                <option value="Desa Kaltara">Desa Kaltara</option>
+                                <option value="Desa Karsel">Desa Karsel</option>
+                                <option value="Desa Bandardawung">Desa Bandardawung</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1">Pilih Kelompok Penempatan *</label>
+                            <select id="penempatan_kelompok" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                                <option value="">-- Pilih Desa Terlebih Dahulu --</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tanggal Mulai Tugas</label>
+                                <input type="date" id="tanggal_mulai_tugas" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tanggal Selesai Tugas</label>
+                                <input type="date" id="tanggal_selesai_tugas" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seksi A: Identitas -->
+                    <div class="space-y-3">
+                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">A. Identitas Utama</p>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nomor Induk</label>
+                            <input type="text" id="nomor_induk" placeholder="Contoh: P033" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nama Lengkap *</label>
+                            <input type="text" id="nama_lengkap" required placeholder="Sesuai KTP" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Nama Panggilan</label>
+                                <input type="text" id="nama_panggilan" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Pendidikan</label>
+                                <input type="text" id="pendidikan_terakhir" placeholder="SMP/SMA" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 uppercase">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tempat Lahir</label>
+                                <input type="text" id="tempat_lahir" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tanggal Lahir</label>
+                                <input type="date" id="tanggal_lahir" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Unggah Foto 3x4</label>
+                            <input type="file" id="foto_input" accept="image/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-slate-300">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">RT/RW</label>
+                                <input type="text" id="alamat_rt_rw" placeholder="005/011" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Desa/Kelurahan</label>
+                                <input type="text" id="alamat_desa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Kecamatan</label>
+                                <input type="text" id="alamat_kecamatan" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Kabupaten</label>
+                                <input type="text" id="alamat_kabupaten" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seksi B -->
+                    <div class="space-y-3">
+                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">B. Pengajian Asal & Tugasan</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Kelompok</label>
+                                <input type="text" id="kelompok_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Desa</label>
+                                <input type="text" id="desa_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Daerah</label>
+                                <input type="text" id="daerah_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Alumni Pondok</label>
+                                <input type="text" id="alumni_pondok" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Tugasan Ke-</label>
+                                <input type="number" id="tugasan_ke" value="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                            </div>
+                        </div>
+                        <div class="space-y-2 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50">
+                            <label class="block text-slate-400">Materi Khatam:</label>
+                            <label class="flex items-center gap-2 text-slate-200">
+                                <input type="checkbox" id="materi_quran_himpunan" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
+                                <span>Qur'an + Himpunan</span>
+                            </label>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="materi_hadist_besar" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
+                                <input type="text" id="materi_hadist_besar_detail" placeholder="Detail Hadist Besar..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-slate-100 outline-none capitalize">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seksi C -->
+                    <div class="space-y-3">
+                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">C. Kesehatan & ORTU</p>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Penyakit Pernah Diderita</label>
+                            <input type="text" id="penyakit_diderita" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1">Nama Ayah</label>
+                                <input type="text" id="nama_ayah" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1">Nama Ibu</label>
+                                <input type="text" id="nama_ibu" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Alamat Lengkap ORTU</label>
+                            <input type="text" id="alamat_orang_tua" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">No. Telp/HP ORTU</label>
+                            <input type="text" id="no_telp_orang_tua" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSubmit" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition active:scale-98">
+                        Simpan Data Biodata
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FIXED BOTTOM NAVIGATION BAR -->
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 z-30 no-print">
+        <div class="max-w-md mx-auto flex justify-around items-center py-2 px-3">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 text-sky-400 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[10px] font-semibold">Home</span>
+            </button>
+            <button onclick="switchTab('daftar')" id="nav-daftar" class="flex flex-col items-center gap-1 text-slate-500 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span class="text-[10px] font-semibold">Daftar</span>
+            </button>
+            <button onclick="switchTab('input')" id="nav-input" class="flex flex-col items-center gap-1 text-slate-500 transition">
+                <div class="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center -mt-4 shadow-lg shadow-sky-500/30">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </div>
+                <span class="text-[10px] font-semibold">Input</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- AREA PRINT DETAIL -->
+    <div id="printArea" class="hidden text-slate-900">
+        <div class="border-b-2 border-black pb-3 mb-6 text-center">
+            <h2 class="text-xl font-bold uppercase tracking-wide">FORUM MUBALLIGH-MUBALLIGHOT TUGASAN</h2>
+            <h3 class="text-lg font-bold uppercase tracking-wide">DAERAH TAWANGMANGU</h3>
+            <p class="text-xs">Sekretariat: Sekuwung, Karanglo, Tawangmangu, 57792</p>
+        </div>
+
+        <div class="flex justify-between items-start mb-6 gap-4">
+            <div class="space-y-1.5 text-sm flex-1">
+                <h3 class="font-bold text-base mb-3 underline">A. IDENTITAS MUBALLIGHOT</h3>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">1. Nomor Induk</span><span>:</span><span id="view_nomor_induk"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">2. Nama Lengkap</span><span>:</span><span id="view_nama_lengkap" class="font-bold"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">3. Nama Panggilan</span><span>:</span><span id="view_nama_panggilan"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">4. TTL</span><span>:</span><span id="view_ttl"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">5. Alamat Lengkap</span><span>:</span><span id="view_alamat"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">6. Pendidikan Terakhir</span><span>:</span><span id="view_pendidikan"></span></div>
+            </div>
+            <div class="w-32 h-44 border-2 border-slate-400 p-1 bg-white shrink-0">
+                <img id="view_foto" class="w-full h-full object-cover" src="" alt="Foto 3x4">
+            </div>
+        </div>
+
+        <div class="space-y-1.5 text-sm mb-6">
+            <h3 class="font-bold text-base mb-3 underline">B. PENGAJIAN ASAL & TUGASAN</h3>
+            <p class="font-medium mb-1">7. Alamat Pengajian Asal:</p>
+            <div class="ml-4 space-y-1 border-l-2 border-slate-300 pl-3 mb-2">
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Kelompok</span><span>:</span><span id="view_kelompok_asal"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Desa</span><span>:</span><span id="view_desa_asal"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Daerah</span><span>:</span><span id="view_daerah_asal"></span></div>
+            </div>
+            <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">8. Alumni Pondok</span><span>:</span><span id="view_alumni"></span></div>
+            <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">9. Tugasan Yang Ke</span><span>:</span><span><span id="view_tugasan_ke"></span> &nbsp;|&nbsp; <strong>Daerah:</strong> <span id="view_daerah_tugasan"></span></span></div>
+            <p class="font-medium mt-2 mb-1">10. Materi Yang Dikhatamkan:</p>
+            <div class="ml-4 space-y-1 border-l-2 border-slate-300 pl-3">
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Qur'an + Himpunan</span><span>:</span><span id="view_quran"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Hadist Besar</span><span>:</span><span id="view_hadist"></span></div>
+            </div>
+        </div>
+
+        <div class="space-y-1.5 text-sm mb-6">
+            <h3 class="font-bold text-base mb-3 underline">C. RIWAYAT KESEHATAN & ORANG TUA</h3>
+            <div class="grid grid-cols-[180px_10px_1fr] items-start"><span class="font-medium">11. Riwayat Kesehatan</span><span>:</span><span id="view_penyakit"></span></div>
+            <p class="font-medium mt-3 mb-1">Data Orang Tua:</p>
+            <div class="ml-4 space-y-1 border-l-2 border-slate-300 pl-3">
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>1. Nama Ayah</span><span>:</span><span id="view_ayah"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>2. Nama Ibu</span><span>:</span><span id="view_ibu"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-start"><span>3. Alamat Lengkap</span><span>:</span><span id="view_alamat_ortu"></span></div>
+                <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>4. No. Telp/HP</span><span>:</span><span id="view_telp_ortu"></span></div>
+            </div>
+        </div>
+
+        <div class="space-y-1.5 text-sm mb-8">
+            <h3 class="font-bold text-base mb-3 underline">D. PENEMPATAN TUGAS</h3>
+            <div class="grid grid-cols-[180px_10px_1fr] items-center"><span class="font-medium">Kelompok Penempatan</span><span>:</span><span id="view_penempatan" class="font-semibold"></span></div>
+            <div class="grid grid-cols-[180px_10px_1fr] items-center"><span class="font-medium">Mulai Tanggal</span><span>:</span><span id="view_tgl_mulai"></span></div>
+            <div class="grid grid-cols-[180px_10px_1fr] items-center"><span class="font-medium">Selesai Tanggal</span><span>:</span><span id="view_tgl_selesai"></span></div>
+        </div>
+
+        <div class="flex justify-end gap-2 no-print border-t pt-4">
+            <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Tutup</button>
+            <button onclick="window.print()" class="px-4 py-2 bg-sky-600 text-white font-semibold text-sm rounded-lg">Cetak Lembar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL -->
+    <div id="viewModalOverlay" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print">
+        <div class="bg-white text-slate-900 rounded-3xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" id="modalViewContent"></div>
+    </div>
+
+    <!-- MODAL NOTIF -->
+    <div id="customModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-slate-800 border border-slate-700 text-slate-100 rounded-3xl max-w-xs w-full p-6 text-center">
+            <div id="modalIcon" class="mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full"></div>
+            <h3 id="modalTitle" class="text-base font-bold mb-1"></h3>
+            <p id="modalMessage" class="text-xs text-slate-400 mb-5"></p>
+            <div id="modalActions" class="flex gap-2 justify-center"></div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript Utama -->
+    <script type="module">
+        import imageCompression from 'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/+esm';
+
+        // Inisialisasi Supabase
+        const SUPABASE_URL = 'https://xijlyydfogbkcctlycsb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpamx5eWRmb2dia2NjdGx5Y3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzAxODYsImV4cCI6MjA5NzcwNjE4Nn0.JwqYXWEt2yiLioI1o9qZ3KRrak2rtzO1Tp0eN7AuAm4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // MASTER DATA TAWANGMANGU (4 Desa & 38 Kelompok)
+        const MASTER_DESA = {
+            "Desa Krangean": [
+                "Nglegok Atas", "Nglegok Bawah", "Krangean Utara", "Krangean Selatan", 
+                "Tawang 1", "Ngreso", "Gondosuli", "Watusambang", "Somokado", "Tawang 2", "Gondang Bomo"
+            ],
+            "Desa Kaltara": [
+                "Plombokan", "Cepogo", "Dukuh", "Sadakan Lor", "Sekuwung", 
+                "Sadakan Kidul 1", "Sadakan Kidul 2", "Pandeyan"
+            ],
+            "Desa Karsel": [
+                "Blimbing 1", "Karanglo", "Pedan Utara", "Pedan Selatan", 
+                "Jabalkanil", "Blimbing 2", "Blimbing 3"
+            ],
+            "Desa Bandardawung": [
+                "Dawung Bawah", "Gondang Barat", "Dawung Atas", "Gondang Timur", 
+                "Bandardawung Timur", "Ngasem", "Pelas Timur", "Gamping", 
+                "Pelas Barat", "Bandardawung Barat", "Gondang Tengah", "Dawung Tengah"
+            ]
+        };
+
+        let dataList = [];
+        let activeModalType = null;
+
+        // DROPDOWN DINAMIS KELOMPOK
+        window.updateKelompokOptions = () => {
+            const desaSelect = document.getElementById('penempatan_desa').value;
+            const kelompokSelect = document.getElementById('penempatan_kelompok');
+            kelompokSelect.innerHTML = '<option value="">-- Pilih Kelompok --</option>';
+
+            if (desaSelect && MASTER_DESA[desaSelect]) {
+                MASTER_DESA[desaSelect].forEach(klp => {
+                    const opt = document.createElement('option');
+                    opt.value = klp;
+                    opt.textContent = klp;
+                    kelompokSelect.appendChild(opt);
+                });
+            } else {
+                kelompokSelect.innerHTML = '<option value="">-- Pilih Desa Terlebih Dahulu --</option>';
+            }
+        };
+
+        // HELPER STATUS TUGAS (MANUAL)
+        function getStatusTugas(item) {
+            return item.status_tugas || 'AKTIF';
+        }
+
+        // SWITCH TAB
+        window.switchTab = (tabName) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            ['home', 'daftar', 'input'].forEach(nav => {
+                const btn = document.getElementById(`nav-${nav}`);
+                if (nav === tabName) {
+                    btn.className = "flex flex-col items-center gap-1 text-sky-400 transition";
+                } else {
+                    btn.className = "flex flex-col items-center gap-1 text-slate-500 transition";
+                }
+            });
+        };
+
+        // PREVENT BACK HISTORY
+        function pushModalState(type) {
+            activeModalType = type;
+            history.pushState({ modalOpen: true, type: type }, "");
+        }
+
+        window.addEventListener('popstate', () => {
+            if (activeModalType === 'view') closeViewModal(false);
+            else if (activeModalType === 'notif') closeCustomModal(false);
+            else if (activeModalType === 'edit') resetForm(false);
+        });
+
+        // MODAL NOTIF
+        function showModal({ type = 'info', title, message, onConfirm = null }) {
+            const modal = document.getElementById('customModal');
+            const iconContainer = document.getElementById('modalIcon');
+            const titleEl = document.getElementById('modalTitle');
+            const msgEl = document.getElementById('modalMessage');
+            const actionsEl = document.getElementById('modalActions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            actionsEl.innerHTML = '';
+
+            if (type === 'success') {
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400';
+                iconContainer.innerHTML = '✓';
+            } else if (type === 'error') {
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-red-500/20 text-red-400';
+                iconContainer.innerHTML = '✕';
+            } else if (type === 'confirm') {
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-amber-500/20 text-amber-400';
+                iconContainer.innerHTML = '!';
+            }
+
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = 'px-3 py-2 bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl flex-1';
+                btnCancel.textContent = 'Batal';
+                btnCancel.onclick = () => closeCustomModal(true);
+
+                const btnOk = document.createElement('button');
+                btnOk.className = 'px-3 py-2 bg-red-600 text-white text-xs font-semibold rounded-xl flex-1';
+                btnOk.textContent = 'Ya, Hapus';
+                btnOk.onclick = () => { closeCustomModal(true); if (onConfirm) onConfirm(); };
+
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnOk);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = 'px-6 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl w-full';
+                btnOk.textContent = 'OK';
+                btnOk.onclick = () => closeCustomModal(true);
+                actionsEl.appendChild(btnOk);
+            }
+
+            pushModalState('notif');
+            modal.classList.remove('hidden');
+        }
+
+        window.closeCustomModal = (triggerBack = true) => {
+            const modal = document.getElementById('customModal');
+            if (!modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                activeModalType = null;
+                if (triggerBack && history.state && history.state.modalOpen) history.back();
+            }
+        };
+
+        // HELPERS
+        function toTitleCase(str) {
+            return str ? str.toLowerCase().replace(/(?:^|\s|-)\S/g, a => a.toUpperCase()) : '';
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function getYear(dateStr) {
+            return dateStr ? new Date(dateStr).getFullYear() : null;
+        }
+
+        // FETCH DATA FROM SUPABASE
+        document.addEventListener('DOMContentLoaded', fetchBiodata);
+
+        async function fetchBiodata() {
+            const { data, error } = await supabase
+                .from('muballigh_biodata')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            dataList = data;
+            updateDashboardStats();
+            renderDesaMonitoring();
+            renderFullList(dataList);
+            populateFilterTahun();
+        }
+
+        // HITUNG STATISTIK AKTIF, PURNA, & KELOMPOK KOSONG
+        function updateDashboardStats() {
+            const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
+            const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA');
+
+            document.getElementById('stat-aktif-hero').textContent = aktifList.length;
+            document.getElementById('stat-aktif-count').textContent = aktifList.length;
+            document.getElementById('stat-purna-count').textContent = purnaList.length;
+
+            // Hitung Kelompok Kosong dari Total 38 Kelompok Master
+            const filledKelompokSet = new Set(aktifList.map(d => d.penempatan_kelompok).filter(Boolean));
+            let totalKelompokMaster = 0;
+            Object.values(MASTER_DESA).forEach(list => totalKelompokMaster += list.length);
+
+            const kosongCount = totalKelompokMaster - filledKelompokSet.size;
+            document.getElementById('stat-kosong-count').textContent = Math.max(0, kosongCount);
+            document.getElementById('badgeCount').textContent = `${dataList.length} Total Data`;
+        }
+
+        // MONITORING DESA & KELOMPOK
+        function renderDesaMonitoring() {
+            const container = document.getElementById('desaMonitoringContainer');
+            container.innerHTML = '';
+
+            const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
+            const activeKelompokSet = new Set(aktifList.map(d => d.penempatan_kelompok).filter(Boolean));
+
+            Object.keys(MASTER_DESA).forEach(namaDesa => {
+                const kelompokList = MASTER_DESA[namaDesa];
+                const terisiCount = kelompokList.filter(k => activeKelompokSet.has(k)).length;
+                const kosongCount = kelompokList.length - terisiCount;
+
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-800/90 border border-slate-700/80 rounded-2xl space-y-2.5";
+                
+                let kelompokBadgesHTML = kelompokList.map(k => {
+                    const isTerisi = activeKelompokSet.has(k);
+                    if (isTerisi) {
+                        return `<span class="inline-block text-[9px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">${k}</span>`;
+                    } else {
+                        return `<span class="inline-block text-[9px] font-semibold bg-rose-500/10 text-rose-400/70 border border-rose-500/20 px-2 py-0.5 rounded-md">${k} (Kosong)</span>`;
+                    }
+                }).join(' ');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                        <h4 class="text-xs font-bold text-sky-400">${namaDesa}</h4>
+                        <div class="text-[10px] space-x-1">
+                            <span class="text-emerald-400 font-bold">${terisiCount} Terisi</span>
+                            <span class="text-slate-500">|</span>
+                            <span class="text-rose-400 font-bold">${kosongCount} Kosong</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-1 pt-1">
+                        ${kelompokBadgesHTML}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // RENDER LIST UNTUK TAB DAFTAR
+        function renderFullList(data) {
+            const container = document.getElementById('fullListContainer');
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                container.innerHTML = `<div class="p-6 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Data tidak ditemukan.</div>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const status = getStatusTugas(item);
+                const statusBadge = status === 'AKTIF' 
+                    ? `<span class="text-[9px] font-bold uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">AKTIF</span>`
+                    : `<span class="text-[9px] font-bold uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">PURNA</span>`;
+
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-800/90 border border-slate-700/80 rounded-2xl space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-12 h-16 object-cover rounded-xl border border-slate-700">
+                        <div class="space-y-0.5 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                ${statusBadge}
+                                <span class="text-[9px] text-slate-400 font-semibold">${item.nomor_induk || ''}</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-white pt-1">${toTitleCase(item.nama_lengkap)}</h4>
+                            <p class="text-[10px] text-slate-400">Klp: <strong class="text-slate-200">${toTitleCase(item.penempatan_kelompok) || '-'}</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-700/50">
+                        <button onclick="viewData('${item.id}')" class="px-2.5 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-semibold rounded-lg">View</button>
+                        <button onclick="printData('${item.id}')" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold rounded-lg">Cetak</button>
+                        <button onclick="editData('${item.id}')" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold rounded-lg">Edit</button>
+                        <button onclick="deleteData('${item.id}')" class="px-2.5 py-1 bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-semibold rounded-lg">Hapus</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // FILTER CONTROL
+        function populateFilterTahun() {
+            const select = document.getElementById('filterTahun');
+            select.innerHTML = '<option value="">-- Semua Tahun --</option>';
+            const list = [...new Set(dataList.map(d => getYear(d.tanggal_mulai_tugas)).filter(Boolean))].sort((a,b) => b - a);
+            list.forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = `Tahun ${y}`;
+                select.appendChild(opt);
+            });
+        }
+
+        function applyFilter() {
+            const kw = document.getElementById('searchInput').value.toLowerCase();
+            const yr = document.getElementById('filterTahun').value;
+            const st = document.getElementById('filterStatus').value;
+
+            const res = dataList.filter(i => {
+                const matchKw = (i.nama_lengkap && i.nama_lengkap.toLowerCase().includes(kw)) ||
+                                (i.nomor_induk && i.nomor_induk.toLowerCase().includes(kw));
+                const matchYr = !yr || (getYear(i.tanggal_mulai_tugas) == yr);
+                const matchSt = !st || (getStatusTugas(i) === st);
+                return matchKw && matchYr && matchSt;
+            });
+
+            renderFullList(res);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilter);
+        document.getElementById('filterTahun').addEventListener('change', applyFilter);
+        document.getElementById('filterStatus').addEventListener('change', applyFilter);
+
+        // EXPORT EXCEL
+        window.exportToExcel = () => {
+            if (dataList.length === 0) return showModal({ type: 'error', title: 'Kosong', message: 'Tidak ada data untuk diexport.' });
+
+            const exp = dataList.map((item, i) => ({
+                "No": i + 1,
+                "Status Tugas": getStatusTugas(item),
+                "No. Induk": item.nomor_induk || '-',
+                "Nama Lengkap": toTitleCase(item.nama_lengkap),
+                "Kelompok Penempatan": toTitleCase(item.penempatan_kelompok) || '-',
+                "Mulai Tugas": item.tanggal_mulai_tugas || '-',
+                "Selesai Tugas": item.tanggal_selesai_tugas || '-',
+                "Daerah Asal": toTitleCase(item.daerah_asal) || '-',
+                "No. Telp Ortu": item.no_telp_orang_tua || '-'
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(exp);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Data Muballigh");
+            XLSX.writeFile(wb, `Data_Muballigh_Tawangmangu_${Date.now()}.xlsx`);
+        };
+
+        // SUBMIT FORM
+        document.getElementById('biodataForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const editId = document.getElementById('edit_id').value;
+            btn.disabled = true;
+
+            try {
+                let fotoUrl = document.getElementById('existing_foto_url').value || null;
+                const file = document.getElementById('foto_input').files[0];
+
+                if (file) {
+                    const comp = await imageCompression(file, { maxSizeMB: 0.15, maxWidthOrHeight: 800, useWebWorker: true });
+                    const fname = `${Date.now()}.${file.name.split('.').pop()}`;
+                    const { error: upErr } = await supabase.storage.from('foto-muballigh').upload(fname, comp);
+                    if (upErr) throw upErr;
+                    fotoUrl = supabase.storage.from('foto-muballigh').getPublicUrl(fname).data.publicUrl;
+                }
+
+                const payload = {
+                    status_tugas: document.getElementById('status_tugas').value,
+                    nomor_induk: document.getElementById('nomor_induk').value.toUpperCase(),
+                    nama_lengkap: toTitleCase(document.getElementById('nama_lengkap').value),
+                    nama_panggilan: toTitleCase(document.getElementById('nama_panggilan').value),
+                    tempat_lahir: toTitleCase(document.getElementById('tempat_lahir').value),
+                    tanggal_lahir: document.getElementById('tanggal_lahir').value || null,
+                    foto_url: fotoUrl,
+                    alamat_rt_rw: document.getElementById('alamat_rt_rw').value,
+                    alamat_desa: toTitleCase(document.getElementById('alamat_desa').value),
+                    alamat_kecamatan: toTitleCase(document.getElementById('alamat_kecamatan').value),
+                    alamat_kabupaten: toTitleCase(document.getElementById('alamat_kabupaten').value),
+                    pendidikan_terakhir: document.getElementById('pendidikan_terakhir').value.toUpperCase(),
+                    kelompok_asal: toTitleCase(document.getElementById('kelompok_asal').value),
+                    desa_asal: toTitleCase(document.getElementById('desa_asal').value),
+                    daerah_asal: toTitleCase(document.getElementById('daerah_asal').value),
+                    alumni_pondok: toTitleCase(document.getElementById('alumni_pondok').value),
+                    tugasan_ke: parseInt(document.getElementById('tugasan_ke').value) || 1,
+                    materi_quran_himpunan: document.getElementById('materi_quran_himpunan').checked,
+                    materi_hadist_besar: document.getElementById('materi_hadist_besar').checked,
+                    materi_hadist_besar_detail: toTitleCase(document.getElementById('materi_hadist_besar_detail').value),
+                    penyakit_diderita: toTitleCase(document.getElementById('penyakit_diderita').value),
+                    nama_ayah: toTitleCase(document.getElementById('nama_ayah').value),
+                    nama_ibu: toTitleCase(document.getElementById('nama_ibu').value),
+                    alamat_orang_tua: toTitleCase(document.getElementById('alamat_orang_tua').value),
+                    no_telp_orang_tua: document.getElementById('no_telp_orang_tua').value,
+                    penempatan_kelompok: document.getElementById('penempatan_kelompok').value,
+                    tanggal_mulai_tugas: document.getElementById('tanggal_mulai_tugas').value || null,
+                    tanggal_selesai_tugas: document.getElementById('tanggal_selesai_tugas').value || null
+                };
+
+                if (editId) {
+                    const { error } = await supabase.from('muballigh_biodata').update(payload).eq('id', editId);
+                    if (error) throw error;
+                    showModal({ type: 'success', title: 'Berhasil', message: 'Data berhasil diperbarui.' });
+                } else {
+                    const { error } = await supabase.from('muballigh_biodata').insert([payload]);
+                    if (error) throw error;
+                    showModal({ type: 'success', title: 'Berhasil', message: 'Data berhasil ditambahkan.' });
+                }
+
+                resetForm(false);
+                fetchBiodata();
+                switchTab('daftar');
+
+            } catch (err) {
+                showModal({ type: 'error', title: 'Gagal', message: err.message });
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // POPULATE PRINT AREA
+        function populatePrintArea(item) {
+            document.getElementById('view_nomor_induk').textContent = item.nomor_induk || '-';
+            document.getElementById('view_nama_lengkap').textContent = toTitleCase(item.nama_lengkap);
+            document.getElementById('view_nama_panggilan').textContent = toTitleCase(item.nama_panggilan) || '-';
+            document.getElementById('view_ttl').textContent = `${toTitleCase(item.tempat_lahir) || '-'}, ${formatDate(item.tanggal_lahir)}`;
+            document.getElementById('view_alamat').textContent = `Dk. ${toTitleCase(item.alamat_desa)}, RT/RW: ${item.alamat_rt_rw || '-'}, Kec. ${toTitleCase(item.alamat_kecamatan)}, Kab. ${toTitleCase(item.alamat_kabupaten)}, Prop. ${item.alamat_provinsi}`;
+            document.getElementById('view_pendidikan').textContent = item.pendidikan_terakhir || '-';
+            document.getElementById('view_foto').src = item.foto_url || 'https://via.placeholder.com/120x160?text=3x4';
+
+            document.getElementById('view_kelompok_asal').textContent = toTitleCase(item.kelompok_asal) || '-';
+            document.getElementById('view_desa_asal').textContent = toTitleCase(item.desa_asal) || '-';
+            document.getElementById('view_daerah_asal').textContent = toTitleCase(item.daerah_asal) || '-';
+            document.getElementById('view_alumni').textContent = toTitleCase(item.alumni_pondok) || '-';
+            document.getElementById('view_tugasan_ke').textContent = item.tugasan_ke || '1';
+            document.getElementById('view_daerah_tugasan').textContent = toTitleCase(item.daerah_tugasan) || 'Tawangmangu';
+
+            document.getElementById('view_quran').textContent = item.materi_quran_himpunan ? '☑ Ya' : '☐ Tidak';
+            document.getElementById('view_hadist').textContent = item.materi_hadist_besar ? `☑ Ya (${toTitleCase(item.materi_hadist_besar_detail) || '-'})` : '☐ Tidak';
+
+            document.getElementById('view_penyakit').textContent = toTitleCase(item.penyakit_diderita) || 'Tidak ada';
+            document.getElementById('view_ayah').textContent = toTitleCase(item.nama_ayah) || '-';
+            document.getElementById('view_ibu').textContent = toTitleCase(item.nama_ibu) || '-';
+            document.getElementById('view_alamat_ortu').textContent = toTitleCase(item.alamat_orang_tua) || '-';
+            document.getElementById('view_telp_ortu').textContent = item.no_telp_orang_tua || '-';
+
+            document.getElementById('view_penempatan').textContent = toTitleCase(item.penempatan_kelompok) || '-';
+            document.getElementById('view_tgl_mulai').textContent = formatDate(item.tanggal_mulai_tugas);
+            document.getElementById('view_tgl_selesai').textContent = formatDate(item.tanggal_selesai_tugas);
+        }
+
+        window.viewData = (id) => {
+            const item = dataList.find(d => d.id === id);
+            if (!item) return;
+            populatePrintArea(item);
+            document.getElementById('modalViewContent').innerHTML = document.getElementById('printArea').innerHTML;
+            pushModalState('view');
+            document.getElementById('viewModalOverlay').classList.remove('hidden');
+        };
+
+        window.closeViewModal = (triggerBack = true) => {
+            const overlay = document.getElementById('viewModalOverlay');
+            if (!overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+                activeModalType = null;
+                if (triggerBack && history.state && history.state.modalOpen) history.back();
+            }
+        };
+
+        window.printData = (id) => {
+            const item = dataList.find(d => d.id === id);
+            if (!item) return;
+            populatePrintArea(item);
+            document.getElementById('printArea').classList.remove('hidden');
+            window.print();
+            document.getElementById('printArea').classList.add('hidden');
+        };
+
+        window.editData = (id) => {
+            const item = dataList.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('edit_id').value = item.id;
+            document.getElementById('existing_foto_url').value = item.foto_url || '';
+            document.getElementById('status_tugas').value = item.status_tugas || 'AKTIF';
+
+            // Cari Desa berdasarkan Kelompok
+            let foundDesa = "";
+            Object.keys(MASTER_DESA).forEach(desa => {
+                if (MASTER_DESA[desa].includes(item.penempatan_kelompok)) {
+                    foundDesa = desa;
+                }
+            });
+
+            if (foundDesa) {
+                document.getElementById('penempatan_desa').value = foundDesa;
+                updateKelompokOptions();
+                document.getElementById('penempatan_kelompok').value = item.penempatan_kelompok;
+            }
+
+            document.getElementById('nomor_induk').value = item.nomor_induk || '';
+            document.getElementById('nama_lengkap').value = item.nama_lengkap || '';
+            document.getElementById('nama_panggilan').value = item.nama_panggilan || '';
+            document.getElementById('tempat_lahir').value = item.tempat_lahir || '';
+            document.getElementById('tanggal_lahir').value = item.tanggal_lahir || '';
+            document.getElementById('alamat_rt_rw').value = item.alamat_rt_rw || '';
+            document.getElementById('alamat_desa').value = item.alamat_desa || '';
+            document.getElementById('alamat_kecamatan').value = item.alamat_kecamatan || '';
+            document.getElementById('alamat_kabupaten').value = item.alamat_kabupaten || '';
+            document.getElementById('pendidikan_terakhir').value = item.pendidikan_terakhir || '';
+
+            document.getElementById('kelompok_asal').value = item.kelompok_asal || '';
+            document.getElementById('desa_asal').value = item.desa_asal || '';
+            document.getElementById('daerah_asal').value = item.daerah_asal || '';
+            document.getElementById('alumni_pondok').value = item.alumni_pondok || '';
+            document.getElementById('tugasan_ke').value = item.tugasan_ke || 1;
+
+            document.getElementById('materi_quran_himpunan').checked = item.materi_quran_himpunan || false;
+            document.getElementById('materi_hadist_besar').checked = item.materi_hadist_besar || false;
+            document.getElementById('materi_hadist_besar_detail').value = item.materi_hadist_besar_detail || '';
+
+            document.getElementById('penyakit_diderita').value = item.penyakit_diderita || '';
+            document.getElementById('nama_ayah').value = item.nama_ayah || '';
+            document.getElementById('nama_ibu').value = item.nama_ibu || '';
+            document.getElementById('alamat_orang_tua').value = item.alamat_orang_tua || '';
+            document.getElementById('no_telp_orang_tua').value = item.no_telp_orang_tua || '';
+
+            document.getElementById('tanggal_mulai_tugas').value = item.tanggal_mulai_tugas || '';
+            document.getElementById('tanggal_selesai_tugas').value = item.tanggal_selesai_tugas || '';
+
+            document.getElementById('formTitle').innerHTML = `<span>✏️</span> Edit Data Biodata`;
+            document.getElementById('btnSubmit').textContent = 'Simpan Perubahan';
+            document.getElementById('btnCancelEdit').classList.remove('hidden');
+
+            switchTab('input');
+            pushModalState('edit');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.resetForm = (triggerBack = true) => {
+            document.getElementById('biodataForm').reset();
+            document.getElementById('edit_id').value = '';
+            document.getElementById('existing_foto_url').value = '';
+            document.getElementById('status_tugas').value = 'AKTIF';
+            document.getElementById('penempatan_kelompok').innerHTML = '<option value="">-- Pilih Desa Terlebih Dahulu --</option>';
+
+            document.getElementById('formTitle').innerHTML = `<span>📝</span> Formulir Biodata`;
+            document.getElementById('btnSubmit').textContent = 'Simpan Data Biodata';
+            document.getElementById('btnCancelEdit').classList.add('hidden');
+
+            if (activeModalType === 'edit') {
+                activeModalType = null;
+                if (triggerBack && history.state && history.state.modalOpen) history.back();
+            }
+        };
+
+        window.deleteData = (id) => {
+            showModal({
+                type: 'confirm',
+                title: 'Konfirmasi',
+                message: 'Hapus data biodata ini?',
+                onConfirm: async () => {
+                    const { error } = await supabase.from('muballigh_biodata').delete().eq('id', id);
+                    if (error) showModal({ type: 'error', title: 'Gagal', message: error.message });
+                    else {
+                        showModal({ type: 'success', title: 'Dihapus', message: 'Data berhasil dihapus.' });
+                        fetchBiodata();
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
