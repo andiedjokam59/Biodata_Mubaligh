@@ -21,6 +21,18 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Shimmer Wave Effect */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #printArea, #printArea * { visibility: visible; }
@@ -43,7 +55,7 @@
             </div>
         </div>
         <button onclick="fetchBiodata()" title="Refresh Data" class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:scale-95 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <svg id="refreshIcon" class="w-4 h-4 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
         </button>
     </header>
 
@@ -59,7 +71,7 @@
                 
                 <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
                 <div class="flex items-baseline gap-2 mb-4">
-                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
+                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">--</h2>
                     <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personel</span>
                 </div>
 
@@ -80,19 +92,19 @@
                 </div>
             </div>
 
-            <!-- Dashboard Monitoring Cards (Purna & Kelompok Kosong) -->
+            <!-- Dashboard Monitoring Cards -->
             <div class="grid grid-cols-3 gap-2.5">
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-emerald-400 uppercase">Aktif</p>
-                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
+                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">--</h4>
                 </div>
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-amber-400 uppercase">Purna</p>
-                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
+                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">--</h4>
                 </div>
                 <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
                     <p class="text-[9px] font-bold text-rose-400 uppercase">Klp. Kosong</p>
-                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">0</h4>
+                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">--</h4>
                 </div>
             </div>
 
@@ -104,7 +116,15 @@
                 </div>
 
                 <div id="desaMonitoringContainer" class="space-y-3">
-                    <div class="p-4 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Memuat status desa...</div>
+                    <!-- Placeholder Loading Skeleton -->
+                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl space-y-3">
+                        <div class="h-3 w-1/3 skeleton rounded-lg"></div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <div class="h-5 w-16 skeleton rounded-md"></div>
+                            <div class="h-5 w-20 skeleton rounded-md"></div>
+                            <div class="h-5 w-14 skeleton rounded-md"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -137,7 +157,15 @@
 
             <!-- Mobile Card View List -->
             <div id="fullListContainer" class="space-y-3">
-                <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
+                <!-- Skeleton Placeholder -->
+                <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl flex items-center gap-3">
+                    <div class="w-12 h-16 skeleton rounded-xl"></div>
+                    <div class="space-y-2 flex-1">
+                        <div class="h-3 w-1/4 skeleton rounded"></div>
+                        <div class="h-4 w-3/4 skeleton rounded"></div>
+                        <div class="h-3 w-1/2 skeleton rounded"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -400,7 +428,7 @@
             <div class="ml-4 space-y-1 border-l-2 border-slate-300 pl-3">
                 <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>1. Nama Ayah</span><span>:</span><span id="view_ayah"></span></div>
                 <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>2. Nama Ibu</span><span>:</span><span id="view_ibu"></span></div>
-                <div class="grid grid-cols-[160px_10px_1fr] items-start"><span>3. Alamat Lengkap</span><span>:</span><span id="view_alamat_ortu"></span></div>
+                <div class="grid grid-cols-[180px_10px_1fr] items-start"><span>3. Alamat Lengkap</span><span>:</span><span id="view_alamat_ortu"></span></div>
                 <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>4. No. Telp/HP</span><span>:</span><span id="view_telp_ortu"></span></div>
             </div>
         </div>
@@ -465,6 +493,40 @@
 
         let dataList = [];
         let activeModalType = null;
+
+        // SHOW SKELETON PLACEHOLDERS
+        function showSkeletons() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            if (refreshIcon) refreshIcon.classList.add('rotate-180');
+            
+            const desaContainer = document.getElementById('desaMonitoringContainer');
+            if (desaContainer) {
+                desaContainer.innerHTML = `
+                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl space-y-3">
+                        <div class="h-3 w-1/3 skeleton rounded-lg"></div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <div class="h-5 w-16 skeleton rounded-md"></div>
+                            <div class="h-5 w-20 skeleton rounded-md"></div>
+                            <div class="h-5 w-14 skeleton rounded-md"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const fullContainer = document.getElementById('fullListContainer');
+            if (fullContainer) {
+                fullContainer.innerHTML = `
+                    <div class="p-4 bg-slate-800/80 border border-slate-700/60 rounded-2xl flex items-center gap-3">
+                        <div class="w-12 h-16 skeleton rounded-xl"></div>
+                        <div class="space-y-2 flex-1">
+                            <div class="h-3 w-1/4 skeleton rounded"></div>
+                            <div class="h-4 w-3/4 skeleton rounded"></div>
+                            <div class="h-3 w-1/2 skeleton rounded"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
 
         // DROPDOWN DINAMIS KELOMPOK
         window.updateKelompokOptions = () => {
@@ -588,25 +650,29 @@
         }
 
         // FETCH DATA FROM SUPABASE
-        document.addEventListener('DOMContentLoaded', fetchBiodata);
+        window.fetchBiodata = async function() {
+            showSkeletons();
+            try {
+                const { data, error } = await supabase
+                    .from('muballigh_biodata')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-        async function fetchBiodata() {
-            const { data, error } = await supabase
-                .from('muballigh_biodata')
-                .select('*')
-                .order('created_at', { ascending: false });
+                if (error) throw error;
 
-            if (error) {
-                console.error(error);
-                return;
+                dataList = data || [];
+                updateDashboardStats();
+                renderDesaMonitoring();
+                renderFullList(dataList);
+                populateFilterTahun();
+            } catch (err) {
+                console.error(err);
+                showModal({ type: 'error', title: 'Gagal Memuat', message: err.message });
+            } finally {
+                const refreshIcon = document.getElementById('refreshIcon');
+                if (refreshIcon) refreshIcon.classList.remove('rotate-180');
             }
-
-            dataList = data;
-            updateDashboardStats();
-            renderDesaMonitoring();
-            renderFullList(dataList);
-            populateFilterTahun();
-        }
+        };
 
         // HITUNG STATISTIK AKTIF, PURNA, & KELOMPOK KOSONG
         function updateDashboardStats() {
@@ -988,6 +1054,9 @@
                 }
             });
         };
+
+        // PEMANGGILAN OTOMATIS SAAT APLIKASI PERTAMA KALI DIBUKA
+        document.addEventListener('DOMContentLoaded', fetchBiodata);
     </script>
 </body>
 </html>
