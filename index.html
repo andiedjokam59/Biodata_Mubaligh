@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- META TAG UNTUK MENCEGAH HYBRID BROWSER MENYIMPAN CACHE INDEX HTML -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>Biodata Muballigh - Dashboard Tawangmangu</title>
     
     <!-- PWA Meta Tags & Favicon Logo Insan Qurani -->
@@ -38,7 +44,6 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* Modern Minimalist Splash Screen Animations */
         @keyframes fadeInScale {
             0% { opacity: 0; transform: scale(0.92); }
             100% { opacity: 1; transform: scale(1); }
@@ -48,7 +53,6 @@
             animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Modal & Tab Transitions */
         .tab-content {
             animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -81,11 +85,9 @@
     <div id="splashScreen" class="fixed inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black z-50 flex flex-col items-center justify-between py-16 px-6 transition-opacity duration-500 no-print overflow-hidden">
         <div class="w-full"></div>
 
-        <!-- Center Logo & Branding -->
         <div class="flex flex-col items-center text-center space-y-5 animate-splash-in">
             <div class="relative flex items-center justify-center">
                 <div class="absolute w-32 h-32 bg-sky-500/10 rounded-full blur-2xl"></div>
-                
                 <div class="w-28 h-28 flex items-center justify-center relative z-10 p-2">
                     <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain filter drop-shadow-lg">
                 </div>
@@ -101,7 +103,6 @@
             </div>
         </div>
 
-        <!-- Minimalist Loading Ring -->
         <div class="flex flex-col items-center gap-2">
             <div class="w-5 h-5 border-2 border-sky-500/20 border-t-sky-400 rounded-full animate-spin"></div>
             <p class="text-[10px] text-slate-500 tracking-widest uppercase font-medium">Memuat...</p>
@@ -118,17 +119,12 @@
 
     <!-- MAIN CENTERED CONTAINER -->
     <div class="w-full max-w-md px-4 my-auto space-y-5 flex flex-col justify-center">
-
-        <!-- Main Content Area -->
         <main class="w-full space-y-5 no-print">
 
             <!-- ================= TAB 1: HOME DASHBOARD ================= -->
             <section id="tab-home" class="tab-content space-y-4">
-                
-                <!-- BOARD UTAMA DENGAN SHADOW 3D MEMBUNGKUS HEADER + DASHBOARD -->
                 <div class="dark:bg-slate-900/90 bg-white/90 backdrop-blur-xl dark:border-slate-800/80 border-slate-200/90 border rounded-[2.5rem] p-5 space-y-5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all">
                     
-                    <!-- Top Header App Bar (Di dalam Board) -->
                     <header class="flex justify-between items-center w-full pb-1 border-b dark:border-slate-800/60 border-slate-200/60">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border p-1.5 flex items-center justify-center shrink-0 shadow-sm">
@@ -141,25 +137,21 @@
                         </div>
                         
                         <div class="flex items-center gap-1.5">
-                            <!-- Tombol Home -->
                             <button onclick="switchTab('home')" title="Kembali ke Home" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                             </button>
 
-                            <!-- Mode Dark/Light Toggle Button -->
                             <button onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-amber-400 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
                                 <svg id="themeIconSun" class="w-3.5 h-3.5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 <svg id="themeIconMoon" class="w-3.5 h-3.5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                             </button>
 
-                            <!-- Refresh Button -->
                             <button onclick="fetchBiodata()" title="Refresh Data" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
                                 <svg id="refreshIcon" class="w-3.5 h-3.5 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             </button>
                         </div>
                     </header>
 
-                    <!-- Hero Gradient Card -->
                     <div class="rounded-2xl p-5 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-lg shadow-sky-900/30 text-white relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                         
@@ -169,7 +161,6 @@
                             <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personil</span>
                         </div>
 
-                        <!-- Quick Action Buttons -->
                         <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
                             <button onclick="openAddNewForm()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-xl py-2 flex flex-col items-center justify-center gap-1 text-[11px] font-medium backdrop-blur-sm">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -188,7 +179,6 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Monitoring Interactive Cards -->
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="openModalAktif()" class="dark:bg-slate-950/70 bg-slate-50 dark:border-slate-800/80 border-slate-200 border rounded-xl p-3 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-emerald-500/50 group flex flex-col justify-center items-center">
                             <p class="text-[9px] font-bold text-emerald-500 uppercase tracking-wider">Aktif</p>
@@ -207,9 +197,7 @@
                     </div>
 
                 </div>
-
             </section>
-
 
             <!-- ================= TAB 2: DIREKTORI BIODATA ================= -->
             <section id="tab-daftar" class="tab-content hidden space-y-4">
@@ -220,7 +208,6 @@
                     <span id="badgeCount" class="text-xs bg-sky-500/10 text-sky-500 dark:text-sky-400 font-semibold px-2.5 py-1 rounded-full border border-sky-500/20">0 Data</span>
                 </div>
 
-                <!-- Search & Filter Controls -->
                 <div class="space-y-2">
                     <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-300 border rounded-xl p-3 text-xs dark:text-slate-100 text-slate-800 dark:placeholder-slate-500 placeholder-slate-400 outline-none focus:border-sky-500 shadow-sm capitalize">
                     
@@ -237,12 +224,10 @@
                     </div>
                 </div>
 
-                <!-- Mobile Card View List -->
                 <div id="fullListContainer" class="space-y-3">
                     <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
                 </div>
             </section>
-
 
             <!-- ================= TAB 3: INPUT / EDIT DATA ================= -->
             <section id="tab-input" class="tab-content hidden">
@@ -265,7 +250,6 @@
                         <input type="hidden" id="edit_id">
                         <input type="hidden" id="existing_foto_url">
 
-                        <!-- Seksi A: Identitas -->
                         <div class="space-y-3">
                             <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">A. Identitas Utama</p>
                             <div>
@@ -322,7 +306,6 @@
                             </div>
                         </div>
 
-                        <!-- Seksi B: Daerah Asal -->
                         <div class="space-y-3">
                             <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">B. Daerah Asal & Tugasan</p>
                             <div class="grid grid-cols-3 gap-2">
@@ -362,7 +345,6 @@
                             </div>
                         </div>
 
-                        <!-- Seksi C: Kesehatan & ORTU -->
                         <div class="space-y-3">
                             <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">C. Kesehatan & ORTU</p>
                             <div>
@@ -389,7 +371,6 @@
                             </div>
                         </div>
 
-                        <!-- Seksi D: Penempatan Tugas -->
                         <div class="space-y-3">
                             <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
                             
@@ -521,19 +502,34 @@
     <script type="module">
         import imageCompression from 'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/+esm';
 
-        // REGISTRASI SERVICE WORKER & AUTO-REFRESH ON UPDATE
+        // REGISTRASI SERVICE WORKER UNTUK AUTO-UPDATE DAN HAPUS CACHE LAMA OTOMATIS
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(reg => {
+                    // Cek update sw secara periodik tiap kali aplikasi dibuka
+                    reg.update();
+
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                window.location.reload();
+                            if (installingWorker.state === 'installed') {
+                                if (navigator.serviceWorker.controller) {
+                                    // Memaksa Service Worker baru langsung mengambil alih & merefresh halaman otomatis
+                                    window.location.reload(true);
+                                }
                             }
                         };
                     };
                 }).catch(err => console.error('SW Error:', err));
+            });
+
+            // Menerima sinyal controllerchange jika service worker baru mengosongkan cache lama
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload(true);
+                }
             });
         }
 
@@ -542,7 +538,6 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpamx5eWRmb2dia2NjdGx5Y3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzAxODYsImV4cCI6MjA5NzcwNjE4Nn0.JwqYXWEt2yiLioI1o9qZ3KRrak2rtzO1Tp0eN7AuAm4';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // MASTER DATA TAWANGMANGU (Nama Desa Tanpa Kata "Desa", Diurutkan Abjad Beserta Kelompoknya)
         const MASTER_DESA = {
             "Bandardawung": [
                 "Bandardawung Barat", "Bandardawung Timur", "Dawung Atas", "Dawung Bawah", 
@@ -566,19 +561,16 @@
 
         let dataList = [];
         
-        // State untuk Filter & Form
         let selectedFilterStatus = "";
         let selectedFilterTahun = "";
         let selectedFormStatus = "AKTIF";
         let selectedFormDesa = "";
         let selectedFormKelompok = "";
 
-        // State Ekspor Modal
         let selectedExpDesa = "";
         let selectedExpKelompok = "";
         let selectedExpCols = ["status_tugas", "nomor_induk", "nama_lengkap", "penempatan_kelompok", "tanggal_mulai_tugas", "tanggal_selesai_tugas", "daerah_asal", "no_telp_orang_tua"];
 
-        // MODE DARK / LIGHT TOGGLE
         function applyTheme(isDark) {
             const html = document.documentElement;
             if (isDark) {
@@ -615,7 +607,6 @@
 
         initTheme();
 
-        // SHOW & HIDE SPLASH SCREEN
         function showSplashScreen() {
             const splash = document.getElementById('splashScreen');
             if (splash) {
@@ -636,7 +627,6 @@
             if (refreshIcon) refreshIcon.classList.remove('rotate-180');
         }
 
-        // SAVE LOADING INDICATOR HELPER
         function showSaveLoading() {
             const el = document.getElementById('saveLoadingModal');
             if (el) el.classList.remove('hidden');
@@ -651,7 +641,6 @@
             return item.status_tugas || 'AKTIF';
         }
 
-        // ================= SISTEM HISTORY STACK (UNTUK BACK BERURUTAN) =================
         let activityStack = [];
         let isBackProcessing = false;
 
@@ -734,7 +723,6 @@
             }
         });
 
-        // MODAL NOTIFIKASI
         function showModal({ type = 'info', title, message, onConfirm = null }) {
             const modal = document.getElementById('customModal');
             const iconContainer = document.getElementById('modalIcon');
@@ -792,7 +780,6 @@
             }
         };
 
-        // HELPERS
         function toTitleCase(str) {
             return str ? str.toLowerCase().replace(/(?:^|\s|-)\S/g, a => a.toUpperCase()) : '';
         }
@@ -806,7 +793,6 @@
             return dateStr ? new Date(dateStr).getFullYear() : null;
         }
 
-        // FETCH DATA FROM SUPABASE
         window.fetchBiodata = async function() {
             showSplashScreen();
             try {
@@ -828,7 +814,6 @@
             }
         };
 
-        // STATISTIK HITUNG
         function updateDashboardStats() {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
             const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA');
@@ -845,8 +830,6 @@
             document.getElementById('stat-kosong-count').textContent = Math.max(0, kosongCount);
             document.getElementById('badgeCount').textContent = `${dataList.length} Total Data`;
         }
-
-        // ================= MODAL MONITORING BOARD =================
 
         window.openModalAktif = () => {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
@@ -1043,8 +1026,6 @@
             pushModalInstance('modal-kosong', html);
         };
 
-        // ================= MODAL PEMILIH GENERAL =================
-
         window.openFilterStatusModal = () => {
             const html = `
                 <div class="space-y-3">
@@ -1163,8 +1144,6 @@
             closeCurrentActivity();
         };
 
-        // ================= MODAL EKSPOR (DENGAN PEMILIH DESA & KELOMPOK DALAM MODAL) =================
-
         window.openExportModal = () => {
             const allCols = [
                 { id: "status_tugas", label: "Status Tugas" },
@@ -1195,7 +1174,6 @@
                     </div>
 
                     <div class="space-y-3 text-xs">
-                        <!-- Button Modal Desa -->
                         <div>
                             <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Desa</label>
                             <button type="button" onclick="openExpDesaModal()" id="btnExpDesaLabel" class="w-full dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 text-left flex justify-between items-center active:scale-95 transition-all">
@@ -1204,7 +1182,6 @@
                             </button>
                         </div>
 
-                        <!-- Button Modal Kelompok -->
                         <div>
                             <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Kelompok</label>
                             <button type="button" onclick="openExpKelompokModal()" id="btnExpKelompokLabel" class="w-full dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 text-left flex justify-between items-center active:scale-95 transition-all">
@@ -1213,7 +1190,6 @@
                             </button>
                         </div>
 
-                        <!-- Simpel Checkbox Kolom -->
                         <div>
                             <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Pilih Kolom Diekspor</label>
                             <div class="grid grid-cols-2 gap-1 max-h-[150px] overflow-y-auto p-2 border dark:border-slate-800 border-slate-200 rounded-xl dark:bg-slate-950/40 bg-slate-50">
@@ -1233,7 +1209,6 @@
             pushModalInstance('modal-export', html);
         };
 
-        // Modal Pemilih Desa Ekspor
         window.openExpDesaModal = () => {
             let itemsHTML = `<button onclick="selectExpDesa('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Desa --</button>`;
 
@@ -1262,7 +1237,6 @@
             closeCurrentActivity();
         };
 
-        // Modal Pemilih Kelompok Ekspor
         window.openExpKelompokModal = () => {
             let availableKelompok = [];
             if (selectedExpDesa && MASTER_DESA[selectedExpDesa]) {
@@ -1360,7 +1334,6 @@
             }
         };
 
-        // RENDER LIST UNTUK TAB DIREKTORI
         function renderFullList(data) {
             const container = document.getElementById('fullListContainer');
             container.innerHTML = '';
@@ -1418,7 +1391,6 @@
 
         document.getElementById('searchInput').addEventListener('input', applyFilter);
 
-        // SUBMIT FORM
         document.getElementById('biodataForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
@@ -1499,7 +1471,6 @@
             }
         });
 
-        // POPULATE PRINT AREA
         function populatePrintArea(item) {
             document.getElementById('view_nomor_induk').textContent = item.nomor_induk || '-';
             document.getElementById('view_nama_lengkap').textContent = toTitleCase(item.nama_lengkap);
@@ -1580,7 +1551,7 @@
 
 						<div class="grid grid-cols-2 gap-2">
 							<div class="p-2.5 dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
-								<p class="text-[9px] font-bold text-slate-400 uppercase">👨‍gsub‍👦 Orang Tua</p>
+								<p class="text-[9px] font-bold text-slate-400 uppercase">👨‍👩‍👦 Orang Tua</p>
 								<p class="font-semibold truncate text-[11px] text-slate-700 dark:text-slate-200">${toTitleCase(item.nama_ayah) || '-'}</p>
 								<p class="text-[10px] text-slate-500 truncate">${item.no_telp_orang_tua || '-'}</p>
 							</div>
@@ -1709,7 +1680,6 @@
             });
         };
 
-        // INITIAL LOAD
         document.addEventListener('DOMContentLoaded', fetchBiodata);
     </script>
 </body>
