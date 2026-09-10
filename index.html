@@ -44,7 +44,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* ANIMASI BACKGROUND GLOWING BLOBS (SANGAT TERLIHAT & ESTETIK) */
+        /* ANIMASI BACKGROUND GLOWING BLOBS */
         @keyframes blobMotion1 {
             0%, 100% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
             33% { transform: translate(60px, -80px) rotate(120deg) scale(1.25); }
@@ -62,34 +62,18 @@
             50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.4); }
         }
 
-        .animate-blob-1 {
-            animation: blobMotion1 14s ease-in-out infinite;
-        }
-
-        .animate-blob-2 {
-            animation: blobMotion2 18s ease-in-out infinite;
-        }
-
-        .animate-blob-3 {
-            animation: blobMotion3 20s ease-in-out infinite;
-        }
+        .animate-blob-1 { animation: blobMotion1 14s ease-in-out infinite; }
+        .animate-blob-2 { animation: blobMotion2 18s ease-in-out infinite; }
+        .animate-blob-3 { animation: blobMotion3 20s ease-in-out infinite; }
 
         @keyframes fadeInScale {
             0% { opacity: 0; transform: scale(0.92); }
             100% { opacity: 1; transform: scale(1); }
         }
 
-        .animate-splash-in {
-            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .tab-content {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-animate {
-            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .animate-splash-in { animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .tab-content { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-animate { animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
@@ -111,17 +95,14 @@
 </head>
 <body class="dark:bg-slate-950 bg-slate-100 dark:text-slate-100 text-slate-800 min-h-screen pb-6 flex flex-col justify-start items-center antialiased transition-colors duration-300 selection:bg-sky-500 selection:text-white relative overflow-x-hidden">
 
-    <!-- EFEK ANIMASI BACKGROUND AMBIENT BLOBS (WARNA TEGAS & JELAS TERLIHAT) -->
+    <!-- EFEK ANIMASI BACKGROUND AMBIENT BLOBS -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden no-print">
-        <!-- Blob 1: Cyan / Sky Blue -->
         <div class="absolute -top-10 -left-10 w-80 h-80 dark:bg-sky-500/35 bg-sky-400/40 rounded-full blur-[80px] animate-blob-1"></div>
-        <!-- Blob 2: Indigo / Purple -->
         <div class="absolute top-1/3 -right-16 w-80 h-80 dark:bg-indigo-600/35 bg-indigo-400/40 rounded-full blur-[80px] animate-blob-2"></div>
-        <!-- Blob 3: Emerald / Teal -->
         <div class="absolute bottom-10 left-1/2 w-96 h-96 dark:bg-emerald-500/30 bg-teal-300/45 rounded-full blur-[90px] animate-blob-3"></div>
     </div>
 
-    <!-- ELEGANT & MINIMALIST SPLASH SCREEN -->
+    <!-- SPLASH SCREEN -->
     <div id="splashScreen" class="fixed inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black z-50 flex flex-col items-center justify-between py-16 px-6 transition-opacity duration-500 no-print overflow-hidden">
         <div class="w-full"></div>
 
@@ -160,7 +141,7 @@
     <!-- MAIN CENTERED CONTAINER -->
     <div class="w-full max-w-md px-4 space-y-4 flex flex-col justify-start z-10 relative">
 
-        <!-- BARIS PALING ATAS (HEADER STICKY DI SEMUA TAB) -->
+        <!-- HEADER STICKY -->
         <header class="sticky top-2 z-40 w-full dark:bg-slate-900/60 bg-white/60 backdrop-blur-xl dark:border-slate-700/50 border-white/60 border rounded-2xl p-3 shadow-lg flex justify-between items-center transition-all no-print">
             <div class="flex items-center gap-2.5">
                 <div class="w-9 h-9 rounded-xl dark:bg-slate-950/80 bg-white/80 dark:border-slate-800 border-slate-200 border p-1 flex items-center justify-center shrink-0 shadow-sm">
@@ -194,6 +175,7 @@
             <!-- ================= TAB 1: HOME DASHBOARD ================= -->
             <section id="tab-home" class="tab-content space-y-4">
                 
+                <!-- KARTU UTAMA & MONITORS -->
                 <div class="dark:bg-slate-900/60 bg-white/60 backdrop-blur-xl dark:border-slate-700/50 border-white/60 border rounded-[2rem] p-4 space-y-4 shadow-xl transition-all">
                     
                     <!-- Hero Gradient Card -->
@@ -243,6 +225,34 @@
                         </button>
                     </div>
 
+                </div>
+
+                <!-- SEBARAN MUBALLIGH PER DESA (NILAI TAMBAH AREA KOSONG) -->
+                <div class="dark:bg-slate-900/60 bg-white/60 backdrop-blur-xl dark:border-slate-700/50 border-white/60 border rounded-[2rem] p-4 space-y-3 shadow-xl">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200/60 pb-2">
+                        <h3 class="text-xs font-bold text-sky-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🏘️</span> Sebaran Tugas Per Desa
+                        </h3>
+                        <span class="text-[10px] text-slate-400 font-medium">4 Desa Master</span>
+                    </div>
+
+                    <div id="desaSebaranContainer" class="grid grid-cols-2 gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- AKTIVITAS / PERSONIL RECENT (NILAI TAMBAH AREA KOSONG) -->
+                <div class="dark:bg-slate-900/60 bg-white/60 backdrop-blur-xl dark:border-slate-700/50 border-white/60 border rounded-[2rem] p-4 space-y-3 shadow-xl">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200/60 pb-2">
+                        <h3 class="text-xs font-bold text-sky-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🕒</span> Personil Baru Ditambahkan
+                        </h3>
+                        <button onclick="switchTab('daftar')" class="text-[10px] text-sky-500 hover:underline font-semibold">Lihat Semua</button>
+                    </div>
+
+                    <div id="recentContainer" class="space-y-2">
+                        <!-- Populated by JS -->
+                    </div>
                 </div>
 
             </section>
@@ -349,7 +359,7 @@
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Kabupaten</label>
-                                    <input type="text" id="alamat_kabupaten" class="w-full dark:bg-slate-950/70 bg-white/80 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="alamat_kabupaten" class="w-full dark:bg-slate-950/70 bg-white/80 dark:border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                             </div>
                         </div>
@@ -848,6 +858,8 @@
 
                 dataList = data || [];
                 updateDashboardStats();
+                renderDesaSebaran();
+                renderRecentPersons();
                 renderFullList(dataList);
             } catch (err) {
                 console.error(err);
@@ -872,6 +884,60 @@
             const kosongCount = totalKelompokMaster - filledKelompokSet.size;
             document.getElementById('stat-kosong-count').textContent = Math.max(0, kosongCount);
             document.getElementById('badgeCount').textContent = `${dataList.length} Total Data`;
+        }
+
+        function renderDesaSebaran() {
+            const container = document.getElementById('desaSebaranContainer');
+            if (!container) return;
+
+            const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
+            
+            let html = '';
+            Object.keys(MASTER_DESA).forEach(desa => {
+                const totalMasterKelompok = MASTER_DESA[desa].length;
+                const activeInDesa = aktifList.filter(item => MASTER_DESA[desa].includes(item.penempatan_kelompok)).length;
+                const persentase = Math.round((activeInDesa / totalMasterKelompok) * 100);
+
+                html += `
+                    <div class="p-2.5 dark:bg-slate-950/60 bg-white/70 backdrop-blur-md rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="font-bold truncate dark:text-slate-200 text-slate-800">${desa}</span>
+                            <span class="font-semibold text-sky-500">${activeInDesa}/${totalMasterKelompok}</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: ${persentase}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderRecentPersons() {
+            const container = document.getElementById('recentContainer');
+            if (!container) return;
+
+            const recentList = dataList.slice(0, 3);
+            if (recentList.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">Belum ada data muballigh.</p>`;
+                return;
+            }
+
+            container.innerHTML = recentList.map(item => `
+                <div class="p-2.5 dark:bg-slate-950/60 bg-white/70 backdrop-blur-md border dark:border-slate-800 border-slate-200/80 rounded-xl flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-8 h-10 object-cover rounded-lg shrink-0">
+                        <div class="min-w-0">
+                            <h5 class="text-xs font-bold truncate dark:text-slate-100 text-slate-800">${toTitleCase(item.nama_lengkap)}</h5>
+                            <p class="text-[9px] text-slate-400 truncate">Klp: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
+                        </div>
+                    </div>
+                    <button onclick="viewData('${item.id}')" class="px-2 py-1 bg-sky-500/10 text-sky-500 text-[10px] font-bold rounded-lg border border-sky-500/20 shrink-0">
+                        Detail
+                    </button>
+                </div>
+            `).join('');
         }
 
         window.openModalAktif = () => {
