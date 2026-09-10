@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Biodata Muballigh - Dashboard Tawangmangu</title>
     
-    <!-- Meta PWA & Favicon Logo Insan Qurani -->
-    <meta name="theme-color" content="#0f172a">
+    <!-- PWA Meta Tags & Favicon Logo Insan Qurani -->
+    <meta name="theme-color" content="#0f172a" id="theme-color-meta">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Muballigh Tawangmangu">
     <link rel="apple-touch-icon" href="logo insan qurany.png">
     <link rel="icon" type="image/png" href="logo insan qurany.png">
+    
+    <!-- Dynamic Manifest Data URI for PWA Installation -->
+    <link rel="manifest" id="manifest-placeholder">
 
     <!-- Tailwind CSS & Font Inter -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' }
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Supabase & SheetJS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,372 +38,412 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        @keyframes customPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.96); }
+        /* Modern Entrance & Splash Screen Animations */
+        @keyframes logoEntrance {
+            0% { transform: scale(0.7) translateY(12px); opacity: 0; }
+            60% { transform: scale(1.05) translateY(-2px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
-        .animate-brand {
-            animation: customPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+        @keyframes ringGlow {
+            0%, 100% { transform: scale(0.95); opacity: 0.2; }
+            50% { transform: scale(1.25); opacity: 0.6; }
+        }
+
+        @keyframes floatLight {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(3deg); }
+        }
+
+        .animate-logo-entrance {
+            animation: logoEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-ring-glow {
+            animation: ringGlow 2.5s ease-in-out infinite;
+        }
+
+        .animate-float-logo {
+            animation: floatLight 3.5s ease-in-out infinite;
+        }
+
+        /* Modal & Tab Transitions */
+        .tab-content {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-animate {
+            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         @media print {
             body * { visibility: hidden; }
             #printArea, #printArea * { visibility: visible; }
-            #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; }
             .no-print { display: none !important; }
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen pb-24 antialiased">
+<body class="dark:bg-slate-900 bg-slate-100 dark:text-slate-100 text-slate-800 min-h-screen py-6 flex flex-col justify-center items-center antialiased transition-colors duration-300 selection:bg-sky-500 selection:text-white">
 
-    <!-- ELEGANT FULLSCREEN SPLASH SCREEN -->
-    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-between py-12 px-6 transition-opacity duration-500 no-print">
-        <div class="w-full"></div> <!-- Spacer -->
+    <!-- PREMIUM RADIAL SPLASH SCREEN -->
+    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-between py-12 px-6 transition-opacity duration-500 no-print overflow-hidden">
+        <div class="w-full"></div>
 
-        <!-- Branding Logo Center -->
-        <div class="flex flex-col items-center text-center space-y-4 animate-brand">
+        <!-- Center Logo with Animated Orbiting Glowing Rings -->
+        <div class="flex flex-col items-center text-center space-y-6 animate-logo-entrance">
             <div class="relative flex items-center justify-center">
-                <!-- Glowing Effect -->
-                <div class="absolute w-28 h-28 bg-sky-500/20 rounded-full blur-xl"></div>
-                <div class="w-24 h-24 rounded-3xl bg-slate-900/80 border border-slate-700/80 p-3 shadow-2xl flex items-center justify-center relative z-10">
-                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
+                <div class="absolute w-36 h-36 bg-sky-500/20 rounded-full blur-2xl animate-ring-glow"></div>
+                <div class="absolute w-28 h-28 border border-sky-400/30 rounded-3xl animate-ping opacity-25"></div>
+                
+                <div class="w-24 h-24 rounded-3xl bg-slate-900/90 border border-sky-500/30 p-3.5 shadow-[0_0_35px_rgba(14,165,233,0.3)] flex items-center justify-center relative z-10 backdrop-blur-xl animate-float-logo">
+                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain filter drop-shadow">
                 </div>
             </div>
-            <div>
-                <h1 class="text-xl font-bold text-white tracking-tight">Tawangmangu</h1>
-                <p class="text-xs text-sky-400 font-medium tracking-widest uppercase mt-0.5">Forum Muballigh-Muballighot</p>
+
+            <div class="space-y-1">
+                <h1 class="text-2xl font-extrabold text-white tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-sky-200">
+                    Tawangmangu
+                </h1>
+                <p class="text-[11px] text-sky-400 font-semibold tracking-[0.2em] uppercase">
+                    Forum Muballigh-Muballighot
+                </p>
             </div>
         </div>
 
-        <!-- Minimalist Progress Bar -->
-        <div class="w-full max-w-[160px] space-y-2">
-            <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                <div class="h-full bg-sky-400 rounded-full animate-pulse w-full"></div>
+        <!-- Bottom Loading Indicator -->
+        <div class="w-full max-w-[180px] space-y-2.5">
+            <div class="h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-slate-700/50">
+                <div class="h-full bg-gradient-to-r from-sky-500 via-blue-500 to-sky-300 rounded-full animate-pulse w-full"></div>
             </div>
-            <p class="text-[10px] text-slate-500 text-center font-medium tracking-wider uppercase">Menghubungkan...</p>
+            <p class="text-[10px] text-slate-400 text-center font-medium tracking-widest uppercase flex items-center justify-center gap-1">
+                <span>Memuat Sistem</span>
+                <span class="inline-block animate-bounce">...</span>
+            </p>
         </div>
     </div>
 
-    <!-- Top Header App Bar -->
-    <header class="px-5 pt-5 pb-3 flex justify-between items-center max-w-md mx-auto no-print">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 p-1.5 flex items-center justify-center shrink-0">
-                <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
-            </div>
-            <div>
-                <h1 class="text-base font-bold text-white tracking-tight">Tawangmangu</h1>
-                <p class="text-[10px] text-slate-400">Forum Muballigh-Muballighot</p>
-            </div>
-        </div>
-        <button onclick="fetchBiodata()" title="Refresh Data" class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:scale-95 transition">
-            <svg id="refreshIcon" class="w-4 h-4 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-        </button>
-    </header>
+    <!-- MAIN CENTERED CONTAINER -->
+    <div class="w-full max-w-md px-4 my-auto space-y-5 flex flex-col justify-center">
 
-    <!-- Main Content App Container -->
-    <main class="max-w-md mx-auto px-4 space-y-5 no-print">
-
-        <!-- ================= TAB 1: HOME DASHBOARD ================= -->
-        <section id="tab-home" class="tab-content space-y-5">
+        <!-- Top Header App Bar -->
+        <header class="px-2 pb-1 flex justify-between items-center w-full no-print">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-300 border p-1.5 flex items-center justify-center shrink-0 shadow-sm">
+                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-base font-bold dark:text-white text-slate-800 tracking-tight">Tawangmangu</h1>
+                    <p class="text-[10px] dark:text-slate-400 text-slate-500">Forum Muballigh-Muballighot</p>
+                </div>
+            </div>
             
-            <!-- Hero Gradient Card -->
-            <div class="rounded-3xl p-6 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-xl shadow-sky-900/30 text-white relative overflow-hidden">
-                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center gap-2">
+                <!-- Mode Dark/Light Toggle Button -->
+                <button onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-amber-400 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                    <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+
+                <!-- Refresh Button -->
+                <button onclick="fetchBiodata()" title="Refresh Data" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                    <svg id="refreshIcon" class="w-4 h-4 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="w-full space-y-5 no-print">
+
+            <!-- ================= TAB 1: HOME DASHBOARD ================= -->
+            <section id="tab-home" class="tab-content space-y-5">
                 
-                <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
-                <div class="flex items-baseline gap-2 mb-4">
-                    <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
-                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personel</span>
-                </div>
+                <!-- Hero Gradient Card -->
+                <div class="rounded-3xl p-6 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-xl shadow-sky-900/20 text-white relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
+                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personil</span>
+                    </div>
 
-                <!-- Quick Action Buttons -->
-                <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
-                    <button onclick="switchTab('input')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
-                        <span class="text-base">➕</span>
-                        <span>Tambah</span>
-                    </button>
-                    <button onclick="switchTab('daftar')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
-                        <span class="text-base">📋</span>
-                        <span>Daftar</span>
-                    </button>
-                    <button onclick="exportToExcel()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-xs font-medium">
-                        <span class="text-base">📥</span>
-                        <span>Export</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Dashboard Monitoring Cards -->
-            <div class="grid grid-cols-3 gap-2.5">
-                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
-                    <p class="text-[9px] font-bold text-emerald-400 uppercase">Aktif</p>
-                    <h4 id="stat-aktif-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
-                </div>
-                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
-                    <p class="text-[9px] font-bold text-amber-400 uppercase">Purna</p>
-                    <h4 id="stat-purna-count" class="text-lg font-extrabold text-white mt-0.5">0</h4>
-                </div>
-                <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3 text-center">
-                    <p class="text-[9px] font-bold text-rose-400 uppercase">Klp. Kosong</p>
-                    <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-400 mt-0.5">0</h4>
-                </div>
-            </div>
-
-            <!-- Monitoring Sebaran Kelompok Per Desa -->
-            <div class="space-y-3">
-                <div class="flex justify-between items-center px-1">
-                    <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Sebaran Tugas Per Desa</h3>
-                    <span class="text-[10px] text-slate-400">Total 38 Kelompok</span>
-                </div>
-
-                <div id="desaMonitoringContainer" class="space-y-3">
-                    <div class="p-4 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Memuat status desa...</div>
-                </div>
-            </div>
-
-        </section>
-
-
-        <!-- ================= TAB 2: DAFTAR BIODATA ================= -->
-        <section id="tab-daftar" class="tab-content hidden space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-bold text-white">Daftar Biodata</h2>
-                <span id="badgeCount" class="text-xs bg-sky-500/20 text-sky-400 font-semibold px-2.5 py-1 rounded-full border border-sky-500/30">0 Data</span>
-            </div>
-
-            <!-- Search & Filter Controls -->
-            <div class="space-y-2">
-                <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-sky-500 capitalize">
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <select id="filterStatus" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 outline-none focus:border-sky-500">
-                        <option value="">-- Semua Status --</option>
-                        <option value="AKTIF">Tugas Aktif</option>
-                        <option value="PURNA">Purna Tugas</option>
-                    </select>
-
-                    <select id="filterTahun" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 outline-none focus:border-sky-500">
-                        <option value="">-- Semua Tahun --</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Mobile Card View List -->
-            <div id="fullListContainer" class="space-y-3">
-                <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
-            </div>
-        </section>
-
-
-        <!-- ================= TAB 3: INPUT / EDIT DATA ================= -->
-        <section id="tab-input" class="tab-content hidden">
-            <div class="bg-slate-800 border border-slate-700 rounded-3xl p-5 space-y-5">
-                <div class="flex justify-between items-center border-b border-slate-700/80 pb-3">
-                    <h3 id="formTitle" class="text-sm font-bold text-sky-400 flex items-center gap-2">
-                        <span>📝</span> Formulir Biodata
-                    </h3>
-                    <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded-lg">
-                        Batal
-                    </button>
-                </div>
-
-                <form id="biodataForm" class="space-y-5 text-xs">
-                    <input type="hidden" id="edit_id">
-                    <input type="hidden" id="existing_foto_url">
-
-                    <!-- Seksi D: Penempatan Tugas -->
-                    <div class="space-y-3">
-                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
+                    <!-- Quick Action Buttons with SVG Icons -->
+                    <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
+                        <button onclick="switchTab('input')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            <span>Tambah</span>
+                        </button>
                         
-                        <div>
-                            <label class="block text-slate-400 mb-1">Status Tugasan *</label>
-                            <select id="status_tugas" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 font-semibold">
-                                <option value="AKTIF">🟢 AKTIF (Sedang Bertugas)</option>
-                                <option value="PURNA">🟡 PURNA (Sudah Selesai Tugas)</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-slate-400 mb-1">Pilih Desa Penempatan *</label>
-                            <select id="penempatan_desa" required onchange="updateKelompokOptions()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                                <option value="">-- Pilih Desa --</option>
-                                <option value="Desa Krangean">Desa Krangean</option>
-                                <option value="Desa Kaltara">Desa Kaltara</option>
-                                <option value="Desa Karsel">Desa Karsel</option>
-                                <option value="Desa Bandardawung">Desa Bandardawung</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-slate-400 mb-1">Pilih Kelompok Penempatan *</label>
-                            <select id="penempatan_kelompok" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                                <option value="">-- Pilih Desa Terlebih Dahulu --</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tanggal Mulai Tugas</label>
-                                <input type="date" id="tanggal_mulai_tugas" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tanggal Selesai Tugas</label>
-                                <input type="date" id="tanggal_selesai_tugas" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                            </div>
-                        </div>
+                        <button onclick="switchTab('daftar')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <span>Direktori</span>
+                        </button>
+                        
+                        <button onclick="openExportModal()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span>Ekspor</span>
+                        </button>
                     </div>
-
-                    <!-- Seksi A: Identitas -->
-                    <div class="space-y-3">
-                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">A. Identitas Utama</p>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Nomor Induk</label>
-                            <input type="text" id="nomor_induk" placeholder="Contoh: P033" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 uppercase">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Nama Lengkap *</label>
-                            <input type="text" id="nama_lengkap" required placeholder="Sesuai KTP" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Nama Panggilan</label>
-                                <input type="text" id="nama_panggilan" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Pendidikan</label>
-                                <input type="text" id="pendidikan_terakhir" placeholder="SMP/SMA" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 uppercase">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tempat Lahir</label>
-                                <input type="text" id="tempat_lahir" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tanggal Lahir</label>
-                                <input type="date" id="tanggal_lahir" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Unggah Foto 3x4</label>
-                            <input type="file" id="foto_input" accept="image/*" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-slate-300">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">RT/RW</label>
-                                <input type="text" id="alamat_rt_rw" placeholder="005/011" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Desa/Kelurahan</label>
-                                <input type="text" id="alamat_desa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Kecamatan</label>
-                                <input type="text" id="alamat_kecamatan" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Kabupaten</label>
-                                <input type="text" id="alamat_kabupaten" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seksi B -->
-                    <div class="space-y-3">
-                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">B. Pengajian Asal & Tugasan</p>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Kelompok</label>
-                                <input type="text" id="kelompok_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Desa</label>
-                                <input type="text" id="desa_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Daerah</label>
-                                <input type="text" id="daerah_asal" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Alumni Pondok</label>
-                                <input type="text" id="alumni_pondok" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Tugasan Ke-</label>
-                                <input type="number" id="tugasan_ke" value="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                            </div>
-                        </div>
-                        <div class="space-y-2 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50">
-                            <label class="block text-slate-400">Materi Khatam:</label>
-                            <label class="flex items-center gap-2 text-slate-200">
-                                <input type="checkbox" id="materi_quran_himpunan" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
-                                <span>Qur'an + Himpunan</span>
-                            </label>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="materi_hadist_besar" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
-                                <input type="text" id="materi_hadist_besar_detail" placeholder="Detail Hadist Besar..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-slate-100 outline-none capitalize">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Seksi C -->
-                    <div class="space-y-3">
-                        <p class="font-bold text-sky-400 uppercase text-[10px] tracking-wider bg-slate-900/60 p-2 rounded-lg">C. Kesehatan & ORTU</p>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Penyakit Pernah Diderita</label>
-                            <input type="text" id="penyakit_diderita" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-slate-400 mb-1">Nama Ayah</label>
-                                <input type="text" id="nama_ayah" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                            <div>
-                                <label class="block text-slate-400 mb-1">Nama Ibu</label>
-                                <input type="text" id="nama_ibu" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">Alamat Lengkap ORTU</label>
-                            <input type="text" id="alamat_orang_tua" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500 capitalize">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1">No. Telp/HP ORTU</label>
-                            <input type="text" id="no_telp_orang_tua" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-100 outline-none focus:border-sky-500">
-                        </div>
-                    </div>
-
-                    <button type="submit" id="btnSubmit" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition active:scale-98">
-                        Simpan Data Biodata
-                    </button>
-                </form>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FIXED BOTTOM NAVIGATION BAR -->
-    <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 z-30 no-print">
-        <div class="max-w-md mx-auto flex justify-around items-center py-2 px-3">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 text-sky-400 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="text-[10px] font-semibold">Home</span>
-            </button>
-            <button onclick="switchTab('daftar')" id="nav-daftar" class="flex flex-col items-center gap-1 text-slate-500 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                <span class="text-[10px] font-semibold">Daftar</span>
-            </button>
-            <button onclick="switchTab('input')" id="nav-input" class="flex flex-col items-center gap-1 text-slate-500 transition">
-                <div class="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center -mt-4 shadow-lg shadow-sky-500/30">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 </div>
-                <span class="text-[10px] font-semibold">Input</span>
-            </button>
-        </div>
+
+                <!-- Dashboard Monitoring Interactive Cards -->
+                <div class="grid grid-cols-3 gap-2.5">
+                    <button onclick="openModalAktif()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-emerald-500/50 group flex flex-col justify-center items-center">
+                        <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Aktif</p>
+                        <h4 id="stat-aktif-count" class="text-xl font-extrabold dark:text-white text-slate-800 mt-1">0</h4>
+                    </button>
+
+                    <button onclick="openModalPurna()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-amber-500/50 group flex flex-col justify-center items-center">
+                        <p class="text-[10px] font-bold text-amber-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Purna</p>
+                        <h4 id="stat-purna-count" class="text-xl font-extrabold dark:text-white text-slate-800 mt-1">0</h4>
+                    </button>
+
+                    <button onclick="openModalKosong()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-rose-500/50 group flex flex-col justify-center items-center">
+                        <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Klp. Kosong</p>
+                        <h4 id="stat-kosong-count" class="text-xl font-extrabold text-rose-500 mt-1">0</h4>
+                    </button>
+                </div>
+
+            </section>
+
+
+            <!-- ================= TAB 2: DIREKTORI BIODATA ================= -->
+            <section id="tab-daftar" class="tab-content hidden space-y-4">
+                <div class="flex justify-between items-center">
+                    <button onclick="switchTab('home')" class="text-xs text-sky-500 font-semibold flex items-center gap-1 active:scale-95 transition-all">
+                        &larr; Kembali ke Home
+                    </button>
+                    <span id="badgeCount" class="text-xs bg-sky-500/10 text-sky-500 dark:text-sky-400 font-semibold px-2.5 py-1 rounded-full border border-sky-500/20">0 Data</span>
+                </div>
+
+                <!-- Search & Filter Controls -->
+                <div class="space-y-2">
+                    <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-3 text-xs dark:text-slate-100 text-slate-800 dark:placeholder-slate-500 placeholder-slate-400 outline-none focus:border-sky-500 shadow-sm capitalize">
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="openFilterStatusModal()" id="btnFilterStatusLabel" class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
+                            <span class="truncate">-- Semua Status --</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+
+                        <button onclick="openFilterTahunModal()" id="btnFilterTahunLabel" class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
+                            <span class="truncate">-- Semua Tahun --</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Card View List -->
+                <div id="fullListContainer" class="space-y-3">
+                    <div class="p-6 text-center text-xs text-slate-500">Memuat seluruh data...</div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 3: INPUT / EDIT DATA ================= -->
+            <section id="tab-input" class="tab-content hidden">
+                <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border rounded-3xl p-5 space-y-5 shadow-sm">
+                    <div class="flex justify-between items-center border-b dark:border-slate-700/80 border-slate-200 pb-3">
+                        <h3 id="formTitle" class="text-sm font-bold text-sky-500 flex items-center gap-2">
+                            <span>📝</span> Formulir Biodata
+                        </h3>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="switchTab('home')" class="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-2 py-1">
+                                Kembali
+                            </button>
+                            <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs dark:bg-slate-700 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 dark:text-slate-200 text-slate-700 px-3 py-1 rounded-lg active:scale-95 transition-all duration-150">
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="biodataForm" class="space-y-5 text-xs">
+                        <input type="hidden" id="edit_id">
+                        <input type="hidden" id="existing_foto_url">
+
+                        <!-- Seksi A: Identitas -->
+                        <div class="space-y-3">
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">A. Identitas Utama</p>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Nomor Induk</label>
+                                <input type="text" id="nomor_induk" placeholder="Contoh: P033" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
+                            </div>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Lengkap *</label>
+                                <input type="text" id="nama_lengkap" required placeholder="Sesuai KTP" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Panggilan</label>
+                                    <input type="text" id="nama_panggilan" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Pendidikan</label>
+                                    <input type="text" id="pendidikan_terakhir" placeholder="SMP/SMA" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Tempat Lahir</label>
+                                    <input type="text" id="tempat_lahir" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Lahir</label>
+                                    <input type="date" id="tanggal_lahir" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Unggah Foto 3x4</label>
+                                <input type="file" id="foto_input" accept="image/*" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2 text-slate-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">RT/RW</label>
+                                    <input type="text" id="alamat_rt_rw" placeholder="005/011" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Desa/Kelurahan</label>
+                                    <input type="text" id="alamat_desa" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Kecamatan</label>
+                                    <input type="text" id="alamat_kecamatan" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Kabupaten</label>
+                                    <input type="text" id="alamat_kabupaten" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seksi B: Pengajian Asal -->
+                        <div class="space-y-3">
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">B. Pengajian Asal & Tugasan</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Kelompok</label>
+                                    <input type="text" id="kelompok_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Desa</label>
+                                    <input type="text" id="desa_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Daerah</label>
+                                    <input type="text" id="daerah_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Alumni Pondok</label>
+                                    <input type="text" id="alumni_pondok" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Tugasan Ke-</label>
+                                    <input type="number" id="tugasan_ke" value="1" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                </div>
+                            </div>
+                            <div class="space-y-2 dark:bg-slate-900/50 bg-slate-50 p-3 rounded-xl dark:border-slate-700/50 border-slate-200 border">
+                                <label class="block dark:text-slate-400 text-slate-600">Materi Khatam:</label>
+                                <label class="flex items-center gap-2 dark:text-slate-200 text-slate-700">
+                                    <input type="checkbox" id="materi_quran_himpunan" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
+                                    <span>Qur'an + Himpunan</span>
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="materi_hadist_besar" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
+                                    <input type="text" id="materi_hadist_besar_detail" placeholder="Detail Hadist Besar..." class="flex-1 dark:bg-slate-900 bg-white dark:border-slate-700 border-slate-300 border rounded-lg p-1.5 dark:text-slate-100 text-slate-800 outline-none capitalize">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seksi C: Kesehatan & ORTU -->
+                        <div class="space-y-3">
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">C. Kesehatan & ORTU</p>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Penyakit Pernah Diderita</label>
+                                <input type="text" id="penyakit_diderita" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Ayah</label>
+                                    <input type="text" id="nama_ayah" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Ibu</label>
+                                    <input type="text" id="nama_ibu" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Alamat Lengkap ORTU</label>
+                                <input type="text" id="alamat_orang_tua" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                            </div>
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">No. Telp/HP ORTU</label>
+                                <input type="text" id="no_telp_orang_tua" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                            </div>
+                        </div>
+
+                        <!-- Seksi D: Penempatan Tugas -->
+                        <div class="space-y-3">
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
+                            
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Status Tugasan *</label>
+                                <button type="button" onclick="openFormStatusModal()" id="btnFormStatusLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150 font-semibold">
+                                    <span>🟢 AKTIF (Sedang Bertugas)</span>
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                            </div>
+
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Pilih Desa Penempatan *</label>
+                                <button type="button" onclick="openFormDesaModal()" id="btnFormDesaLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
+                                    <span>-- Pilih Desa --</span>
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                            </div>
+
+                            <div>
+                                <label class="block dark:text-slate-400 text-slate-600 mb-1">Pilih Kelompok Penempatan *</label>
+                                <button type="button" onclick="openFormKelompokModal()" id="btnFormKelompokLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
+                                    <span>-- Pilih Desa Terlebih Dahulu --</span>
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Mulai Tugas</label>
+                                    <input type="date" id="tanggal_mulai_tugas" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Selesai Tugas</label>
+                                    <input type="date" id="tanggal_selesai_tugas" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btnSubmit" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-95 duration-150">
+                            Simpan Data Biodata
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <!-- AREA PRINT DETAIL -->
@@ -450,22 +506,29 @@
         </div>
 
         <div class="flex justify-end gap-2 no-print border-t pt-4">
-            <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg">Tutup</button>
-            <button onclick="window.print()" class="px-4 py-2 bg-sky-600 text-white font-semibold text-sm rounded-lg">Cetak Lembar</button>
+            <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg active:scale-95 transition-all">Tutup</button>
+            <button onclick="window.print()" class="px-4 py-2 bg-sky-600 text-white font-semibold text-sm rounded-lg active:scale-95 transition-all">Cetak Lembar</button>
         </div>
     </div>
 
-    <!-- MODAL DETAIL -->
-    <div id="viewModalOverlay" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print">
-        <div class="bg-white text-slate-900 rounded-3xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" id="modalViewContent"></div>
+    <!-- MODAL POPUP GLOBAL CONTAINER (Selalu Ditengah Layar) -->
+    <div id="popupModalOverlay" class="fixed inset-0 bg-black/75 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print backdrop-blur-sm">
+        <div class="dark:bg-slate-800 bg-white dark:text-slate-100 text-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-5 border dark:border-slate-700 border-slate-200 modal-animate my-auto" id="popupModalContent">
+            <!-- Dynamic Content Injected Here -->
+        </div>
     </div>
 
-    <!-- MODAL NOTIF -->
-    <div id="customModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden p-4 no-print">
-        <div class="bg-slate-800 border border-slate-700 text-slate-100 rounded-3xl max-w-xs w-full p-6 text-center">
+    <!-- MODAL VIEW BIODATA DETAIL -->
+    <div id="viewModalOverlay" class="fixed inset-0 bg-black/75 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print backdrop-blur-sm">
+        <div class="bg-white text-slate-900 rounded-3xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto modal-animate my-auto" id="modalViewContent"></div>
+    </div>
+
+    <!-- MODAL NOTIFIKASI STANDARD -->
+    <div id="customModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center hidden p-4 no-print backdrop-blur-sm">
+        <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border dark:text-slate-100 text-slate-800 rounded-3xl max-w-xs w-full p-6 text-center modal-animate my-auto shadow-2xl">
             <div id="modalIcon" class="mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full"></div>
             <h3 id="modalTitle" class="text-base font-bold mb-1"></h3>
-            <p id="modalMessage" class="text-xs text-slate-400 mb-5"></p>
+            <p id="modalMessage" class="text-xs dark:text-slate-400 text-slate-500 mb-5"></p>
             <div id="modalActions" class="flex gap-2 justify-center"></div>
         </div>
     </div>
@@ -474,22 +537,53 @@
     <script type="module">
         import imageCompression from 'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/+esm';
 
+        // Inisialisasi PWA Dynamic Manifest
+        (function initPWA() {
+            const manifestData = {
+                "name": "Biodata Muballigh Tawangmangu",
+                "short_name": "Muballigh",
+                "start_url": "./",
+                "display": "standalone",
+                "background_color": "#0f172a",
+                "theme_color": "#0f172a",
+                "icons": [
+                    { "src": "logo insan qurany.png", "sizes": "192x192", "type": "image/png" },
+                    { "src": "logo insan qurany.png", "sizes": "512x512", "type": "image/png" }
+                ]
+            };
+            const stringManifest = JSON.stringify(manifestData);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
+
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('activate', e => self.clients.claim());
+                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
+                `;
+                const swBlob = new Blob([swCode], {type: 'text/javascript'});
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW error', err));
+            }
+        })();
+
         // Inisialisasi Supabase
         const SUPABASE_URL = 'https://xijlyydfogbkcctlycsb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpamx5eWRmb2dia2NjdGx5Y3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzAxODYsImV4cCI6MjA5NzcwNjE4Nn0.JwqYXWEt2yiLioI1o9qZ3KRrak2rtzO1Tp0eN7AuAm4';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // MASTER DATA TAWANGMANGU (4 Desa & 38 Kelompok)
+        // MASTER DATA TAWANGMANGU
         const MASTER_DESA = {
             "Desa Krangean": [
                 "Nglegok Atas", "Nglegok Bawah", "Krangean Utara", "Krangean Selatan", 
                 "Tawang 1", "Ngreso", "Gondosuli", "Watusambang", "Somokado", "Tawang 2", "Gondang Bomo"
             ],
-            "Desa Kaltara": [
+            "Karanglo Utara": [
                 "Plombokan", "Cepogo", "Dukuh", "Sadakan Lor", "Sekuwung", 
                 "Sadakan Kidul 1", "Sadakan Kidul 2", "Pandeyan"
             ],
-            "Desa Karsel": [
+            "Karanglo Selatan": [
                 "Blimbing 1", "Karanglo", "Pedan Utara", "Pedan Selatan", 
                 "Jabalkanil", "Blimbing 2", "Blimbing 3"
             ],
@@ -501,7 +595,52 @@
         };
 
         let dataList = [];
-        let activeModalType = null;
+        
+        // State untuk Filter Modal & Form Modal
+        let selectedFilterStatus = "";
+        let selectedFilterTahun = "";
+        let selectedFormStatus = "AKTIF";
+        let selectedFormDesa = "";
+        let selectedFormKelompok = "";
+
+        // MODE DARK / LIGHT TOGGLE DENGAN DETEKSI OTOMATIS TEMA HP SYSTEM
+        function applyTheme(isDark) {
+            const html = document.documentElement;
+            if (isDark) {
+                html.classList.add('dark');
+                document.getElementById('theme-color-meta').setAttribute('content', '#0f172a');
+            } else {
+                html.classList.remove('dark');
+                document.getElementById('theme-color-meta').setAttribute('content', '#f1f5f9');
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme === 'dark');
+            } else {
+                // Ikuti Pengaturan Bawaan HP / Sistem Operating System
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                applyTheme(systemPrefersDark);
+            }
+        }
+
+        window.toggleDarkMode = () => {
+            const isCurrentDark = document.documentElement.classList.contains('dark');
+            const newDark = !isCurrentDark;
+            applyTheme(newDark);
+            localStorage.setItem('theme', newDark ? 'dark' : 'light');
+        };
+
+        // Deteksi Perubahan Tema HP Secara Realtime Jika Pengguna Belum Memilih Mode Manual
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches);
+            }
+        });
+
+        initTheme();
 
         // SHOW & HIDE SPLASH SCREEN
         function showSplashScreen() {
@@ -524,55 +663,72 @@
             if (refreshIcon) refreshIcon.classList.remove('rotate-180');
         }
 
-        // DROPDOWN DINAMIS KELOMPOK
-        window.updateKelompokOptions = () => {
-            const desaSelect = document.getElementById('penempatan_desa').value;
-            const kelompokSelect = document.getElementById('penempatan_kelompok');
-            kelompokSelect.innerHTML = '<option value="">-- Pilih Kelompok --</option>';
-
-            if (desaSelect && MASTER_DESA[desaSelect]) {
-                MASTER_DESA[desaSelect].forEach(klp => {
-                    const opt = document.createElement('option');
-                    opt.value = klp;
-                    opt.textContent = klp;
-                    kelompokSelect.appendChild(opt);
-                });
-            } else {
-                kelompokSelect.innerHTML = '<option value="">-- Pilih Desa Terlebih Dahulu --</option>';
-            }
-        };
-
-        // HELPER STATUS TUGAS (MANUAL)
+        // HELPER STATUS TUGAS
         function getStatusTugas(item) {
             return item.status_tugas || 'AKTIF';
         }
 
-        // SWITCH TAB
-        window.switchTab = (tabName) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-
-            ['home', 'daftar', 'input'].forEach(nav => {
-                const btn = document.getElementById(`nav-${nav}`);
-                if (nav === tabName) {
-                    btn.className = "flex flex-col items-center gap-1 text-sky-400 transition";
-                } else {
-                    btn.className = "flex flex-col items-center gap-1 text-slate-500 transition";
-                }
-            });
-        };
-
-        // PREVENT BACK HISTORY
-        function pushModalState(type) {
-            activeModalType = type;
-            history.pushState({ modalOpen: true, type: type }, "");
+        // ================= SISTEM NAVIGASI HISTORY & TOMBOL BACK HP =================
+        if (!history.state) {
+            history.replaceState({ page: 'home' }, "");
         }
 
-        window.addEventListener('popstate', () => {
-            if (activeModalType === 'view') closeViewModal(false);
-            else if (activeModalType === 'notif') closeCustomModal(false);
-            else if (activeModalType === 'edit') resetForm(false);
+        window.switchTab = (tabName, pushState = true) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (pushState && tabName !== 'home') {
+                history.pushState({ page: tabName }, "");
+            }
+        };
+
+        function closeAllModalsUI() {
+            document.getElementById('popupModalOverlay').classList.add('hidden');
+            document.getElementById('viewModalOverlay').classList.add('hidden');
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function isAnyModalOpen() {
+            return !document.getElementById('popupModalOverlay').classList.contains('hidden') ||
+                   !document.getElementById('viewModalOverlay').classList.contains('hidden') ||
+                   !document.getElementById('customModal').classList.contains('hidden');
+        }
+
+        // LISTENER SYSTEM BACK HP
+        window.addEventListener('popstate', (e) => {
+            if (isAnyModalOpen()) {
+                closeAllModalsUI();
+                return;
+            }
+
+            const tabDaftar = document.getElementById('tab-daftar');
+            const tabInput = document.getElementById('tab-input');
+            if (!tabDaftar.classList.contains('hidden') || !tabInput.classList.contains('hidden')) {
+                switchTab('home', false);
+                return;
+            }
         });
+
+        // POPUP MODAL SYSTEM
+        window.openPopupModal = (htmlContent) => {
+            const overlay = document.getElementById('popupModalOverlay');
+            const content = document.getElementById('popupModalContent');
+            content.innerHTML = htmlContent;
+            
+            history.pushState({ modalOpen: true }, "");
+            overlay.classList.remove('hidden');
+        };
+
+        window.closePopupModal = (triggerBack = true) => {
+            const overlay = document.getElementById('popupModalOverlay');
+            if (!overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+                if (triggerBack && history.state && history.state.modalOpen) {
+                    history.back();
+                }
+            }
+        };
 
         // MODAL NOTIF
         function showModal({ type = 'info', title, message, onConfirm = null }) {
@@ -587,24 +743,24 @@
             actionsEl.innerHTML = '';
 
             if (type === 'success') {
-                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400';
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-500';
                 iconContainer.innerHTML = '✓';
             } else if (type === 'error') {
-                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-red-500/20 text-red-400';
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-red-500/20 text-red-500';
                 iconContainer.innerHTML = '✕';
             } else if (type === 'confirm') {
-                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-amber-500/20 text-amber-400';
+                iconContainer.className = 'mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full bg-amber-500/20 text-amber-500';
                 iconContainer.innerHTML = '!';
             }
 
             if (type === 'confirm') {
                 const btnCancel = document.createElement('button');
-                btnCancel.className = 'px-3 py-2 bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl flex-1';
+                btnCancel.className = 'px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
                 btnCancel.textContent = 'Batal';
                 btnCancel.onclick = () => closeCustomModal(true);
 
                 const btnOk = document.createElement('button');
-                btnOk.className = 'px-3 py-2 bg-red-600 text-white text-xs font-semibold rounded-xl flex-1';
+                btnOk.className = 'px-3 py-2 bg-red-600 text-white text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
                 btnOk.textContent = 'Ya, Hapus';
                 btnOk.onclick = () => { closeCustomModal(true); if (onConfirm) onConfirm(); };
 
@@ -612,13 +768,13 @@
                 actionsEl.appendChild(btnOk);
             } else {
                 const btnOk = document.createElement('button');
-                btnOk.className = 'px-6 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl w-full';
+                btnOk.className = 'px-6 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl w-full active:scale-95 transition-all';
                 btnOk.textContent = 'OK';
                 btnOk.onclick = () => closeCustomModal(true);
                 actionsEl.appendChild(btnOk);
             }
 
-            pushModalState('notif');
+            history.pushState({ modalOpen: true }, "");
             modal.classList.remove('hidden');
         }
 
@@ -626,8 +782,9 @@
             const modal = document.getElementById('customModal');
             if (!modal.classList.contains('hidden')) {
                 modal.classList.add('hidden');
-                activeModalType = null;
-                if (triggerBack && history.state && history.state.modalOpen) history.back();
+                if (triggerBack && history.state && history.state.modalOpen) {
+                    history.back();
+                }
             }
         };
 
@@ -645,7 +802,7 @@
             return dateStr ? new Date(dateStr).getFullYear() : null;
         }
 
-        // FETCH DATA FROM SUPABASE WITH SPLASH SCREEN
+        // FETCH DATA FROM SUPABASE
         window.fetchBiodata = async function() {
             showSplashScreen();
             try {
@@ -658,9 +815,7 @@
 
                 dataList = data || [];
                 updateDashboardStats();
-                renderDesaMonitoring();
                 renderFullList(dataList);
-                populateFilterTahun();
             } catch (err) {
                 console.error(err);
                 showModal({ type: 'error', title: 'Gagal Memuat', message: err.message });
@@ -669,7 +824,7 @@
             }
         };
 
-        // HITUNG STATISTIK AKTIF, PURNA, & KELOMPOK KOSONG
+        // STATISTIK HITUNG
         function updateDashboardStats() {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
             const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA');
@@ -678,7 +833,6 @@
             document.getElementById('stat-aktif-count').textContent = aktifList.length;
             document.getElementById('stat-purna-count').textContent = purnaList.length;
 
-            // Hitung Kelompok Kosong dari Total 38 Kelompok Master
             const filledKelompokSet = new Set(aktifList.map(d => d.penempatan_kelompok).filter(Boolean));
             let totalKelompokMaster = 0;
             Object.values(MASTER_DESA).forEach(list => totalKelompokMaster += list.length);
@@ -688,113 +842,477 @@
             document.getElementById('badgeCount').textContent = `${dataList.length} Total Data`;
         }
 
-        // MONITORING DESA & KELOMPOK
-        function renderDesaMonitoring() {
-            const container = document.getElementById('desaMonitoringContainer');
-            container.innerHTML = '';
+        // ================= MODAL TOMBOL MONITORING BOARD =================
 
+        // PAPAN AKTIF MODAL
+        window.openModalAktif = () => {
+            const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
+            let itemsHTML = '';
+
+            if (aktifList.length === 0) {
+                itemsHTML = `<p class="text-xs text-slate-400 text-center py-4">Belum ada personil bertugas aktif.</p>`;
+            } else {
+                itemsHTML = aktifList.map(item => `
+                    <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
+                            <p class="text-[10px] text-sky-500 font-semibold truncate">Klp: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
+                            <p class="text-[9px] text-slate-400">Asal: ${toTitleCase(item.daerah_asal) || '-'}</p>
+                        </div>
+                        <button onclick="triggerDetailFromModal('${item.id}')" class="px-2.5 py-1.5 bg-sky-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
+                            Detail
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            const html = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-emerald-500 flex items-center gap-1.5">
+                            <span>🟢</span> Personil Tugas Aktif (${aktifList.length})
+                        </h3>
+                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                    </div>
+                    <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.triggerDetailFromModal = (id) => {
+            closePopupModal(false);
+            setTimeout(() => {
+                viewData(id);
+            }, 50);
+        };
+
+        // PAPAN PURNA MODAL
+        window.openModalPurna = () => {
+            renderModalPurnaContent('');
+        };
+
+        window.renderModalPurnaContent = (kw = '') => {
+            const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA' && 
+                (!kw || (d.nama_lengkap && d.nama_lengkap.toLowerCase().includes(kw.toLowerCase())) ||
+                (d.nomor_induk && d.nomor_induk.toLowerCase().includes(kw.toLowerCase())))
+            );
+
+            let itemsHTML = purnaList.length === 0 ? 
+                `<p class="text-xs text-slate-400 text-center py-4">Data purna tugas tidak ditemukan.</p>` :
+                purnaList.map(item => `
+                    <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
+                            <p class="text-[10px] text-amber-500 font-semibold truncate">Purna: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
+                            <p class="text-[9px] text-slate-400">Selesai: ${formatDate(item.tanggal_selesai_tugas)}</p>
+                        </div>
+                        <button onclick="triggerDetailFromModal('${item.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
+                            Detail
+                        </button>
+                    </div>
+                `).join('');
+
+            const html = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-amber-500 flex items-center gap-1.5">
+                            <span>🟡</span> Muballigh Purna Tugas (${purnaList.length})
+                        </h3>
+                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="purnaSearchInput" value="${kw}" placeholder="Filter nama/no. induk..." oninput="renderModalPurnaContent(this.value)" class="flex-1 dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 text-xs outline-none">
+                        <button onclick="exportPurnaOnly()" title="Ekspor Khusus Purna" class="px-3 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold active:scale-95 transition-all shrink-0 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span>Ekspor</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.exportPurnaOnly = () => {
+            const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA');
+            if (purnaList.length === 0) return showModal({ type: 'error', title: 'Kosong', message: 'Tidak ada data purna untuk diekspor.' });
+
+            const exp = purnaList.map((item, i) => ({
+                "No": i + 1,
+                "No. Induk": item.nomor_induk || '-',
+                "Nama Lengkap": toTitleCase(item.nama_lengkap),
+                "Kelompok Penempatan Selesai": toTitleCase(item.penempatan_kelompok) || '-',
+                "Mulai Tugas": item.tanggal_mulai_tugas || '-',
+                "Selesai Tugas": item.tanggal_selesai_tugas || '-',
+                "Daerah Asal": toTitleCase(item.daerah_asal) || '-'
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(exp);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Muballigh Purna");
+            XLSX.writeFile(wb, `Data_Muballigh_Purna_Tawangmangu_${Date.now()}.xlsx`);
+        };
+
+        // PAPAN KELOMPOK KOSONG MODAL
+        window.openModalKosong = () => {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
             const activeKelompokSet = new Set(aktifList.map(d => d.penempatan_kelompok).filter(Boolean));
 
+            let emptyDesaHTML = '';
+            let totalKosong = 0;
+
             Object.keys(MASTER_DESA).forEach(namaDesa => {
-                const kelompokList = MASTER_DESA[namaDesa];
-                const terisiCount = kelompokList.filter(k => activeKelompokSet.has(k)).length;
-                const kosongCount = kelompokList.length - terisiCount;
+                const emptyList = MASTER_DESA[namaDesa].filter(k => !activeKelompokSet.has(k));
+                totalKosong += emptyList.length;
 
-                const card = document.createElement('div');
-                card.className = "p-4 bg-slate-800/90 border border-slate-700/80 rounded-2xl space-y-2.5";
-                
-                let kelompokBadgesHTML = kelompokList.map(k => {
-                    const isTerisi = activeKelompokSet.has(k);
-                    if (isTerisi) {
-                        return `<span class="inline-block text-[9px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">${k}</span>`;
-                    } else {
-                        return `<span class="inline-block text-[9px] font-semibold bg-rose-500/10 text-rose-400/70 border border-rose-500/20 px-2 py-0.5 rounded-md">${k} (Kosong)</span>`;
-                    }
-                }).join(' ');
+                if (emptyList.length > 0) {
+                    emptyDesaHTML += `
+                        <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl space-y-1.5">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-xs font-bold text-rose-500">${namaDesa}</h5>
+                                <span class="text-[9px] bg-rose-500/10 text-rose-500 font-bold px-2 py-0.5 rounded-full">${emptyList.length} Kosong</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1">
+                                ${emptyList.map(k => `<span class="text-[9px] bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-0.5 rounded-md font-medium">${k}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
 
-                card.innerHTML = `
-                    <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
-                        <h4 class="text-xs font-bold text-sky-400">${namaDesa}</h4>
-                        <div class="text-[10px] space-x-1">
-                            <span class="text-emerald-400 font-bold">${terisiCount} Terisi</span>
-                            <span class="text-slate-500">|</span>
-                            <span class="text-rose-400 font-bold">${kosongCount} Kosong</span>
+            if (totalKosong === 0) {
+                emptyDesaHTML = `<p class="text-xs text-emerald-500 text-center py-4 font-bold">Semua kelompok di seluruh desa telah terisi muballigh!</p>`;
+            }
+
+            const html = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-rose-500 flex items-center gap-1.5">
+                            <span>🔴</span> Rincian Kelompok Kosong (${totalKosong})
+                        </h3>
+                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                    </div>
+                    <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+                        ${emptyDesaHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        // ================= MODAL FILTER & FORM DROPDOWNS =================
+
+        // Filter Status Modal
+        window.openFilterStatusModal = () => {
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Status</h3>
+                    <div class="space-y-1.5">
+                        <button onclick="selectFilterStatus('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFilterStatus === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Status --</button>
+                        <button onclick="selectFilterStatus('AKTIF')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-500 ${selectedFilterStatus === 'AKTIF' ? 'bg-emerald-500/15 text-emerald-500 font-bold' : ''}">🟢 Tugas Aktif</button>
+                        <button onclick="selectFilterStatus('PURNA')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-amber-500/10 hover:text-amber-500 ${selectedFilterStatus === 'PURNA' ? 'bg-amber-500/15 text-amber-500 font-bold' : ''}">🟡 Purna Tugas</button>
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.selectFilterStatus = (val) => {
+            selectedFilterStatus = val;
+            const labelMap = { '': '-- Semua Status --', 'AKTIF': '🟢 Tugas Aktif', 'PURNA': '🟡 Purna Tugas' };
+            document.getElementById('btnFilterStatusLabel').querySelector('span').textContent = labelMap[val];
+            closePopupModal(true);
+            applyFilter();
+        };
+
+        // Filter Tahun Modal
+        window.openFilterTahunModal = () => {
+            const list = [...new Set(dataList.map(d => getYear(d.tanggal_mulai_tugas)).filter(Boolean))].sort((a,b) => b - a);
+            let itemsHTML = `<button onclick="selectFilterTahun('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFilterTahun === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Tahun --</button>`;
+
+            list.forEach(y => {
+                itemsHTML += `<button onclick="selectFilterTahun('${y}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFilterTahun == y ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">Tahun ${y}</button>`;
+            });
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Tahun</h3>
+                    <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.selectFilterTahun = (val) => {
+            selectedFilterTahun = val;
+            document.getElementById('btnFilterTahunLabel').querySelector('span').textContent = val ? `Tahun ${val}` : '-- Semua Tahun --';
+            closePopupModal(true);
+            applyFilter();
+        };
+
+        // Form Status Tugas Modal
+        window.openFormStatusModal = () => {
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Status Tugasan</h3>
+                    <div class="space-y-1.5">
+                        <button type="button" onclick="selectFormStatus('AKTIF')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-500 ${selectedFormStatus === 'AKTIF' ? 'bg-emerald-500/15 text-emerald-500 font-bold' : ''}">🟢 AKTIF (Sedang Bertugas)</button>
+                        <button type="button" onclick="selectFormStatus('PURNA')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-amber-500/10 hover:text-amber-500 ${selectedFormStatus === 'PURNA' ? 'bg-amber-500/15 text-amber-500 font-bold' : ''}">🟡 PURNA (Sudah Selesai Tugas)</button>
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.selectFormStatus = (val) => {
+            selectedFormStatus = val;
+            const labelMap = { 'AKTIF': '🟢 AKTIF (Sedang Bertugas)', 'PURNA': '🟡 PURNA (Sudah Selesai Tugas)' };
+            document.getElementById('btnFormStatusLabel').querySelector('span').textContent = labelMap[val];
+            closePopupModal(true);
+        };
+
+        // Form Desa Penempatan Modal
+        window.openFormDesaModal = () => {
+            let itemsHTML = Object.keys(MASTER_DESA).map(desa => `
+                <button type="button" onclick="selectFormDesa('${desa}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFormDesa === desa ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${desa}</button>
+            `).join('');
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Desa Penempatan</h3>
+                    <div class="space-y-1.5">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.selectFormDesa = (desa) => {
+            selectedFormDesa = desa;
+            selectedFormKelompok = "";
+            document.getElementById('btnFormDesaLabel').querySelector('span').textContent = desa;
+            document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = '-- Pilih Kelompok --';
+            closePopupModal(true);
+        };
+
+        // Form Kelompok Penempatan Modal
+        window.openFormKelompokModal = () => {
+            if (!selectedFormDesa || !MASTER_DESA[selectedFormDesa]) {
+                return showModal({ type: 'error', title: 'Pilih Desa', message: 'Silakan pilih Desa Penempatan terlebih dahulu.' });
+            }
+
+            let itemsHTML = MASTER_DESA[selectedFormDesa].map(klp => `
+                <button type="button" onclick="selectFormKelompok('${klp}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFormKelompok === klp ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${klp}</button>
+            `).join('');
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Kelompok (${selectedFormDesa})</h3>
+                    <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.selectFormKelompok = (klp) => {
+            selectedFormKelompok = klp;
+            document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = klp;
+            closePopupModal(true);
+        };
+
+        // ================= MODAL EKSPOR ADVANCED =================
+        window.openExportModal = () => {
+            let desaOpts = Object.keys(MASTER_DESA).map(d => `<option value="${d}">${d}</option>`).join('');
+
+            const html = `
+                <div class="space-y-4 text-left">
+                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-sky-500 flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span>Opsi Ekspor Data</span>
+                        </h3>
+                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Desa</label>
+                            <select id="expDesaSelect" onchange="updateExpKelompokOptions()" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 outline-none">
+                                <option value="">-- Semua Desa --</option>
+                                ${desaOpts}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Kelompok</label>
+                            <select id="expKelompokSelect" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 outline-none">
+                                <option value="">-- Semua Kelompok --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Pilih Kolom Yang Diekspor</label>
+                            <div class="grid grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 max-h-36 overflow-y-auto">
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="status_tugas" checked> Status</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="nomor_induk" checked> No. Induk</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="nama_lengkap" checked> Nama</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="penempatan_kelompok" checked> Kelompok</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="tanggal_mulai_tugas" checked> Mulai Tugas</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="tanggal_selesai_tugas" checked> Selesai Tugas</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="daerah_asal" checked> Daerah Asal</label>
+                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="no_telp_orang_tua" checked> Telp Ortu</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-wrap gap-1 pt-1">
-                        ${kelompokBadgesHTML}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
 
-        // RENDER LIST UNTUK TAB DAFTAR
+                    <div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-700 border-slate-200">
+                        <button onclick="closePopupModal(true)" class="px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">Batal</button>
+                        <button onclick="processAdvancedExport('csv')" class="px-3 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">CSV</button>
+                        <button onclick="processAdvancedExport('excel')" class="px-3 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">Excel</button>
+                    </div>
+                </div>
+            `;
+            openPopupModal(html);
+        };
+
+        window.updateExpKelompokOptions = () => {
+            const desa = document.getElementById('expDesaSelect').value;
+            const klpSelect = document.getElementById('expKelompokSelect');
+            klpSelect.innerHTML = '<option value="">-- Semua Kelompok --</option>';
+
+            if (desa && MASTER_DESA[desa]) {
+                MASTER_DESA[desa].forEach(k => {
+                    const opt = document.createElement('option');
+                    opt.value = k;
+                    opt.textContent = k;
+                    klpSelect.appendChild(opt);
+                });
+            }
+        };
+
+        window.processAdvancedExport = (format) => {
+            const desa = document.getElementById('expDesaSelect').value;
+            const klp = document.getElementById('expKelompokSelect').value;
+
+            const selectedCols = Array.from(document.querySelectorAll('.expCol:checked')).map(c => c.value);
+
+            if (selectedCols.length === 0) {
+                return showModal({ type: 'error', title: 'Pilih Kolom', message: 'Minimal pilih 1 kolom untuk diekspor.' });
+            }
+
+            let filtered = dataList.filter(item => {
+                let matchDesa = true;
+                if (desa) {
+                    matchDesa = MASTER_DESA[desa] && MASTER_DESA[desa].includes(item.penempatan_kelompok);
+                }
+                let matchKlp = true;
+                if (klp) matchKlp = item.penempatan_kelompok === klp;
+
+                return matchDesa && matchKlp;
+            });
+
+            if (filtered.length === 0) {
+                return showModal({ type: 'error', title: 'Data Kosong', message: 'Tidak ada data sesuai kriteria filter.' });
+            }
+
+            const fieldLabels = {
+                status_tugas: "Status Tugas",
+                nomor_induk: "No. Induk",
+                nama_lengkap: "Nama Lengkap",
+                penempatan_kelompok: "Kelompok Penempatan",
+                tanggal_mulai_tugas: "Mulai Tugas",
+                tanggal_selesai_tugas: "Selesai Tugas",
+                daerah_asal: "Daerah Asal",
+                no_telp_orang_tua: "No. Telp Ortu"
+            };
+
+            const expData = filtered.map((item, index) => {
+                let row = { "No": index + 1 };
+                selectedCols.forEach(col => {
+                    let val = item[col] || '-';
+                    if (col === 'nama_lengkap' || col === 'penempatan_kelompok' || col === 'daerah_asal') val = toTitleCase(val);
+                    row[fieldLabels[col] || col] = val;
+                });
+                return row;
+            });
+
+            const ws = XLSX.utils.json_to_sheet(expData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Ekspor Biodata");
+
+            closePopupModal(true);
+
+            if (format === 'csv') {
+                XLSX.writeFile(wb, `Ekspor_Biodata_${Date.now()}.csv`, { bookType: 'csv' });
+            } else {
+                XLSX.writeFile(wb, `Ekspor_Biodata_${Date.now()}.xlsx`);
+            }
+        };
+
+        // RENDER LIST UNTUK TAB DIREKTORI
         function renderFullList(data) {
             const container = document.getElementById('fullListContainer');
             container.innerHTML = '';
 
             if (data.length === 0) {
-                container.innerHTML = `<div class="p-6 bg-slate-800/40 rounded-2xl text-center text-xs text-slate-500">Data tidak ditemukan.</div>`;
+                container.innerHTML = `<div class="p-6 dark:bg-slate-800/40 bg-white/50 rounded-2xl text-center text-xs text-slate-500 border border-slate-200 dark:border-slate-700/50">Data tidak ditemukan.</div>`;
                 return;
             }
 
             data.forEach(item => {
                 const status = getStatusTugas(item);
                 const statusBadge = status === 'AKTIF' 
-                    ? `<span class="text-[9px] font-bold uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">AKTIF</span>`
-                    : `<span class="text-[9px] font-bold uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">PURNA</span>`;
+                    ? `<span class="text-[9px] font-bold uppercase text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">AKTIF</span>`
+                    : `<span class="text-[9px] font-bold uppercase text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">PURNA</span>`;
 
                 const card = document.createElement('div');
-                card.className = "p-4 bg-slate-800/90 border border-slate-700/80 rounded-2xl space-y-3";
+                card.className = "p-4 dark:bg-slate-800 bg-white dark:border-slate-700/80 border-slate-200 border rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-shadow";
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-12 h-16 object-cover rounded-xl border border-slate-700">
-                        <div class="space-y-0.5 flex-1">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-12 h-16 object-cover rounded-xl border border-slate-300 dark:border-slate-700 shrink-0">
+                        <div class="space-y-0.5 flex-1 min-w-0">
                             <div class="flex items-center gap-1.5">
                                 ${statusBadge}
                                 <span class="text-[9px] text-slate-400 font-semibold">${item.nomor_induk || ''}</span>
                             </div>
-                            <h4 class="text-xs font-bold text-white pt-1">${toTitleCase(item.nama_lengkap)}</h4>
-                            <p class="text-[10px] text-slate-400">Klp: <strong class="text-slate-200">${toTitleCase(item.penempatan_kelompok) || '-'}</strong></p>
+                            <h4 class="text-xs font-bold dark:text-white text-slate-800 pt-1 truncate">${toTitleCase(item.nama_lengkap)}</h4>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Klp: <strong class="dark:text-slate-200 text-slate-700">${toTitleCase(item.penempatan_kelompok) || '-'}</strong></p>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-700/50">
-                        <button onclick="viewData('${item.id}')" class="px-2.5 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-semibold rounded-lg">View</button>
-                        <button onclick="printData('${item.id}')" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold rounded-lg">Cetak</button>
-                        <button onclick="editData('${item.id}')" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold rounded-lg">Edit</button>
-                        <button onclick="deleteData('${item.id}')" class="px-2.5 py-1 bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-semibold rounded-lg">Hapus</button>
+                    <div class="flex items-center justify-end gap-1.5 pt-2 border-t dark:border-slate-700/50 border-slate-100">
+                        <button onclick="viewData('${item.id}')" class="px-2.5 py-1 bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">View</button>
+                        <button onclick="printData('${item.id}')" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">Cetak</button>
+                        <button onclick="editData('${item.id}')" class="px-2.5 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">Edit</button>
+                        <button onclick="deleteData('${item.id}')" class="px-2.5 py-1 bg-red-500/10 text-red-500 border border-red-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">Hapus</button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // FILTER CONTROL
-        function populateFilterTahun() {
-            const select = document.getElementById('filterTahun');
-            select.innerHTML = '<option value="">-- Semua Tahun --</option>';
-            const list = [...new Set(dataList.map(d => getYear(d.tanggal_mulai_tugas)).filter(Boolean))].sort((a,b) => b - a);
-            list.forEach(y => {
-                const opt = document.createElement('option');
-                opt.value = y;
-                opt.textContent = `Tahun ${y}`;
-                select.appendChild(opt);
-            });
-        }
-
         function applyFilter() {
             const kw = document.getElementById('searchInput').value.toLowerCase();
-            const yr = document.getElementById('filterTahun').value;
-            const st = document.getElementById('filterStatus').value;
 
             const res = dataList.filter(i => {
                 const matchKw = (i.nama_lengkap && i.nama_lengkap.toLowerCase().includes(kw)) ||
                                 (i.nomor_induk && i.nomor_induk.toLowerCase().includes(kw));
-                const matchYr = !yr || (getYear(i.tanggal_mulai_tugas) == yr);
-                const matchSt = !st || (getStatusTugas(i) === st);
+                const matchYr = !selectedFilterTahun || (getYear(i.tanggal_mulai_tugas) == selectedFilterTahun);
+                const matchSt = !selectedFilterStatus || (getStatusTugas(i) === selectedFilterStatus);
                 return matchKw && matchYr && matchSt;
             });
 
@@ -802,38 +1320,18 @@
         }
 
         document.getElementById('searchInput').addEventListener('input', applyFilter);
-        document.getElementById('filterTahun').addEventListener('change', applyFilter);
-        document.getElementById('filterStatus').addEventListener('change', applyFilter);
-
-        // EXPORT EXCEL
-        window.exportToExcel = () => {
-            if (dataList.length === 0) return showModal({ type: 'error', title: 'Kosong', message: 'Tidak ada data untuk diexport.' });
-
-            const exp = dataList.map((item, i) => ({
-                "No": i + 1,
-                "Status Tugas": getStatusTugas(item),
-                "No. Induk": item.nomor_induk || '-',
-                "Nama Lengkap": toTitleCase(item.nama_lengkap),
-                "Kelompok Penempatan": toTitleCase(item.penempatan_kelompok) || '-',
-                "Mulai Tugas": item.tanggal_mulai_tugas || '-',
-                "Selesai Tugas": item.tanggal_selesai_tugas || '-',
-                "Daerah Asal": toTitleCase(item.daerah_asal) || '-',
-                "No. Telp Ortu": item.no_telp_orang_tua || '-'
-            }));
-
-            const ws = XLSX.utils.json_to_sheet(exp);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Data Muballigh");
-            XLSX.writeFile(wb, `Data_Muballigh_Tawangmangu_${Date.now()}.xlsx`);
-        };
 
         // SUBMIT FORM
         document.getElementById('biodataForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('edit_id').value;
-            btn.disabled = true;
 
+            if (!selectedFormKelompok) {
+                return showModal({ type: 'error', title: 'Kelompok Kosong', message: 'Silakan pilih Desa dan Kelompok penempatan.' });
+            }
+
+            btn.disabled = true;
             showSplashScreen();
 
             try {
@@ -849,7 +1347,7 @@
                 }
 
                 const payload = {
-                    status_tugas: document.getElementById('status_tugas').value,
+                    status_tugas: selectedFormStatus,
                     nomor_induk: document.getElementById('nomor_induk').value.toUpperCase(),
                     nama_lengkap: toTitleCase(document.getElementById('nama_lengkap').value),
                     nama_panggilan: toTitleCase(document.getElementById('nama_panggilan').value),
@@ -874,7 +1372,7 @@
                     nama_ibu: toTitleCase(document.getElementById('nama_ibu').value),
                     alamat_orang_tua: toTitleCase(document.getElementById('alamat_orang_tua').value),
                     no_telp_orang_tua: document.getElementById('no_telp_orang_tua').value,
-                    penempatan_kelompok: document.getElementById('penempatan_kelompok').value,
+                    penempatan_kelompok: selectedFormKelompok,
                     tanggal_mulai_tugas: document.getElementById('tanggal_mulai_tugas').value || null,
                     tanggal_selesai_tugas: document.getElementById('tanggal_selesai_tugas').value || null
                 };
@@ -906,7 +1404,7 @@
             document.getElementById('view_nama_lengkap').textContent = toTitleCase(item.nama_lengkap);
             document.getElementById('view_nama_panggilan').textContent = toTitleCase(item.nama_panggilan) || '-';
             document.getElementById('view_ttl').textContent = `${toTitleCase(item.tempat_lahir) || '-'}, ${formatDate(item.tanggal_lahir)}`;
-            document.getElementById('view_alamat').textContent = `Dk. ${toTitleCase(item.alamat_desa)}, RT/RW: ${item.alamat_rt_rw || '-'}, Kec. ${toTitleCase(item.alamat_kecamatan)}, Kab. ${toTitleCase(item.alamat_kabupaten)}, Prop. ${item.alamat_provinsi}`;
+            document.getElementById('view_alamat').textContent = `Dk. ${toTitleCase(item.alamat_desa)}, RT/RW: ${item.alamat_rt_rw || '-'}, Kec. ${toTitleCase(item.alamat_kecamatan)}, Kab. ${toTitleCase(item.alamat_kabupaten)}`;
             document.getElementById('view_pendidikan').textContent = item.pendidikan_terakhir || '-';
             document.getElementById('view_foto').src = item.foto_url || 'https://via.placeholder.com/120x160?text=3x4';
 
@@ -915,7 +1413,7 @@
             document.getElementById('view_daerah_asal').textContent = toTitleCase(item.daerah_asal) || '-';
             document.getElementById('view_alumni').textContent = toTitleCase(item.alumni_pondok) || '-';
             document.getElementById('view_tugasan_ke').textContent = item.tugasan_ke || '1';
-            document.getElementById('view_daerah_tugasan').textContent = toTitleCase(item.daerah_tugasan) || 'Tawangmangu';
+            document.getElementById('view_daerah_tugasan').textContent = 'Tawangmangu';
 
             document.getElementById('view_quran').textContent = item.materi_quran_himpunan ? '☑ Ya' : '☐ Tidak';
             document.getElementById('view_hadist').textContent = item.materi_hadist_besar ? `☑ Ya (${toTitleCase(item.materi_hadist_besar_detail) || '-'})` : '☐ Tidak';
@@ -936,7 +1434,8 @@
             if (!item) return;
             populatePrintArea(item);
             document.getElementById('modalViewContent').innerHTML = document.getElementById('printArea').innerHTML;
-            pushModalState('view');
+            
+            history.pushState({ modalOpen: true }, "");
             document.getElementById('viewModalOverlay').classList.remove('hidden');
         };
 
@@ -944,8 +1443,9 @@
             const overlay = document.getElementById('viewModalOverlay');
             if (!overlay.classList.contains('hidden')) {
                 overlay.classList.add('hidden');
-                activeModalType = null;
-                if (triggerBack && history.state && history.state.modalOpen) history.back();
+                if (triggerBack && history.state && history.state.modalOpen) {
+                    history.back();
+                }
             }
         };
 
@@ -964,20 +1464,20 @@
 
             document.getElementById('edit_id').value = item.id;
             document.getElementById('existing_foto_url').value = item.foto_url || '';
-            document.getElementById('status_tugas').value = item.status_tugas || 'AKTIF';
+            
+            selectedFormStatus = item.status_tugas || 'AKTIF';
+            document.getElementById('btnFormStatusLabel').querySelector('span').textContent = selectedFormStatus === 'AKTIF' ? '🟢 AKTIF (Sedang Bertugas)' : '🟡 PURNA (Sudah Selesai Tugas)';
 
-            // Cari Desa berdasarkan Kelompok
             let foundDesa = "";
             Object.keys(MASTER_DESA).forEach(desa => {
-                if (MASTER_DESA[desa].includes(item.penempatan_kelompok)) {
-                    foundDesa = desa;
-                }
+                if (MASTER_DESA[desa].includes(item.penempatan_kelompok)) foundDesa = desa;
             });
 
             if (foundDesa) {
-                document.getElementById('penempatan_desa').value = foundDesa;
-                updateKelompokOptions();
-                document.getElementById('penempatan_kelompok').value = item.penempatan_kelompok;
+                selectedFormDesa = foundDesa;
+                selectedFormKelompok = item.penempatan_kelompok;
+                document.getElementById('btnFormDesaLabel').querySelector('span').textContent = foundDesa;
+                document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = item.penempatan_kelompok;
             }
 
             document.getElementById('nomor_induk').value = item.nomor_induk || '';
@@ -1015,25 +1515,24 @@
             document.getElementById('btnCancelEdit').classList.remove('hidden');
 
             switchTab('input');
-            pushModalState('edit');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.resetForm = (triggerBack = true) => {
             document.getElementById('biodataForm').reset();
             document.getElementById('edit_id').value = '';
             document.getElementById('existing_foto_url').value = '';
-            document.getElementById('status_tugas').value = 'AKTIF';
-            document.getElementById('penempatan_kelompok').innerHTML = '<option value="">-- Pilih Desa Terlebih Dahulu --</option>';
+            
+            selectedFormStatus = 'AKTIF';
+            selectedFormDesa = '';
+            selectedFormKelompok = '';
+
+            document.getElementById('btnFormStatusLabel').querySelector('span').textContent = '🟢 AKTIF (Sedang Bertugas)';
+            document.getElementById('btnFormDesaLabel').querySelector('span').textContent = '-- Pilih Desa --';
+            document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = '-- Pilih Desa Terlebih Dahulu --';
 
             document.getElementById('formTitle').innerHTML = `<span>📝</span> Formulir Biodata`;
             document.getElementById('btnSubmit').textContent = 'Simpan Data Biodata';
             document.getElementById('btnCancelEdit').classList.add('hidden');
-
-            if (activeModalType === 'edit') {
-                activeModalType = null;
-                if (triggerBack && history.state && history.state.modalOpen) history.back();
-            }
         };
 
         window.deleteData = (id) => {
@@ -1052,7 +1551,7 @@
             });
         };
 
-        // PEMANGGILAN OTOMATIS SAAT PERTAMA KALI MEMBUKA APLIKASI
+        // INITAL LOAD
         document.addEventListener('DOMContentLoaded', fetchBiodata);
     </script>
 </body>
