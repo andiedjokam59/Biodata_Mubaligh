@@ -38,33 +38,14 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* Modern Entrance & Splash Screen Animations */
-        @keyframes logoEntrance {
-            0% { transform: scale(0.7) translateY(12px); opacity: 0; }
-            60% { transform: scale(1.05) translateY(-2px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+        /* Modern Minimalist Splash Screen Animations */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.92); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes ringGlow {
-            0%, 100% { transform: scale(0.95); opacity: 0.2; }
-            50% { transform: scale(1.25); opacity: 0.6; }
-        }
-
-        @keyframes floatLight {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(3deg); }
-        }
-
-        .animate-logo-entrance {
-            animation: logoEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-ring-glow {
-            animation: ringGlow 2.5s ease-in-out infinite;
-        }
-
-        .animate-float-logo {
-            animation: floatLight 3.5s ease-in-out infinite;
+        .animate-splash-in {
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* Modal & Tab Transitions */
@@ -94,48 +75,42 @@
         }
     </style>
 </head>
-<body class="dark:bg-slate-900 bg-slate-100 dark:text-slate-100 text-slate-800 min-h-screen py-6 flex flex-col justify-center items-center antialiased transition-colors duration-300 selection:bg-sky-500 selection:text-white">
+<body class="dark:bg-slate-950 bg-slate-100 dark:text-slate-100 text-slate-800 min-h-screen py-6 flex flex-col justify-center items-center antialiased transition-colors duration-300 selection:bg-sky-500 selection:text-white">
 
-    <!-- PREMIUM RADIAL SPLASH SCREEN -->
-    <div id="splashScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-between py-12 px-6 transition-opacity duration-500 no-print overflow-hidden">
+    <!-- ELEGANT & MINIMALIST SPLASH SCREEN -->
+    <div id="splashScreen" class="fixed inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black z-50 flex flex-col items-center justify-between py-16 px-6 transition-opacity duration-500 no-print overflow-hidden">
         <div class="w-full"></div>
 
-        <!-- Center Logo with Animated Orbiting Glowing Rings -->
-        <div class="flex flex-col items-center text-center space-y-6 animate-logo-entrance">
+        <!-- Center Logo & Branding -->
+        <div class="flex flex-col items-center text-center space-y-5 animate-splash-in">
             <div class="relative flex items-center justify-center">
-                <div class="absolute w-36 h-36 bg-sky-500/20 rounded-full blur-2xl animate-ring-glow"></div>
-                <div class="absolute w-28 h-28 border border-sky-400/30 rounded-3xl animate-ping opacity-25"></div>
+                <div class="absolute w-32 h-32 bg-sky-500/10 rounded-full blur-2xl"></div>
                 
-                <div class="w-24 h-24 rounded-3xl bg-slate-900/90 border border-sky-500/30 p-3.5 shadow-[0_0_35px_rgba(14,165,233,0.3)] flex items-center justify-center relative z-10 backdrop-blur-xl animate-float-logo">
-                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain filter drop-shadow">
+                <div class="w-28 h-28 flex items-center justify-center relative z-10 p-2">
+                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain filter drop-shadow-lg">
                 </div>
             </div>
 
             <div class="space-y-1">
-                <h1 class="text-2xl font-extrabold text-white tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-sky-200">
+                <h1 class="text-2xl font-extrabold text-white tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-sky-300">
                     Tawangmangu
                 </h1>
-                <p class="text-[11px] text-sky-400 font-semibold tracking-[0.2em] uppercase">
+                <p class="text-[10px] text-sky-400 font-semibold tracking-[0.25em] uppercase">
                     Forum Muballigh-Muballighot
                 </p>
             </div>
         </div>
 
-        <!-- Bottom Loading Indicator -->
-        <div class="w-full max-w-[180px] space-y-2.5">
-            <div class="h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-slate-700/50">
-                <div class="h-full bg-gradient-to-r from-sky-500 via-blue-500 to-sky-300 rounded-full animate-pulse w-full"></div>
-            </div>
-            <p class="text-[10px] text-slate-400 text-center font-medium tracking-widest uppercase flex items-center justify-center gap-1">
-                <span>Memuat Sistem</span>
-                <span class="inline-block animate-bounce">...</span>
-            </p>
+        <!-- Minimalist Loading Ring -->
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-5 h-5 border-2 border-sky-500/20 border-t-sky-400 rounded-full animate-spin"></div>
+            <p class="text-[10px] text-slate-500 tracking-widest uppercase font-medium">Memuat...</p>
         </div>
     </div>
 
-    <!-- CENTER LOADING INDICATOR MODAL (Tepat di Tengah Layar) -->
+    <!-- CENTER LOADING INDICATOR MODAL -->
     <div id="saveLoadingModal" class="fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center hidden no-print backdrop-blur-sm">
-        <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center space-y-3 modal-animate max-w-[200px] w-full text-center">
+        <div class="dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-200 border rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center space-y-3 modal-animate max-w-[200px] w-full text-center">
             <div class="w-10 h-10 border-4 border-sky-500/30 border-t-sky-500 rounded-full animate-spin"></div>
             <p class="text-xs font-bold dark:text-slate-100 text-slate-800">Menyimpan Data...</p>
         </div>
@@ -144,88 +119,93 @@
     <!-- MAIN CENTERED CONTAINER -->
     <div class="w-full max-w-md px-4 my-auto space-y-5 flex flex-col justify-center">
 
-        <!-- Top Header App Bar -->
-        <header class="px-2 pb-1 flex justify-between items-center w-full no-print">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-300 border p-1.5 flex items-center justify-center shrink-0 shadow-sm">
-                    <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
-                </div>
-                <div>
-                    <h1 class="text-base font-bold dark:text-white text-slate-800 tracking-tight">Tawangmangu</h1>
-                    <p class="text-[10px] dark:text-slate-400 text-slate-500">Forum Muballigh-Muballighot</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <!-- Tombol Home -->
-                <button onclick="switchTab('home')" title="Kembali ke Home" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                </button>
-
-                <!-- Mode Dark/Light Toggle Button -->
-                <button onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-amber-400 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
-                    <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                </button>
-
-                <!-- Refresh Button -->
-                <button onclick="fetchBiodata()" title="Refresh Data" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
-                    <svg id="refreshIcon" class="w-4 h-4 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                </button>
-            </div>
-        </header>
-
         <!-- Main Content Area -->
         <main class="w-full space-y-5 no-print">
 
             <!-- ================= TAB 1: HOME DASHBOARD ================= -->
-            <section id="tab-home" class="tab-content space-y-5">
+            <section id="tab-home" class="tab-content space-y-4">
                 
-                <!-- Hero Gradient Card -->
-                <div class="rounded-3xl p-6 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-xl shadow-sky-900/20 text-white relative overflow-hidden">
-                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <!-- BOARD UTAMA DENGAN SHADOW 3D MEMBUNGKUS HEADER + DASHBOARD -->
+                <div class="dark:bg-slate-900/90 bg-white/90 backdrop-blur-xl dark:border-slate-800/80 border-slate-200/90 border rounded-[2.5rem] p-5 space-y-5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all">
                     
-                    <p class="text-xs font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
-                    <div class="flex items-baseline gap-2 mb-4">
-                        <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
-                        <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personil</span>
+                    <!-- Top Header App Bar (Di dalam Board) -->
+                    <header class="flex justify-between items-center w-full pb-1 border-b dark:border-slate-800/60 border-slate-200/60">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border p-1.5 flex items-center justify-center shrink-0 shadow-sm">
+                                <img src="logo insan qurany.png" alt="Logo Insan Qurani" class="w-full h-full object-contain">
+                            </div>
+                            <div>
+                                <h1 class="text-base font-bold dark:text-white text-slate-800 tracking-tight">Tawangmangu</h1>
+                                <p class="text-[10px] dark:text-slate-400 text-slate-500">Forum Muballigh-Muballighot</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-1.5">
+                            <!-- Tombol Home -->
+                            <button onclick="switchTab('home')" title="Kembali ke Home" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                            </button>
+
+                            <!-- Mode Dark/Light Toggle Button -->
+                            <button onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-amber-400 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                                <svg id="themeIconSun" class="w-3.5 h-3.5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                <svg id="themeIconMoon" class="w-3.5 h-3.5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            </button>
+
+                            <!-- Refresh Button -->
+                            <button onclick="fetchBiodata()" title="Refresh Data" class="w-8 h-8 rounded-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                                <svg id="refreshIcon" class="w-3.5 h-3.5 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- Hero Gradient Card -->
+                    <div class="rounded-2xl p-5 bg-gradient-to-br from-sky-500 via-sky-600 to-blue-700 shadow-lg shadow-sky-900/30 text-white relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <p class="text-[11px] font-medium text-sky-100 uppercase tracking-wider mb-1">Muballigh Tugas Aktif</p>
+                        <div class="flex items-baseline gap-2 mb-3">
+                            <h2 id="stat-aktif-hero" class="text-4xl font-extrabold tracking-tight">0</h2>
+                            <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium text-sky-100">Personil</span>
+                        </div>
+
+                        <!-- Quick Action Buttons -->
+                        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
+                            <button onclick="openAddNewForm()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-xl py-2 flex flex-col items-center justify-center gap-1 text-[11px] font-medium backdrop-blur-sm">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                <span>Tambah</span>
+                            </button>
+                            
+                            <button onclick="switchTab('daftar')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-xl py-2 flex flex-col items-center justify-center gap-1 text-[11px] font-medium backdrop-blur-sm">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                <span>Direktori</span>
+                            </button>
+                            
+                            <button onclick="openExportModal()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-xl py-2 flex flex-col items-center justify-center gap-1 text-[11px] font-medium backdrop-blur-sm">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Ekspor</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Quick Action Buttons with SVG Icons -->
-                    <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
-                        <button onclick="openAddNewForm()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            <span>Tambah</span>
+                    <!-- Dashboard Monitoring Interactive Cards -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="openModalAktif()" class="dark:bg-slate-950/70 bg-slate-50 dark:border-slate-800/80 border-slate-200 border rounded-xl p-3 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-emerald-500/50 group flex flex-col justify-center items-center">
+                            <p class="text-[9px] font-bold text-emerald-500 uppercase tracking-wider">Aktif</p>
+                            <h4 id="stat-aktif-count" class="text-lg font-extrabold dark:text-white text-slate-800 mt-0.5">0</h4>
                         </button>
-                        
-                        <button onclick="switchTab('daftar')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                            <span>Direktori</span>
+
+                        <button onclick="openModalPurna()" class="dark:bg-slate-950/70 bg-slate-50 dark:border-slate-800/80 border-slate-200 border rounded-xl p-3 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-amber-500/50 group flex flex-col justify-center items-center">
+                            <p class="text-[9px] font-bold text-amber-500 uppercase tracking-wider">Purna</p>
+                            <h4 id="stat-purna-count" class="text-lg font-extrabold dark:text-white text-slate-800 mt-0.5">0</h4>
                         </button>
-                        
-                        <button onclick="openExportModal()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            <span>Ekspor</span>
+
+                        <button onclick="openModalKosong()" class="dark:bg-slate-950/70 bg-slate-50 dark:border-slate-800/80 border-slate-200 border rounded-xl p-3 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-rose-500/50 group flex flex-col justify-center items-center">
+                            <p class="text-[9px] font-bold text-rose-500 uppercase tracking-wider">Kosong</p>
+                            <h4 id="stat-kosong-count" class="text-lg font-extrabold text-rose-500 mt-0.5">0</h4>
                         </button>
                     </div>
-                </div>
 
-                <!-- Dashboard Monitoring Interactive Cards -->
-                <div class="grid grid-cols-3 gap-2.5">
-                    <button onclick="openModalAktif()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-emerald-500/50 group flex flex-col justify-center items-center">
-                        <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Aktif</p>
-                        <h4 id="stat-aktif-count" class="text-xl font-extrabold dark:text-white text-slate-800 mt-1">0</h4>
-                    </button>
-
-                    <button onclick="openModalPurna()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-amber-500/50 group flex flex-col justify-center items-center">
-                        <p class="text-[10px] font-bold text-amber-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Purna</p>
-                        <h4 id="stat-purna-count" class="text-xl font-extrabold dark:text-white text-slate-800 mt-1">0</h4>
-                    </button>
-
-                    <button onclick="openModalKosong()" class="dark:bg-slate-800 bg-white dark:border-slate-700/60 border-slate-200/80 border rounded-2xl p-4 text-center active:scale-95 transition-all duration-150 shadow-sm hover:border-rose-500/50 group flex flex-col justify-center items-center">
-                        <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider group-hover:scale-105 transition-transform">Klp. Kosong</p>
-                        <h4 id="stat-kosong-count" class="text-xl font-extrabold text-rose-500 mt-1">0</h4>
-                    </button>
                 </div>
 
             </section>
@@ -242,15 +222,15 @@
 
                 <!-- Search & Filter Controls -->
                 <div class="space-y-2">
-                    <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-3 text-xs dark:text-slate-100 text-slate-800 dark:placeholder-slate-500 placeholder-slate-400 outline-none focus:border-sky-500 shadow-sm capitalize">
+                    <input type="text" id="searchInput" placeholder="Cari nama / nomor induk..." class="w-full dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-300 border rounded-xl p-3 text-xs dark:text-slate-100 text-slate-800 dark:placeholder-slate-500 placeholder-slate-400 outline-none focus:border-sky-500 shadow-sm capitalize">
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="openFilterStatusModal()" id="btnFilterStatusLabel" class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
+                        <button onclick="openFilterStatusModal()" id="btnFilterStatusLabel" class="dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
                             <span class="truncate">-- Semua Status --</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
 
-                        <button onclick="openFilterTahunModal()" id="btnFilterTahunLabel" class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
+                        <button onclick="openFilterTahunModal()" id="btnFilterTahunLabel" class="dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 text-xs dark:text-slate-300 text-slate-700 outline-none flex justify-between items-center active:scale-95 transition-all duration-150 shadow-sm">
                             <span class="truncate">-- Semua Tahun --</span>
                             <svg class="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
@@ -266,8 +246,8 @@
 
             <!-- ================= TAB 3: INPUT / EDIT DATA ================= -->
             <section id="tab-input" class="tab-content hidden">
-                <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border rounded-3xl p-5 space-y-5 shadow-sm">
-                    <div class="flex justify-between items-center border-b dark:border-slate-700/80 border-slate-200 pb-3">
+                <div class="dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-200 border rounded-3xl p-5 space-y-5 shadow-sm">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-3">
                         <h3 id="formTitle" class="text-sm font-bold text-sky-500 flex items-center gap-2">
                             <span>📝</span> Formulir Biodata
                         </h3>
@@ -275,7 +255,7 @@
                             <button type="button" onclick="closeCurrentActivity()" class="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-2 py-1">
                                 Kembali
                             </button>
-                            <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs dark:bg-slate-700 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 dark:text-slate-200 text-slate-700 px-3 py-1 rounded-lg active:scale-95 transition-all duration-150">
+                            <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 dark:text-slate-200 text-slate-700 px-3 py-1 rounded-lg active:scale-95 transition-all duration-150">
                                 Batal
                             </button>
                         </div>
@@ -287,89 +267,89 @@
 
                         <!-- Seksi A: Identitas -->
                         <div class="space-y-3">
-                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">A. Identitas Utama</p>
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">A. Identitas Utama</p>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Nomor Induk</label>
-                                <input type="text" id="nomor_induk" placeholder="Contoh: P033" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
+                                <input type="text" id="nomor_induk" placeholder="Contoh: P033" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
                             </div>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Lengkap *</label>
-                                <input type="text" id="nama_lengkap" required placeholder="Sesuai KTP" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                <input type="text" id="nama_lengkap" required placeholder="Sesuai KTP" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Panggilan</label>
-                                    <input type="text" id="nama_panggilan" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="nama_panggilan" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Pendidikan</label>
-                                    <input type="text" id="pendidikan_terakhir" placeholder="SMP/SMA" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
+                                    <input type="text" id="pendidikan_terakhir" placeholder="SMP/SMA" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 uppercase">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Tempat Lahir</label>
-                                    <input type="text" id="tempat_lahir" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="tempat_lahir" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Lahir</label>
-                                    <input type="date" id="tanggal_lahir" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                    <input type="date" id="tanggal_lahir" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                                 </div>
                             </div>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Unggah Foto 3x4</label>
-                                <input type="file" id="foto_input" accept="image/*" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2 text-slate-500">
+                                <input type="file" id="foto_input" accept="image/*" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2 text-slate-500">
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">RT/RW</label>
-                                    <input type="text" id="alamat_rt_rw" placeholder="005/011" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                    <input type="text" id="alamat_rt_rw" placeholder="005/011" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Desa/Kelurahan</label>
-                                    <input type="text" id="alamat_desa" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="alamat_desa" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Kecamatan</label>
-                                    <input type="text" id="alamat_kecamatan" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="alamat_kecamatan" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Kabupaten</label>
-                                    <input type="text" id="alamat_kabupaten" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="alamat_kabupaten" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Seksi B: Daerah Asal -->
                         <div class="space-y-3">
-                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">B. Daerah Asal & Tugasan</p>
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">B. Daerah Asal & Tugasan</p>
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Kelompok</label>
-                                    <input type="text" id="kelompok_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="kelompok_asal" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Desa</label>
-                                    <input type="text" id="desa_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="desa_asal" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Daerah</label>
-                                    <input type="text" id="daerah_asal" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="daerah_asal" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Alumni Pondok</label>
-                                    <input type="text" id="alumni_pondok" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="alumni_pondok" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Tugasan Ke-</label>
-                                    <input type="number" id="tugasan_ke" value="1" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                    <input type="number" id="tugasan_ke" value="1" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                                 </div>
                             </div>
-                            <div class="space-y-2 dark:bg-slate-900/50 bg-slate-50 p-3 rounded-xl dark:border-slate-700/50 border-slate-200 border">
+                            <div class="space-y-2 dark:bg-slate-950/50 bg-slate-50 p-3 rounded-xl dark:border-slate-800 border-slate-200 border">
                                 <label class="block dark:text-slate-400 text-slate-600">Materi Khatam:</label>
                                 <label class="flex items-center gap-2 dark:text-slate-200 text-slate-700">
                                     <input type="checkbox" id="materi_quran_himpunan" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
@@ -377,45 +357,45 @@
                                 </label>
                                 <div class="flex items-center gap-2">
                                     <input type="checkbox" id="materi_hadist_besar" class="rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
-                                    <input type="text" id="materi_hadist_besar_detail" placeholder="Detail Hadist Besar..." class="flex-1 dark:bg-slate-900 bg-white dark:border-slate-700 border-slate-300 border rounded-lg p-1.5 dark:text-slate-100 text-slate-800 outline-none capitalize">
+                                    <input type="text" id="materi_hadist_besar_detail" placeholder="Detail Hadist Besar..." class="flex-1 dark:bg-slate-950 bg-white dark:border-slate-800 border-slate-300 border rounded-lg p-1.5 dark:text-slate-100 text-slate-800 outline-none capitalize">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Seksi C: Kesehatan & ORTU -->
                         <div class="space-y-3">
-                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">C. Kesehatan & ORTU</p>
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">C. Kesehatan & ORTU</p>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Penyakit Pernah Diderita</label>
-                                <input type="text" id="penyakit_diderita" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                <input type="text" id="penyakit_diderita" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Ayah</label>
-                                    <input type="text" id="nama_ayah" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="nama_ayah" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Nama Ibu</label>
-                                    <input type="text" id="nama_ibu" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                    <input type="text" id="nama_ibu" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                                 </div>
                             </div>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Alamat Lengkap ORTU</label>
-                                <input type="text" id="alamat_orang_tua" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
+                                <input type="text" id="alamat_orang_tua" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500 capitalize">
                             </div>
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">No. Telp/HP ORTU</label>
-                                <input type="text" id="no_telp_orang_tua" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                <input type="text" id="no_telp_orang_tua" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                             </div>
                         </div>
 
                         <!-- Seksi D: Penempatan Tugas -->
                         <div class="space-y-3">
-                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-950/60 bg-slate-100 p-2 rounded-lg">D. Penempatan Tugas Tawangmangu</p>
                             
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Status Tugasan *</label>
-                                <button type="button" onclick="openFormStatusModal()" id="btnFormStatusLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150 font-semibold">
+                                <button type="button" onclick="openFormStatusModal()" id="btnFormStatusLabel" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150 font-semibold">
                                     <span>🟢 AKTIF (Sedang Bertugas)</span>
                                     <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
@@ -423,7 +403,7 @@
 
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Pilih Desa Penempatan *</label>
-                                <button type="button" onclick="openFormDesaModal()" id="btnFormDesaLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
+                                <button type="button" onclick="openFormDesaModal()" id="btnFormDesaLabel" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
                                     <span>-- Pilih Desa --</span>
                                     <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
@@ -431,7 +411,7 @@
 
                             <div>
                                 <label class="block dark:text-slate-400 text-slate-600 mb-1">Pilih Kelompok Penempatan *</label>
-                                <button type="button" onclick="openFormKelompokModal()" id="btnFormKelompokLabel" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
+                                <button type="button" onclick="openFormKelompokModal()" id="btnFormKelompokLabel" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none text-left flex justify-between items-center active:scale-95 transition-all duration-150">
                                     <span>-- Pilih Desa Terlebih Dahulu --</span>
                                     <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
@@ -440,11 +420,11 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Mulai Tugas</label>
-                                    <input type="date" id="tanggal_mulai_tugas" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                    <input type="date" id="tanggal_mulai_tugas" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                                 </div>
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Tanggal Selesai Tugas</label>
-                                    <input type="date" id="tanggal_selesai_tugas" class="w-full dark:bg-slate-900 bg-slate-50 dark:border-slate-700 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
+                                    <input type="date" id="tanggal_selesai_tugas" class="w-full dark:bg-slate-950 bg-slate-50 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 outline-none focus:border-sky-500">
                                 </div>
                             </div>
                         </div>
@@ -529,7 +509,7 @@
 
     <!-- MODAL NOTIFIKASI STANDARD -->
     <div id="customModal" class="fixed inset-0 bg-black/75 z-[100] flex items-center justify-center hidden p-4 no-print backdrop-blur-sm">
-        <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border dark:text-slate-100 text-slate-800 rounded-3xl max-w-xs w-full p-6 text-center modal-animate my-auto shadow-2xl">
+        <div class="dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-200 border dark:text-slate-100 text-slate-800 rounded-3xl max-w-xs w-full p-6 text-center modal-animate my-auto shadow-2xl">
             <div id="modalIcon" class="mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full"></div>
             <h3 id="modalTitle" class="text-base font-bold mb-1"></h3>
             <p id="modalMessage" class="text-xs dark:text-slate-400 text-slate-500 mb-5"></p>
@@ -672,7 +652,7 @@
         }
 
         // ================= SISTEM HISTORY STACK (UNTUK BACK BERURUTAN) =================
-        let activityStack = []; // Array penampung id modal/tab teraktif
+        let activityStack = [];
         let isBackProcessing = false;
 
         if (!history.state) {
@@ -691,7 +671,6 @@
             }
         };
 
-        // FUNGSI UNTUK TOMBOL TAMBAH AGAR SELALU MEMBUKA FORMULIR KOSONG
         window.openAddNewForm = () => {
             resetForm();
             switchTab('input');
@@ -707,7 +686,7 @@
             overlay.style.zIndex = zIndex;
 
             overlay.innerHTML = `
-                <div class="dark:bg-slate-800 bg-white dark:text-slate-100 text-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-5 border dark:border-slate-700 border-slate-200 modal-animate my-auto">
+                <div class="dark:bg-slate-900 bg-white dark:text-slate-100 text-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-5 border dark:border-slate-800 border-slate-200 modal-animate my-auto">
                     ${htmlContent}
                 </div>
             `;
@@ -744,7 +723,6 @@
             }
         };
 
-        // LISTENER TOMBOL BACK SYSTEM HP
         window.addEventListener('popstate', (e) => {
             if (isBackProcessing) {
                 isBackProcessing = false;
@@ -781,7 +759,7 @@
 
             if (type === 'confirm') {
                 const btnCancel = document.createElement('button');
-                btnCancel.className = 'px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
+                btnCancel.className = 'px-3 py-2 dark:bg-slate-800 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
                 btnCancel.textContent = 'Batal';
                 btnCancel.onclick = () => closeCustomModal();
 
@@ -878,7 +856,7 @@
                 itemsHTML = `<p class="text-xs text-slate-400 text-center py-4">Belum ada personil bertugas aktif.</p>`;
             } else {
                 itemsHTML = aktifList.map(item => `
-                    <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                    <div class="p-3 dark:bg-slate-950 bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-2xl flex items-center gap-3">
                         <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
                         <div class="flex-1 min-w-0">
                             <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
@@ -894,7 +872,7 @@
 
             const html = `
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
                         <h3 class="text-sm font-bold text-emerald-500 flex items-center gap-1.5">
                             <span>🟢</span> Personil Tugas Aktif (${aktifList.length})
                         </h3>
@@ -921,7 +899,7 @@
             let itemsHTML = purnaList.length === 0 ? 
                 `<p class="text-xs text-slate-400 text-center py-4">Data purna tugas tidak ditemukan.</p>` :
                 purnaList.map(item => `
-                    <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                    <div class="p-3 dark:bg-slate-950 bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-2xl flex items-center gap-3">
                         <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
                         <div class="flex-1 min-w-0">
                             <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
@@ -936,7 +914,7 @@
 
             const html = `
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
                         <h3 class="text-sm font-bold text-amber-500 flex items-center gap-1.5">
                             <span>🟡</span> Muballigh Purna Tugas (${purnaList.length})
                         </h3>
@@ -944,7 +922,7 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <input type="text" id="purnaSearchInput" value="${kw}" placeholder="Filter nama/no. induk..." oninput="updateModalPurnaDOM(this.value)" class="flex-1 dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 text-xs outline-none">
+                        <input type="text" id="purnaSearchInput" value="${kw}" placeholder="Filter nama/no. induk..." oninput="updateModalPurnaDOM(this.value)" class="flex-1 dark:bg-slate-950 bg-slate-100 border dark:border-slate-800 border-slate-300 rounded-xl p-2 text-xs outline-none">
                         <button onclick="exportPurnaOnly()" title="Ekspor Khusus Purna" class="px-3 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold active:scale-95 transition-all shrink-0 flex items-center gap-1">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             <span>Ekspor</span>
@@ -973,7 +951,7 @@
                 container.innerHTML = purnaList.length === 0 ? 
                     `<p class="text-xs text-slate-400 text-center py-4">Data purna tugas tidak ditemukan.</p>` :
                     purnaList.map(item => `
-                        <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                        <div class="p-3 dark:bg-slate-950 bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-2xl flex items-center gap-3">
                             <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
                             <div class="flex-1 min-w-0">
                                 <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
@@ -1021,14 +999,14 @@
 
                 if (emptyList.length > 0) {
                     const listItems = emptyList.map(k => `
-                        <div class="flex items-center gap-2 py-1.5 px-2.5 dark:bg-slate-900/60 bg-slate-100 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center gap-2 py-1.5 px-2.5 dark:bg-slate-950/60 bg-slate-100 rounded-xl border border-slate-200 dark:border-slate-800">
                             <span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
                             <span class="text-xs font-medium dark:text-slate-200 text-slate-700">${k}</span>
                         </div>
                     `).join('');
 
                     emptyDesaHTML += `
-                        <div class="p-3.5 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700/80 border-slate-200 rounded-2xl space-y-2.5">
+                        <div class="p-3.5 dark:bg-slate-950 bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-2xl space-y-2.5">
                             <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
                                 <h5 class="text-xs font-bold text-sky-500 uppercase tracking-wide flex items-center gap-1.5">
                                     <span>📍</span> ${namaDesa}
@@ -1051,7 +1029,7 @@
 
             const html = `
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
                         <h3 class="text-sm font-bold text-rose-500 flex items-center gap-1.5">
                             <span>🔴</span> Rincian Kelompok Kosong (${totalKosong})
                         </h3>
@@ -1065,12 +1043,12 @@
             pushModalInstance('modal-kosong', html);
         };
 
-        // ================= MODAL PEMILIH (REPLACING ALL DROPDOWNS) =================
+        // ================= MODAL PEMILIH GENERAL =================
 
         window.openFilterStatusModal = () => {
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Status</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Filter Status</h3>
                     <div class="space-y-1.5">
                         <button onclick="selectFilterStatus('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFilterStatus === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Status --</button>
                         <button onclick="selectFilterStatus('AKTIF')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-500 ${selectedFilterStatus === 'AKTIF' ? 'bg-emerald-500/15 text-emerald-500 font-bold' : ''}">🟢 Tugas Aktif</button>
@@ -1099,7 +1077,7 @@
 
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Tahun</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Filter Tahun</h3>
                     <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
                         ${itemsHTML}
                     </div>
@@ -1118,7 +1096,7 @@
         window.openFormStatusModal = () => {
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Status Tugasan</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Status Tugasan</h3>
                     <div class="space-y-1.5">
                         <button type="button" onclick="selectFormStatus('AKTIF')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-500 ${selectedFormStatus === 'AKTIF' ? 'bg-emerald-500/15 text-emerald-500 font-bold' : ''}">🟢 AKTIF (Sedang Bertugas)</button>
                         <button type="button" onclick="selectFormStatus('PURNA')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-amber-500/10 hover:text-amber-500 ${selectedFormStatus === 'PURNA' ? 'bg-amber-500/15 text-amber-500 font-bold' : ''}">🟡 PURNA (Sudah Selesai Tugas)</button>
@@ -1142,7 +1120,7 @@
 
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Desa Penempatan</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Desa Penempatan</h3>
                     <div class="space-y-1.5">
                         ${itemsHTML}
                     </div>
@@ -1170,7 +1148,7 @@
 
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Kelompok (${selectedFormDesa})</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Kelompok (${selectedFormDesa})</h3>
                     <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
                         ${itemsHTML}
                     </div>
@@ -1185,124 +1163,9 @@
             closeCurrentActivity();
         };
 
-        // ================= MODAL EKSPOR ADVANCED WITH MODAL DROPDOWNS =================
+        // ================= MODAL EKSPOR (DENGAN PEMILIH DESA & KELOMPOK DALAM MODAL) =================
 
         window.openExportModal = () => {
-            renderExportModalDOM(true);
-        };
-
-        window.renderExportModalDOM = (isFirstOpen = false) => {
-            const html = `
-                <div class="space-y-4 text-left">
-                    <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
-                        <h3 class="text-sm font-bold text-sky-500 flex items-center gap-1.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            <span>Opsi Ekspor Data</span>
-                        </h3>
-                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
-                    </div>
-
-                    <div class="space-y-3 text-xs">
-                        <div>
-                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Desa</label>
-                            <button onclick="openExpDesaPickerModal()" id="btnExpDesaLabel" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
-                                <span>${selectedExpDesa || '-- Semua Desa --'}</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-
-                        <div>
-                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Kelompok</label>
-                            <button onclick="openExpKelompokPickerModal()" id="btnExpKelompokLabel" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
-                                <span>${selectedExpKelompok || '-- Semua Kelompok --'}</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-
-                        <div>
-                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Kolom Diekspor (${selectedExpCols.length})</label>
-                            <button onclick="openExpColsPickerModal()" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
-                                <span>Atur Kolom Ekspor</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-700 border-slate-200">
-                        <button onclick="closeCurrentActivity()" class="px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">Batal</button>
-                        <button onclick="processAdvancedExport('csv')" class="px-3 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">CSV</button>
-                        <button onclick="processAdvancedExport('excel')" class="px-3 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">Excel</button>
-                    </div>
-                </div>
-            `;
-
-            if (isFirstOpen) {
-                pushModalInstance('modal-export', html);
-            }
-        };
-
-        window.openExpDesaPickerModal = () => {
-            let itemsHTML = `<button onclick="selectExpDesa('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Desa --</button>`;
-
-            Object.keys(MASTER_DESA).forEach(desa => {
-                itemsHTML += `<button onclick="selectExpDesa('${desa}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === desa ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${desa}</button>`;
-            });
-
-            const html = `
-                <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Desa Ekspor</h3>
-                    <div class="space-y-1.5">
-                        ${itemsHTML}
-                    </div>
-                </div>
-            `;
-            pushModalInstance('modal-exp-desa-picker', html);
-        };
-
-        window.selectExpDesa = (desa) => {
-            selectedExpDesa = desa;
-            selectedExpKelompok = "";
-            const label = document.getElementById('btnExpDesaLabel');
-            if (label) label.querySelector('span').textContent = desa || '-- Semua Desa --';
-            const klpLabel = document.getElementById('btnExpKelompokLabel');
-            if (klpLabel) klpLabel.querySelector('span').textContent = '-- Semua Kelompok --';
-            closeCurrentActivity();
-        };
-
-        window.openExpKelompokPickerModal = () => {
-            let itemsHTML = `<button onclick="selectExpKelompok('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Kelompok --</button>`;
-
-            let availableKelompok = [];
-            if (selectedExpDesa && MASTER_DESA[selectedExpDesa]) {
-                availableKelompok = MASTER_DESA[selectedExpDesa];
-            } else {
-                Object.values(MASTER_DESA).forEach(list => availableKelompok.push(...list));
-                availableKelompok.sort((a, b) => a.localeCompare(b, 'id'));
-            }
-
-            availableKelompok.forEach(klp => {
-                itemsHTML += `<button onclick="selectExpKelompok('${klp}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === klp ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${klp}</button>`;
-            });
-
-            const html = `
-                <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Kelompok Ekspor</h3>
-                    <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
-                        ${itemsHTML}
-                    </div>
-                </div>
-            `;
-            pushModalInstance('modal-exp-kelompok-picker', html);
-        };
-
-        window.selectExpKelompok = (klp) => {
-            selectedExpKelompok = klp;
-            const label = document.getElementById('btnExpKelompokLabel');
-            if (label) label.querySelector('span').textContent = klp || '-- Semua Kelompok --';
-            closeCurrentActivity();
-        };
-
-        window.openExpColsPickerModal = () => {
             const allCols = [
                 { id: "status_tugas", label: "Status Tugas" },
                 { id: "nomor_induk", label: "No. Induk" },
@@ -1314,38 +1177,132 @@
                 { id: "no_telp_orang_tua", label: "Telp Ortu" }
             ];
 
-            let itemsHTML = allCols.map(c => {
-                const isChecked = selectedExpCols.includes(c.id);
-                return `
-                    <button onclick="toggleExpColSelection('${c.id}')" class="w-full p-2.5 rounded-xl text-xs font-medium flex justify-between items-center ${isChecked ? 'bg-sky-500/15 text-sky-500 font-bold' : 'dark:bg-slate-900 bg-slate-100'}">
-                        <span>${c.label}</span>
-                        <span>${isChecked ? '✓' : ''}</span>
-                    </button>
-                `;
-            }).join('');
+            let checkboxHTML = allCols.map(c => `
+                <label class="flex items-center gap-2 text-xs p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 cursor-pointer">
+                    <input type="checkbox" value="${c.id}" ${selectedExpCols.includes(c.id) ? 'checked' : ''} onchange="toggleExportCol(this)" class="exp-col-checkbox rounded bg-slate-800 border-slate-700 text-sky-500 w-4 h-4">
+                    <span class="dark:text-slate-200 text-slate-700 font-medium">${c.label}</span>
+                </label>
+            `).join('');
+
+            const html = `
+                <div class="space-y-4 text-left">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
+                        <h3 class="text-sm font-bold text-sky-500 flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <span>Opsi Ekspor Data</span>
+                        </h3>
+                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <!-- Button Modal Desa -->
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Desa</label>
+                            <button type="button" onclick="openExpDesaModal()" id="btnExpDesaLabel" class="w-full dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 text-left flex justify-between items-center active:scale-95 transition-all">
+                                <span>${selectedExpDesa || '-- Semua Desa --'}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+
+                        <!-- Button Modal Kelompok -->
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Kelompok</label>
+                            <button type="button" onclick="openExpKelompokModal()" id="btnExpKelompokLabel" class="w-full dark:bg-slate-950 bg-slate-100 dark:border-slate-800 border-slate-300 border rounded-xl p-2.5 dark:text-slate-100 text-slate-800 text-left flex justify-between items-center active:scale-95 transition-all">
+                                <span>${selectedExpKelompok || '-- Semua Kelompok --'}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+
+                        <!-- Simpel Checkbox Kolom -->
+                        <div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Pilih Kolom Diekspor</label>
+                            <div class="grid grid-cols-2 gap-1 max-h-[150px] overflow-y-auto p-2 border dark:border-slate-800 border-slate-200 rounded-xl dark:bg-slate-950/40 bg-slate-50">
+                                ${checkboxHTML}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-800 border-slate-200">
+                        <button onclick="closeCurrentActivity()" class="px-3 py-2 dark:bg-slate-800 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">Batal</button>
+                        <button onclick="processAdvancedExport('csv')" class="px-3.5 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">CSV</button>
+                        <button onclick="processAdvancedExport('excel')" class="px-3.5 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">Excel</button>
+                    </div>
+                </div>
+            `;
+
+            pushModalInstance('modal-export', html);
+        };
+
+        // Modal Pemilih Desa Ekspor
+        window.openExpDesaModal = () => {
+            let itemsHTML = `<button onclick="selectExpDesa('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Desa --</button>`;
+
+            Object.keys(MASTER_DESA).forEach(desa => {
+                itemsHTML += `<button onclick="selectExpDesa('${desa}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === desa ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${desa}</button>`;
+            });
 
             const html = `
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Kolom Diekspor</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Filter Desa Ekspor</h3>
+                    <div class="space-y-1.5">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            pushModalInstance('modal-exp-desa', html);
+        };
+
+        window.selectExpDesa = (desa) => {
+            selectedExpDesa = desa;
+            selectedExpKelompok = "";
+            const btnDesa = document.getElementById('btnExpDesaLabel');
+            if (btnDesa) btnDesa.querySelector('span').textContent = desa || '-- Semua Desa --';
+            const btnKlp = document.getElementById('btnExpKelompokLabel');
+            if (btnKlp) btnKlp.querySelector('span').textContent = '-- Semua Kelompok --';
+            closeCurrentActivity();
+        };
+
+        // Modal Pemilih Kelompok Ekspor
+        window.openExpKelompokModal = () => {
+            let availableKelompok = [];
+            if (selectedExpDesa && MASTER_DESA[selectedExpDesa]) {
+                availableKelompok = MASTER_DESA[selectedExpDesa];
+            } else {
+                Object.values(MASTER_DESA).forEach(list => availableKelompok.push(...list));
+                availableKelompok.sort((a, b) => a.localeCompare(b, 'id'));
+            }
+
+            let itemsHTML = `<button onclick="selectExpKelompok('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Kelompok --</button>`;
+
+            availableKelompok.forEach(klp => {
+                itemsHTML += `<button onclick="selectExpKelompok('${klp}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === klp ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${klp}</button>`;
+            });
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-800 border-slate-200 pb-2">Pilih Filter Kelompok Ekspor</h3>
                     <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
                         ${itemsHTML}
                     </div>
-                    <button onclick="closeCurrentActivity()" class="w-full mt-2 py-2 bg-sky-500 text-white rounded-xl text-xs font-bold">Selesai</button>
                 </div>
             `;
-            pushModalInstance('modal-exp-cols-picker', html);
+            pushModalInstance('modal-exp-kelompok', html);
         };
 
-        window.toggleExpColSelection = (colId) => {
-            if (selectedExpCols.includes(colId)) {
-                if (selectedExpCols.length > 1) {
-                    selectedExpCols = selectedExpCols.filter(c => c !== colId);
-                }
+        window.selectExpKelompok = (klp) => {
+            selectedExpKelompok = klp;
+            const btnKlp = document.getElementById('btnExpKelompokLabel');
+            if (btnKlp) btnKlp.querySelector('span').textContent = klp || '-- Semua Kelompok --';
+            closeCurrentActivity();
+        };
+
+        window.toggleExportCol = (checkbox) => {
+            const colId = checkbox.value;
+            if (checkbox.checked) {
+                if (!selectedExpCols.includes(colId)) selectedExpCols.push(colId);
             } else {
-                selectedExpCols.push(colId);
+                selectedExpCols = selectedExpCols.filter(c => c !== colId);
             }
-            closeCurrentActivity(false);
-            openExpColsPickerModal();
         };
 
         window.processAdvancedExport = (format) => {
@@ -1359,8 +1316,9 @@
                     matchDesa = MASTER_DESA[selectedExpDesa] && MASTER_DESA[selectedExpDesa].includes(item.penempatan_kelompok);
                 }
                 let matchKlp = true;
-                if (selectedExpKelompok) matchKlp = item.penempatan_kelompok === selectedExpKelompok;
-
+                if (selectedExpKelompok) {
+                    matchKlp = item.penempatan_kelompok === selectedExpKelompok;
+                }
                 return matchDesa && matchKlp;
             });
 
@@ -1408,7 +1366,7 @@
             container.innerHTML = '';
 
             if (data.length === 0) {
-                container.innerHTML = `<div class="p-6 dark:bg-slate-800/40 bg-white/50 rounded-2xl text-center text-xs text-slate-500 border border-slate-200 dark:border-slate-700/50">Data tidak ditemukan.</div>`;
+                container.innerHTML = `<div class="p-6 dark:bg-slate-900/40 bg-white/50 rounded-2xl text-center text-xs text-slate-500 border border-slate-200 dark:border-slate-800">Data tidak ditemukan.</div>`;
                 return;
             }
 
@@ -1419,10 +1377,10 @@
                     : `<span class="text-[9px] font-bold uppercase text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">PURNA</span>`;
 
                 const card = document.createElement('div');
-                card.className = "p-4 dark:bg-slate-800 bg-white dark:border-slate-700/80 border-slate-200 border rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-shadow";
+                card.className = "p-4 dark:bg-slate-900 bg-white dark:border-slate-800 border-slate-200 border rounded-2xl space-y-3 shadow-sm hover:shadow-md transition-shadow";
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-12 h-16 object-cover rounded-xl border border-slate-300 dark:border-slate-700 shrink-0">
+                        <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-12 h-16 object-cover rounded-xl border border-slate-300 dark:border-slate-800 shrink-0">
                         <div class="space-y-0.5 flex-1 min-w-0">
                             <div class="flex items-center gap-1.5">
                                 ${statusBadge}
@@ -1433,7 +1391,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end gap-1.5 pt-2 border-t dark:border-slate-700/50 border-slate-100">
+                    <div class="flex items-center justify-end gap-1.5 pt-2 border-t dark:border-slate-800 border-slate-100">
                         <button onclick="viewData('${item.id}')" class="px-2.5 py-1 bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">View</button>
                         <button onclick="printData('${item.id}')" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">Cetak</button>
                         <button onclick="editData('${item.id}')" class="px-2.5 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[10px] font-semibold rounded-lg active:scale-95 transition-all">Edit</button>
@@ -1471,7 +1429,7 @@
             }
 
             btn.disabled = true;
-            showSaveLoading(); // Menampilkan indikator loading di tengah layar
+            showSaveLoading();
 
             try {
                 let fotoUrl = document.getElementById('existing_foto_url').value || null;
@@ -1576,14 +1534,11 @@
 			const item = dataList.find(d => d.id === id);
 			if (!item) return;
 			
-			// Isi dulu data untuk area cetak fungsional
 			populatePrintArea(item);
 
-			// Tampilan khusus Preview Mobile Card yang rapi & ringkas
 			const mobilePreviewHTML = `
 				<div class="space-y-4 text-slate-800 dark:text-slate-100">
-					<!-- Header Ringkasan & Tombol Close -->
-					<div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2.5">
+					<div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2.5">
 						<div class="flex items-center gap-2">
 							<span class="text-xs bg-sky-500/10 text-sky-500 font-bold px-2.5 py-0.5 rounded-full border border-sky-500/20">
 								${item.nomor_induk || 'NO-ID'}
@@ -1595,9 +1550,8 @@
 						<button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
 					</div>
 
-					<!-- Profile Card Identitas -->
-					<div class="flex items-start gap-3.5 bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800">
-						<img src="${item.foto_url || 'https://via.placeholder.com/120x160?text=3x4'}" class="w-16 h-20 object-cover rounded-xl border border-slate-300 dark:border-slate-700 shrink-0 shadow-sm">
+					<div class="flex items-start gap-3.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+						<img src="${item.foto_url || 'https://via.placeholder.com/120x160?text=3x4'}" class="w-16 h-20 object-cover rounded-xl border border-slate-300 dark:border-slate-800 shrink-0 shadow-sm">
 						<div class="space-y-1 min-w-0 flex-1">
 							<h4 class="text-sm font-bold text-slate-900 dark:text-white leading-snug">${toTitleCase(item.nama_lengkap)}</h4>
 							<p class="text-[11px] text-slate-500 dark:text-slate-400">Panggilan: <strong class="text-slate-700 dark:text-slate-200">${toTitleCase(item.nama_panggilan) || '-'}</strong></p>
@@ -1606,36 +1560,31 @@
 						</div>
 					</div>
 
-					<!-- Grid Ringkasan Informasi Utama -->
 					<div class="space-y-2.5 text-xs">
-						<!-- Penempatan Tugas -->
 						<div class="p-3 bg-sky-500/10 border border-sky-500/20 rounded-2xl space-y-1">
 							<p class="text-[10px] font-bold uppercase tracking-wider text-sky-500">📍 Penempatan Tugas Tawangmangu</p>
 							<p class="font-bold text-slate-800 dark:text-slate-100">${toTitleCase(item.penempatan_kelompok) || '-'}</p>
 							<p class="text-[10px] text-slate-500 dark:text-slate-400">Periode: ${formatDate(item.tanggal_mulai_tugas)} s/d ${formatDate(item.tanggal_selesai_tugas)}</p>
 						</div>
 
-						<!-- Daerah Asal -->
-						<div class="p-3 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
+						<div class="p-3 dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
 							<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🏠 Daerah Asal</p>
 							<p class="font-semibold text-slate-700 dark:text-slate-200">Klp. ${toTitleCase(item.kelompok_asal) || '-'}, Desa ${toTitleCase(item.desa_asal) || '-'}</p>
 							<p class="text-[10px] text-slate-500 dark:text-slate-400">Daerah: ${toTitleCase(item.daerah_asal) || '-'} | Alumni: ${toTitleCase(item.alumni_pondok) || '-'}</p>
 						</div>
 
-						<!-- Alamat Domisili -->
-						<div class="p-3 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
+						<div class="p-3 dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
 							<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🏡 Alamat Domisili</p>
 							<p class="text-slate-700 dark:text-slate-200 leading-snug">Dk. ${toTitleCase(item.alamat_desa)}, RT/RW ${item.alamat_rt_rw || '-'}, Kec. ${toTitleCase(item.alamat_kecamatan)}, Kab. ${toTitleCase(item.alamat_kabupaten)}</p>
 						</div>
 
-						<!-- Orang Tua & Kesehatan -->
 						<div class="grid grid-cols-2 gap-2">
-							<div class="p-2.5 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
-								<p class="text-[9px] font-bold text-slate-400 uppercase">👨‍👩‍👦 Orang Tua</p>
+							<div class="p-2.5 dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
+								<p class="text-[9px] font-bold text-slate-400 uppercase">👨‍gsub‍👦 Orang Tua</p>
 								<p class="font-semibold truncate text-[11px] text-slate-700 dark:text-slate-200">${toTitleCase(item.nama_ayah) || '-'}</p>
 								<p class="text-[10px] text-slate-500 truncate">${item.no_telp_orang_tua || '-'}</p>
 							</div>
-							<div class="p-2.5 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
+							<div class="p-2.5 dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
 								<p class="text-[9px] font-bold text-slate-400 uppercase">🏥 Riw. Kesehatan</p>
 								<p class="font-semibold truncate text-[11px] text-slate-700 dark:text-slate-200">${toTitleCase(item.penyakit_diderita) || 'Sehat'}</p>
 								<p class="text-[10px] text-slate-500 truncate">Tugasan Ke-${item.tugasan_ke || 1}</p>
@@ -1643,9 +1592,8 @@
 						</div>
 					</div>
 
-					<!-- Action Buttons -->
-					<div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-700 border-slate-200">
-						<button onclick="closeCurrentActivity()" class="px-3.5 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">
+					<div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-800 border-slate-200">
+						<button onclick="closeCurrentActivity()" class="px-3.5 py-2 dark:bg-slate-800 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">
 							Tutup
 						</button>
 						<button onclick="printData('${item.id}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl active:scale-95 transition-all flex items-center gap-1.5 shadow-md">
