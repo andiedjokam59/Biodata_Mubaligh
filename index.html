@@ -13,8 +13,8 @@
     <link rel="apple-touch-icon" href="logo insan qurany.png">
     <link rel="icon" type="image/png" href="logo insan qurany.png">
     
-    <!-- Dynamic Manifest Data URI for PWA Installation -->
-    <link rel="manifest" id="manifest-placeholder">
+    <!-- PWA Manifest File Reference -->
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS & Font Inter -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -133,6 +133,14 @@
         </div>
     </div>
 
+    <!-- CENTER LOADING INDICATOR MODAL (Tepat di Tengah Layar) -->
+    <div id="saveLoadingModal" class="fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center hidden no-print backdrop-blur-sm">
+        <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center space-y-3 modal-animate max-w-[200px] w-full text-center">
+            <div class="w-10 h-10 border-4 border-sky-500/30 border-t-sky-500 rounded-full animate-spin"></div>
+            <p class="text-xs font-bold dark:text-slate-100 text-slate-800">Menyimpan Data...</p>
+        </div>
+    </div>
+
     <!-- MAIN CENTERED CONTAINER -->
     <div class="w-full max-w-md px-4 my-auto space-y-5 flex flex-col justify-center">
 
@@ -149,6 +157,11 @@
             </div>
             
             <div class="flex items-center gap-2">
+                <!-- Tombol Home -->
+                <button onclick="switchTab('home')" title="Kembali ke Home" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-slate-300 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                </button>
+
                 <!-- Mode Dark/Light Toggle Button -->
                 <button onclick="toggleDarkMode()" title="Ubah Mode Tampilan" class="w-9 h-9 rounded-full dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-300 border flex items-center justify-center dark:text-amber-400 text-slate-700 active:scale-90 transition-all duration-150 shadow-sm">
                     <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -180,7 +193,7 @@
 
                     <!-- Quick Action Buttons with SVG Icons -->
                     <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/15">
-                        <button onclick="switchTab('input')" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
+                        <button onclick="openAddNewForm()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition-all duration-150 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1.5 text-xs font-medium backdrop-blur-sm">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             <span>Tambah</span>
                         </button>
@@ -221,7 +234,7 @@
             <!-- ================= TAB 2: DIREKTORI BIODATA ================= -->
             <section id="tab-daftar" class="tab-content hidden space-y-4">
                 <div class="flex justify-between items-center">
-                    <button onclick="switchTab('home')" class="text-xs text-sky-500 font-semibold flex items-center gap-1 active:scale-95 transition-all">
+                    <button onclick="closeCurrentActivity()" class="text-xs text-sky-500 font-semibold flex items-center gap-1 active:scale-95 transition-all">
                         &larr; Kembali ke Home
                     </button>
                     <span id="badgeCount" class="text-xs bg-sky-500/10 text-sky-500 dark:text-sky-400 font-semibold px-2.5 py-1 rounded-full border border-sky-500/20">0 Data</span>
@@ -259,7 +272,7 @@
                             <span>📝</span> Formulir Biodata
                         </h3>
                         <div class="flex gap-2">
-                            <button type="button" onclick="switchTab('home')" class="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-2 py-1">
+                            <button type="button" onclick="closeCurrentActivity()" class="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-2 py-1">
                                 Kembali
                             </button>
                             <button id="btnCancelEdit" onclick="resetForm()" class="hidden text-xs dark:bg-slate-700 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 dark:text-slate-200 text-slate-700 px-3 py-1 rounded-lg active:scale-95 transition-all duration-150">
@@ -329,9 +342,9 @@
                             </div>
                         </div>
 
-                        <!-- Seksi B: Pengajian Asal -->
+                        <!-- Seksi B: Daerah Asal -->
                         <div class="space-y-3">
-                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">B. Pengajian Asal & Tugasan</p>
+                            <p class="font-bold text-sky-500 dark:text-sky-400 uppercase text-[10px] tracking-wider dark:bg-slate-900/60 bg-slate-100 p-2 rounded-lg">B. Daerah Asal & Tugasan</p>
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <label class="block dark:text-slate-400 text-slate-600 mb-1">Kelompok</label>
@@ -470,8 +483,8 @@
         </div>
 
         <div class="space-y-1.5 text-sm mb-6">
-            <h3 class="font-bold text-base mb-3 underline">B. PENGAJIAN ASAL & TUGASAN</h3>
-            <p class="font-medium mb-1">7. Alamat Pengajian Asal:</p>
+            <h3 class="font-bold text-base mb-3 underline">B. DAERAH ASAL & TUGASAN</h3>
+            <p class="font-medium mb-1">7. Alamat Daerah Asal:</p>
             <div class="ml-4 space-y-1 border-l-2 border-slate-300 pl-3 mb-2">
                 <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Kelompok</span><span>:</span><span id="view_kelompok_asal"></span></div>
                 <div class="grid grid-cols-[160px_10px_1fr] items-center"><span>- Desa</span><span>:</span><span id="view_desa_asal"></span></div>
@@ -506,25 +519,16 @@
         </div>
 
         <div class="flex justify-end gap-2 no-print border-t pt-4">
-            <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg active:scale-95 transition-all">Tutup</button>
+            <button onclick="closeCurrentActivity()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg active:scale-95 transition-all">Tutup</button>
             <button onclick="window.print()" class="px-4 py-2 bg-sky-600 text-white font-semibold text-sm rounded-lg active:scale-95 transition-all">Cetak Lembar</button>
         </div>
     </div>
 
-    <!-- MODAL POPUP GLOBAL CONTAINER (Selalu Ditengah Layar) -->
-    <div id="popupModalOverlay" class="fixed inset-0 bg-black/75 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print backdrop-blur-sm">
-        <div class="dark:bg-slate-800 bg-white dark:text-slate-100 text-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-5 border dark:border-slate-700 border-slate-200 modal-animate my-auto" id="popupModalContent">
-            <!-- Dynamic Content Injected Here -->
-        </div>
-    </div>
-
-    <!-- MODAL VIEW BIODATA DETAIL -->
-    <div id="viewModalOverlay" class="fixed inset-0 bg-black/75 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print backdrop-blur-sm">
-        <div class="bg-white text-slate-900 rounded-3xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto modal-animate my-auto" id="modalViewContent"></div>
-    </div>
+    <!-- STACK CONTAINER UNTUK DYNAMIC MODALS -->
+    <div id="modalStackContainer" class="no-print"></div>
 
     <!-- MODAL NOTIFIKASI STANDARD -->
-    <div id="customModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center hidden p-4 no-print backdrop-blur-sm">
+    <div id="customModal" class="fixed inset-0 bg-black/75 z-[100] flex items-center justify-center hidden p-4 no-print backdrop-blur-sm">
         <div class="dark:bg-slate-800 bg-white dark:border-slate-700 border-slate-200 border dark:text-slate-100 text-slate-800 rounded-3xl max-w-xs w-full p-6 text-center modal-animate my-auto shadow-2xl">
             <div id="modalIcon" class="mx-auto mb-3 w-10 h-10 flex items-center justify-center rounded-full"></div>
             <h3 id="modalTitle" class="text-base font-bold mb-1"></h3>
@@ -537,73 +541,64 @@
     <script type="module">
         import imageCompression from 'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/+esm';
 
-        // Inisialisasi PWA Dynamic Manifest
-        (function initPWA() {
-            const manifestData = {
-                "name": "Biodata Muballigh Tawangmangu",
-                "short_name": "Muballigh",
-                "start_url": "./",
-                "display": "standalone",
-                "background_color": "#0f172a",
-                "theme_color": "#0f172a",
-                "icons": [
-                    { "src": "logo insan qurany.png", "sizes": "192x192", "type": "image/png" },
-                    { "src": "logo insan qurany.png", "sizes": "512x512", "type": "image/png" }
-                ]
-            };
-            const stringManifest = JSON.stringify(manifestData);
-            const blob = new Blob([stringManifest], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-            document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
-
-            if ('serviceWorker' in navigator) {
-                const swCode = `
-                    self.addEventListener('install', e => self.skipWaiting());
-                    self.addEventListener('activate', e => self.clients.claim());
-                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
-                `;
-                const swBlob = new Blob([swCode], {type: 'text/javascript'});
-                const swUrl = URL.createObjectURL(swBlob);
-                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW error', err));
-            }
-        })();
+        // REGISTRASI SERVICE WORKER & AUTO-REFRESH ON UPDATE
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                window.location.reload();
+                            }
+                        };
+                    };
+                }).catch(err => console.error('SW Error:', err));
+            });
+        }
 
         // Inisialisasi Supabase
         const SUPABASE_URL = 'https://xijlyydfogbkcctlycsb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpamx5eWRmb2dia2NjdGx5Y3NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzAxODYsImV4cCI6MjA5NzcwNjE4Nn0.JwqYXWEt2yiLioI1o9qZ3KRrak2rtzO1Tp0eN7AuAm4';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // MASTER DATA TAWANGMANGU
+        // MASTER DATA TAWANGMANGU (Nama Desa Tanpa Kata "Desa", Diurutkan Abjad Beserta Kelompoknya)
         const MASTER_DESA = {
-            "Desa Krangean": [
-                "Nglegok Atas", "Nglegok Bawah", "Krangean Utara", "Krangean Selatan", 
-                "Tawang 1", "Ngreso", "Gondosuli", "Watusambang", "Somokado", "Tawang 2", "Gondang Bomo"
-            ],
-            "Karanglo Utara": [
-                "Plombokan", "Cepogo", "Dukuh", "Sadakan Lor", "Sekuwung", 
-                "Sadakan Kidul 1", "Sadakan Kidul 2", "Pandeyan"
-            ],
+            "Bandardawung": [
+                "Bandardawung Barat", "Bandardawung Timur", "Dawung Atas", "Dawung Bawah", 
+                "Dawung Tengah", "Gamping", "Gondang Barat", "Gondang Tengah", 
+                "Gondang Timur", "Ngasem", "Pelas Barat", "Pelas Timur"
+            ].sort((a, b) => a.localeCompare(b, 'id')),
             "Karanglo Selatan": [
-                "Blimbing 1", "Karanglo", "Pedan Utara", "Pedan Selatan", 
-                "Jabalkanil", "Blimbing 2", "Blimbing 3"
-            ],
-            "Desa Bandardawung": [
-                "Dawung Bawah", "Gondang Barat", "Dawung Atas", "Gondang Timur", 
-                "Bandardawung Timur", "Ngasem", "Pelas Timur", "Gamping", 
-                "Pelas Barat", "Bandardawung Barat", "Gondang Tengah", "Dawung Tengah"
-            ]
+                "Blimbing 1", "Blimbing 2", "Blimbing 3", "Jabalkanil", 
+                "Karanglo", "Pedan Selatan", "Pedan Utara"
+            ].sort((a, b) => a.localeCompare(b, 'id')),
+            "Karanglo Utara": [
+                "Cepogo", "Dukuh", "Pandeyan", "Plombokan", 
+                "Sadakan Kidul 1", "Sadakan Kidul 2", "Sadakan Lor", "Sekuwung"
+            ].sort((a, b) => a.localeCompare(b, 'id')),
+            "Krangean": [
+                "Gondang Bomo", "Gondosuli", "Krangean Selatan", "Krangean Utara", 
+                "Nglegok Atas", "Nglegok Bawah", "Ngreso", "Somokado", 
+                "Tawang 1", "Tawang 2", "Watusambang"
+            ].sort((a, b) => a.localeCompare(b, 'id'))
         };
 
         let dataList = [];
         
-        // State untuk Filter Modal & Form Modal
+        // State untuk Filter & Form
         let selectedFilterStatus = "";
         let selectedFilterTahun = "";
         let selectedFormStatus = "AKTIF";
         let selectedFormDesa = "";
         let selectedFormKelompok = "";
 
-        // MODE DARK / LIGHT TOGGLE DENGAN DETEKSI OTOMATIS TEMA HP SYSTEM
+        // State Ekspor Modal
+        let selectedExpDesa = "";
+        let selectedExpKelompok = "";
+        let selectedExpCols = ["status_tugas", "nomor_induk", "nama_lengkap", "penempatan_kelompok", "tanggal_mulai_tugas", "tanggal_selesai_tugas", "daerah_asal", "no_telp_orang_tua"];
+
+        // MODE DARK / LIGHT TOGGLE
         function applyTheme(isDark) {
             const html = document.documentElement;
             if (isDark) {
@@ -620,7 +615,6 @@
             if (savedTheme) {
                 applyTheme(savedTheme === 'dark');
             } else {
-                // Ikuti Pengaturan Bawaan HP / Sistem Operating System
                 const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 applyTheme(systemPrefersDark);
             }
@@ -633,7 +627,6 @@
             localStorage.setItem('theme', newDark ? 'dark' : 'light');
         };
 
-        // Deteksi Perubahan Tema HP Secara Realtime Jika Pengguna Belum Memilih Mode Manual
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('theme')) {
                 applyTheme(e.matches);
@@ -663,14 +656,27 @@
             if (refreshIcon) refreshIcon.classList.remove('rotate-180');
         }
 
-        // HELPER STATUS TUGAS
+        // SAVE LOADING INDICATOR HELPER
+        function showSaveLoading() {
+            const el = document.getElementById('saveLoadingModal');
+            if (el) el.classList.remove('hidden');
+        }
+
+        function hideSaveLoading() {
+            const el = document.getElementById('saveLoadingModal');
+            if (el) el.classList.add('hidden');
+        }
+
         function getStatusTugas(item) {
             return item.status_tugas || 'AKTIF';
         }
 
-        // ================= SISTEM NAVIGASI HISTORY & TOMBOL BACK HP =================
+        // ================= SISTEM HISTORY STACK (UNTUK BACK BERURUTAN) =================
+        let activityStack = []; // Array penampung id modal/tab teraktif
+        let isBackProcessing = false;
+
         if (!history.state) {
-            history.replaceState({ page: 'home' }, "");
+            history.replaceState({ depth: 0, type: 'home' }, "");
         }
 
         window.switchTab = (tabName, pushState = true) => {
@@ -679,58 +685,78 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (pushState && tabName !== 'home') {
-                history.pushState({ page: tabName }, "");
+                const depth = (history.state ? history.state.depth : 0) + 1;
+                activityStack.push({ type: 'tab', name: tabName });
+                history.pushState({ depth: depth, type: 'tab', name: tabName }, "");
             }
         };
 
-        function closeAllModalsUI() {
-            document.getElementById('popupModalOverlay').classList.add('hidden');
-            document.getElementById('viewModalOverlay').classList.add('hidden');
-            document.getElementById('customModal').classList.add('hidden');
-        }
+        // FUNGSI UNTUK TOMBOL TAMBAH AGAR SELALU MEMBUKA FORMULIR KOSONG
+        window.openAddNewForm = () => {
+            resetForm();
+            switchTab('input');
+        };
 
-        function isAnyModalOpen() {
-            return !document.getElementById('popupModalOverlay').classList.contains('hidden') ||
-                   !document.getElementById('viewModalOverlay').classList.contains('hidden') ||
-                   !document.getElementById('customModal').classList.contains('hidden');
-        }
+        window.pushModalInstance = (modalId, htmlContent, onModalClose = null) => {
+            const container = document.getElementById('modalStackContainer');
+            const zIndex = 50 + (activityStack.filter(a => a.type === 'modal').length * 10);
 
-        // LISTENER SYSTEM BACK HP
+            const overlay = document.createElement('div');
+            overlay.id = modalId;
+            overlay.className = `fixed inset-0 bg-black/75 flex items-center justify-center p-4 overflow-y-auto no-print backdrop-blur-sm`;
+            overlay.style.zIndex = zIndex;
+
+            overlay.innerHTML = `
+                <div class="dark:bg-slate-800 bg-white dark:text-slate-100 text-slate-800 rounded-3xl shadow-2xl max-w-sm w-full p-5 border dark:border-slate-700 border-slate-200 modal-animate my-auto">
+                    ${htmlContent}
+                </div>
+            `;
+
+            container.appendChild(overlay);
+
+            const depth = (history.state ? history.state.depth : 0) + 1;
+            activityStack.push({ type: 'modal', id: modalId, onClose: onModalClose });
+            history.pushState({ depth: depth, type: 'modal', id: modalId }, "");
+        };
+
+        window.closeCurrentActivity = (triggerHistoryBack = true) => {
+            if (activityStack.length === 0) return;
+
+            const topActivity = activityStack.pop();
+
+            if (topActivity.type === 'modal') {
+                const el = document.getElementById(topActivity.id);
+                if (el) el.remove();
+                if (topActivity.onClose) topActivity.onClose();
+            } else if (topActivity.type === 'tab') {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                const prevTab = activityStack.filter(a => a.type === 'tab').pop();
+                if (prevTab) {
+                    document.getElementById(`tab-${prevTab.name}`).classList.remove('hidden');
+                } else {
+                    document.getElementById('tab-home').classList.remove('hidden');
+                }
+            }
+
+            if (triggerHistoryBack) {
+                isBackProcessing = true;
+                history.back();
+            }
+        };
+
+        // LISTENER TOMBOL BACK SYSTEM HP
         window.addEventListener('popstate', (e) => {
-            if (isAnyModalOpen()) {
-                closeAllModalsUI();
+            if (isBackProcessing) {
+                isBackProcessing = false;
                 return;
             }
 
-            const tabDaftar = document.getElementById('tab-daftar');
-            const tabInput = document.getElementById('tab-input');
-            if (!tabDaftar.classList.contains('hidden') || !tabInput.classList.contains('hidden')) {
-                switchTab('home', false);
-                return;
+            if (activityStack.length > 0) {
+                closeCurrentActivity(false);
             }
         });
 
-        // POPUP MODAL SYSTEM
-        window.openPopupModal = (htmlContent) => {
-            const overlay = document.getElementById('popupModalOverlay');
-            const content = document.getElementById('popupModalContent');
-            content.innerHTML = htmlContent;
-            
-            history.pushState({ modalOpen: true }, "");
-            overlay.classList.remove('hidden');
-        };
-
-        window.closePopupModal = (triggerBack = true) => {
-            const overlay = document.getElementById('popupModalOverlay');
-            if (!overlay.classList.contains('hidden')) {
-                overlay.classList.add('hidden');
-                if (triggerBack && history.state && history.state.modalOpen) {
-                    history.back();
-                }
-            }
-        };
-
-        // MODAL NOTIF
+        // MODAL NOTIFIKASI
         function showModal({ type = 'info', title, message, onConfirm = null }) {
             const modal = document.getElementById('customModal');
             const iconContainer = document.getElementById('modalIcon');
@@ -757,12 +783,12 @@
                 const btnCancel = document.createElement('button');
                 btnCancel.className = 'px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
                 btnCancel.textContent = 'Batal';
-                btnCancel.onclick = () => closeCustomModal(true);
+                btnCancel.onclick = () => closeCustomModal();
 
                 const btnOk = document.createElement('button');
                 btnOk.className = 'px-3 py-2 bg-red-600 text-white text-xs font-semibold rounded-xl flex-1 active:scale-95 transition-all';
                 btnOk.textContent = 'Ya, Hapus';
-                btnOk.onclick = () => { closeCustomModal(true); if (onConfirm) onConfirm(); };
+                btnOk.onclick = () => { closeCustomModal(); if (onConfirm) onConfirm(); };
 
                 actionsEl.appendChild(btnCancel);
                 actionsEl.appendChild(btnOk);
@@ -770,21 +796,21 @@
                 const btnOk = document.createElement('button');
                 btnOk.className = 'px-6 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl w-full active:scale-95 transition-all';
                 btnOk.textContent = 'OK';
-                btnOk.onclick = () => closeCustomModal(true);
+                btnOk.onclick = () => closeCustomModal();
                 actionsEl.appendChild(btnOk);
             }
 
-            history.pushState({ modalOpen: true }, "");
+            const depth = (history.state ? history.state.depth : 0) + 1;
+            activityStack.push({ type: 'modal', id: 'customModal' });
+            history.pushState({ depth: depth, type: 'modal', id: 'customModal' }, "");
             modal.classList.remove('hidden');
         }
 
-        window.closeCustomModal = (triggerBack = true) => {
+        window.closeCustomModal = () => {
             const modal = document.getElementById('customModal');
             if (!modal.classList.contains('hidden')) {
                 modal.classList.add('hidden');
-                if (triggerBack && history.state && history.state.modalOpen) {
-                    history.back();
-                }
+                closeCurrentActivity(true);
             }
         };
 
@@ -842,9 +868,8 @@
             document.getElementById('badgeCount').textContent = `${dataList.length} Total Data`;
         }
 
-        // ================= MODAL TOMBOL MONITORING BOARD =================
+        // ================= MODAL MONITORING BOARD =================
 
-        // PAPAN AKTIF MODAL
         window.openModalAktif = () => {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
             let itemsHTML = '';
@@ -860,7 +885,7 @@
                             <p class="text-[10px] text-sky-500 font-semibold truncate">Klp: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
                             <p class="text-[9px] text-slate-400">Asal: ${toTitleCase(item.daerah_asal) || '-'}</p>
                         </div>
-                        <button onclick="triggerDetailFromModal('${item.id}')" class="px-2.5 py-1.5 bg-sky-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
+                        <button onclick="viewData('${item.id}')" class="px-2.5 py-1.5 bg-sky-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
                             Detail
                         </button>
                     </div>
@@ -873,29 +898,21 @@
                         <h3 class="text-sm font-bold text-emerald-500 flex items-center gap-1.5">
                             <span>🟢</span> Personil Tugas Aktif (${aktifList.length})
                         </h3>
-                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
                     </div>
                     <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
                         ${itemsHTML}
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-aktif', html);
         };
 
-        window.triggerDetailFromModal = (id) => {
-            closePopupModal(false);
-            setTimeout(() => {
-                viewData(id);
-            }, 50);
-        };
-
-        // PAPAN PURNA MODAL
         window.openModalPurna = () => {
-            renderModalPurnaContent('');
+            renderModalPurnaContent('', true);
         };
 
-        window.renderModalPurnaContent = (kw = '') => {
+        window.renderModalPurnaContent = (kw = '', isFirstOpen = false) => {
             const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA' && 
                 (!kw || (d.nama_lengkap && d.nama_lengkap.toLowerCase().includes(kw.toLowerCase())) ||
                 (d.nomor_induk && d.nomor_induk.toLowerCase().includes(kw.toLowerCase())))
@@ -911,7 +928,7 @@
                             <p class="text-[10px] text-amber-500 font-semibold truncate">Purna: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
                             <p class="text-[9px] text-slate-400">Selesai: ${formatDate(item.tanggal_selesai_tugas)}</p>
                         </div>
-                        <button onclick="triggerDetailFromModal('${item.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
+                        <button onclick="viewData('${item.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
                             Detail
                         </button>
                     </div>
@@ -923,23 +940,52 @@
                         <h3 class="text-sm font-bold text-amber-500 flex items-center gap-1.5">
                             <span>🟡</span> Muballigh Purna Tugas (${purnaList.length})
                         </h3>
-                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
                     </div>
 
                     <div class="flex gap-2">
-                        <input type="text" id="purnaSearchInput" value="${kw}" placeholder="Filter nama/no. induk..." oninput="renderModalPurnaContent(this.value)" class="flex-1 dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 text-xs outline-none">
+                        <input type="text" id="purnaSearchInput" value="${kw}" placeholder="Filter nama/no. induk..." oninput="updateModalPurnaDOM(this.value)" class="flex-1 dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 text-xs outline-none">
                         <button onclick="exportPurnaOnly()" title="Ekspor Khusus Purna" class="px-3 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold active:scale-95 transition-all shrink-0 flex items-center gap-1">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             <span>Ekspor</span>
                         </button>
                     </div>
 
-                    <div class="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1">
+                    <div id="purnaListContainer" class="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1">
                         ${itemsHTML}
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+
+            if (isFirstOpen) {
+                pushModalInstance('modal-purna', html);
+            }
+        };
+
+        window.updateModalPurnaDOM = (kw) => {
+            const purnaList = dataList.filter(d => getStatusTugas(d) === 'PURNA' && 
+                (!kw || (d.nama_lengkap && d.nama_lengkap.toLowerCase().includes(kw.toLowerCase())) ||
+                (d.nomor_induk && d.nomor_induk.toLowerCase().includes(kw.toLowerCase())))
+            );
+
+            const container = document.getElementById('purnaListContainer');
+            if (container) {
+                container.innerHTML = purnaList.length === 0 ? 
+                    `<p class="text-xs text-slate-400 text-center py-4">Data purna tugas tidak ditemukan.</p>` :
+                    purnaList.map(item => `
+                        <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl flex items-center gap-3">
+                            <img src="${item.foto_url || 'https://via.placeholder.com/60x80?text=3x4'}" class="w-10 h-12 object-cover rounded-lg shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <h5 class="text-xs font-bold truncate">${toTitleCase(item.nama_lengkap)}</h5>
+                                <p class="text-[10px] text-amber-500 font-semibold truncate">Purna: ${toTitleCase(item.penempatan_kelompok) || '-'}</p>
+                                <p class="text-[9px] text-slate-400">Selesai: ${formatDate(item.tanggal_selesai_tugas)}</p>
+                            </div>
+                            <button onclick="viewData('${item.id}')" class="px-2.5 py-1.5 bg-amber-500 text-white text-[10px] font-bold rounded-xl active:scale-95 transition-all shrink-0 shadow-sm">
+                                Detail
+                            </button>
+                        </div>
+                    `).join('');
+            }
         };
 
         window.exportPurnaOnly = () => {
@@ -962,7 +1008,6 @@
             XLSX.writeFile(wb, `Data_Muballigh_Purna_Tawangmangu_${Date.now()}.xlsx`);
         };
 
-        // PAPAN KELOMPOK KOSONG MODAL
         window.openModalKosong = () => {
             const aktifList = dataList.filter(d => getStatusTugas(d) === 'AKTIF');
             const activeKelompokSet = new Set(aktifList.map(d => d.penempatan_kelompok).filter(Boolean));
@@ -975,14 +1020,25 @@
                 totalKosong += emptyList.length;
 
                 if (emptyList.length > 0) {
+                    const listItems = emptyList.map(k => `
+                        <div class="flex items-center gap-2 py-1.5 px-2.5 dark:bg-slate-900/60 bg-slate-100 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                            <span class="text-xs font-medium dark:text-slate-200 text-slate-700">${k}</span>
+                        </div>
+                    `).join('');
+
                     emptyDesaHTML += `
-                        <div class="p-3 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700 border-slate-200 rounded-2xl space-y-1.5">
-                            <div class="flex justify-between items-center">
-                                <h5 class="text-xs font-bold text-rose-500">${namaDesa}</h5>
-                                <span class="text-[9px] bg-rose-500/10 text-rose-500 font-bold px-2 py-0.5 rounded-full">${emptyList.length} Kosong</span>
+                        <div class="p-3.5 dark:bg-slate-900 bg-slate-50 border dark:border-slate-700/80 border-slate-200 rounded-2xl space-y-2.5">
+                            <div class="flex justify-between items-center border-b dark:border-slate-800 border-slate-200 pb-2">
+                                <h5 class="text-xs font-bold text-sky-500 uppercase tracking-wide flex items-center gap-1.5">
+                                    <span>📍</span> ${namaDesa}
+                                </h5>
+                                <span class="text-[10px] bg-amber-500/15 text-amber-500 dark:text-amber-400 font-extrabold px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                                    ${emptyList.length} Kelompok Kosong
+                                </span>
                             </div>
-                            <div class="flex flex-wrap gap-1">
-                                ${emptyList.map(k => `<span class="text-[9px] bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-0.5 rounded-md font-medium">${k}</span>`).join('')}
+                            <div class="flex flex-col gap-1.5">
+                                ${listItems}
                             </div>
                         </div>
                     `;
@@ -990,7 +1046,7 @@
             });
 
             if (totalKosong === 0) {
-                emptyDesaHTML = `<p class="text-xs text-emerald-500 text-center py-4 font-bold">Semua kelompok di seluruh desa telah terisi muballigh!</p>`;
+                emptyDesaHTML = `<p class="text-xs text-emerald-500 text-center py-6 font-bold">Semua kelompok di seluruh desa telah terisi muballigh!</p>`;
             }
 
             const html = `
@@ -999,19 +1055,18 @@
                         <h3 class="text-sm font-bold text-rose-500 flex items-center gap-1.5">
                             <span>🔴</span> Rincian Kelompok Kosong (${totalKosong})
                         </h3>
-                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
                     </div>
-                    <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+                    <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                         ${emptyDesaHTML}
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-kosong', html);
         };
 
-        // ================= MODAL FILTER & FORM DROPDOWNS =================
+        // ================= MODAL PEMILIH (REPLACING ALL DROPDOWNS) =================
 
-        // Filter Status Modal
         window.openFilterStatusModal = () => {
             const html = `
                 <div class="space-y-3">
@@ -1023,18 +1078,17 @@
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-filter-status', html);
         };
 
         window.selectFilterStatus = (val) => {
             selectedFilterStatus = val;
             const labelMap = { '': '-- Semua Status --', 'AKTIF': '🟢 Tugas Aktif', 'PURNA': '🟡 Purna Tugas' };
             document.getElementById('btnFilterStatusLabel').querySelector('span').textContent = labelMap[val];
-            closePopupModal(true);
+            closeCurrentActivity();
             applyFilter();
         };
 
-        // Filter Tahun Modal
         window.openFilterTahunModal = () => {
             const list = [...new Set(dataList.map(d => getYear(d.tanggal_mulai_tugas)).filter(Boolean))].sort((a,b) => b - a);
             let itemsHTML = `<button onclick="selectFilterTahun('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFilterTahun === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Tahun --</button>`;
@@ -1051,17 +1105,16 @@
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-filter-tahun', html);
         };
 
         window.selectFilterTahun = (val) => {
             selectedFilterTahun = val;
             document.getElementById('btnFilterTahunLabel').querySelector('span').textContent = val ? `Tahun ${val}` : '-- Semua Tahun --';
-            closePopupModal(true);
+            closeCurrentActivity();
             applyFilter();
         };
 
-        // Form Status Tugas Modal
         window.openFormStatusModal = () => {
             const html = `
                 <div class="space-y-3">
@@ -1072,17 +1125,16 @@
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-form-status', html);
         };
 
         window.selectFormStatus = (val) => {
             selectedFormStatus = val;
             const labelMap = { 'AKTIF': '🟢 AKTIF (Sedang Bertugas)', 'PURNA': '🟡 PURNA (Sudah Selesai Tugas)' };
             document.getElementById('btnFormStatusLabel').querySelector('span').textContent = labelMap[val];
-            closePopupModal(true);
+            closeCurrentActivity();
         };
 
-        // Form Desa Penempatan Modal
         window.openFormDesaModal = () => {
             let itemsHTML = Object.keys(MASTER_DESA).map(desa => `
                 <button type="button" onclick="selectFormDesa('${desa}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedFormDesa === desa ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${desa}</button>
@@ -1096,7 +1148,7 @@
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-form-desa', html);
         };
 
         window.selectFormDesa = (desa) => {
@@ -1104,10 +1156,9 @@
             selectedFormKelompok = "";
             document.getElementById('btnFormDesaLabel').querySelector('span').textContent = desa;
             document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = '-- Pilih Kelompok --';
-            closePopupModal(true);
+            closeCurrentActivity();
         };
 
-        // Form Kelompok Penempatan Modal
         window.openFormKelompokModal = () => {
             if (!selectedFormDesa || !MASTER_DESA[selectedFormDesa]) {
                 return showModal({ type: 'error', title: 'Pilih Desa', message: 'Silakan pilih Desa Penempatan terlebih dahulu.' });
@@ -1125,19 +1176,22 @@
                     </div>
                 </div>
             `;
-            openPopupModal(html);
+            pushModalInstance('modal-form-kelompok', html);
         };
 
         window.selectFormKelompok = (klp) => {
             selectedFormKelompok = klp;
             document.getElementById('btnFormKelompokLabel').querySelector('span').textContent = klp;
-            closePopupModal(true);
+            closeCurrentActivity();
         };
 
-        // ================= MODAL EKSPOR ADVANCED =================
-        window.openExportModal = () => {
-            let desaOpts = Object.keys(MASTER_DESA).map(d => `<option value="${d}">${d}</option>`).join('');
+        // ================= MODAL EKSPOR ADVANCED WITH MODAL DROPDOWNS =================
 
+        window.openExportModal = () => {
+            renderExportModalDOM(true);
+        };
+
+        window.renderExportModalDOM = (isFirstOpen = false) => {
             const html = `
                 <div class="space-y-4 text-left">
                     <div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2">
@@ -1145,82 +1199,167 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             <span>Opsi Ekspor Data</span>
                         </h3>
-                        <button onclick="closePopupModal(true)" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+                        <button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
                     </div>
 
                     <div class="space-y-3 text-xs">
                         <div>
                             <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Desa</label>
-                            <select id="expDesaSelect" onchange="updateExpKelompokOptions()" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 outline-none">
-                                <option value="">-- Semua Desa --</option>
-                                ${desaOpts}
-                            </select>
+                            <button onclick="openExpDesaPickerModal()" id="btnExpDesaLabel" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
+                                <span>${selectedExpDesa || '-- Semua Desa --'}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
                         </div>
 
                         <div>
                             <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Filter Per Kelompok</label>
-                            <select id="expKelompokSelect" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2 outline-none">
-                                <option value="">-- Semua Kelompok --</option>
-                            </select>
+                            <button onclick="openExpKelompokPickerModal()" id="btnExpKelompokLabel" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
+                                <span>${selectedExpKelompok || '-- Semua Kelompok --'}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
                         </div>
 
                         <div>
-                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Pilih Kolom Yang Diekspor</label>
-                            <div class="grid grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 max-h-36 overflow-y-auto">
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="status_tugas" checked> Status</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="nomor_induk" checked> No. Induk</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="nama_lengkap" checked> Nama</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="penempatan_kelompok" checked> Kelompok</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="tanggal_mulai_tugas" checked> Mulai Tugas</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="tanggal_selesai_tugas" checked> Selesai Tugas</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="daerah_asal" checked> Daerah Asal</label>
-                                <label class="flex items-center gap-1.5"><input type="checkbox" class="expCol" value="no_telp_orang_tua" checked> Telp Ortu</label>
-                            </div>
+                            <label class="block dark:text-slate-400 text-slate-600 mb-1 font-semibold">Kolom Diekspor (${selectedExpCols.length})</label>
+                            <button onclick="openExpColsPickerModal()" class="w-full dark:bg-slate-900 bg-slate-100 border dark:border-slate-700 border-slate-300 rounded-xl p-2.5 text-left flex justify-between items-center">
+                                <span>Atur Kolom Ekspor</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-700 border-slate-200">
-                        <button onclick="closePopupModal(true)" class="px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">Batal</button>
+                        <button onclick="closeCurrentActivity()" class="px-3 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">Batal</button>
                         <button onclick="processAdvancedExport('csv')" class="px-3 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">CSV</button>
                         <button onclick="processAdvancedExport('excel')" class="px-3 py-2 bg-sky-500 text-white text-xs font-semibold rounded-xl active:scale-95 transition-all">Excel</button>
                     </div>
                 </div>
             `;
-            openPopupModal(html);
-        };
 
-        window.updateExpKelompokOptions = () => {
-            const desa = document.getElementById('expDesaSelect').value;
-            const klpSelect = document.getElementById('expKelompokSelect');
-            klpSelect.innerHTML = '<option value="">-- Semua Kelompok --</option>';
-
-            if (desa && MASTER_DESA[desa]) {
-                MASTER_DESA[desa].forEach(k => {
-                    const opt = document.createElement('option');
-                    opt.value = k;
-                    opt.textContent = k;
-                    klpSelect.appendChild(opt);
-                });
+            if (isFirstOpen) {
+                pushModalInstance('modal-export', html);
             }
         };
 
+        window.openExpDesaPickerModal = () => {
+            let itemsHTML = `<button onclick="selectExpDesa('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Desa --</button>`;
+
+            Object.keys(MASTER_DESA).forEach(desa => {
+                itemsHTML += `<button onclick="selectExpDesa('${desa}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpDesa === desa ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${desa}</button>`;
+            });
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Desa Ekspor</h3>
+                    <div class="space-y-1.5">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            pushModalInstance('modal-exp-desa-picker', html);
+        };
+
+        window.selectExpDesa = (desa) => {
+            selectedExpDesa = desa;
+            selectedExpKelompok = "";
+            const label = document.getElementById('btnExpDesaLabel');
+            if (label) label.querySelector('span').textContent = desa || '-- Semua Desa --';
+            const klpLabel = document.getElementById('btnExpKelompokLabel');
+            if (klpLabel) klpLabel.querySelector('span').textContent = '-- Semua Kelompok --';
+            closeCurrentActivity();
+        };
+
+        window.openExpKelompokPickerModal = () => {
+            let itemsHTML = `<button onclick="selectExpKelompok('')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === '' ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">-- Semua Kelompok --</button>`;
+
+            let availableKelompok = [];
+            if (selectedExpDesa && MASTER_DESA[selectedExpDesa]) {
+                availableKelompok = MASTER_DESA[selectedExpDesa];
+            } else {
+                Object.values(MASTER_DESA).forEach(list => availableKelompok.push(...list));
+                availableKelompok.sort((a, b) => a.localeCompare(b, 'id'));
+            }
+
+            availableKelompok.forEach(klp => {
+                itemsHTML += `<button onclick="selectExpKelompok('${klp}')" class="w-full text-left p-2.5 rounded-xl text-xs font-medium hover:bg-sky-500/10 hover:text-sky-500 ${selectedExpKelompok === klp ? 'bg-sky-500/15 text-sky-500 font-bold' : ''}">${klp}</button>`;
+            });
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Filter Kelompok Ekspor</h3>
+                    <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
+                        ${itemsHTML}
+                    </div>
+                </div>
+            `;
+            pushModalInstance('modal-exp-kelompok-picker', html);
+        };
+
+        window.selectExpKelompok = (klp) => {
+            selectedExpKelompok = klp;
+            const label = document.getElementById('btnExpKelompokLabel');
+            if (label) label.querySelector('span').textContent = klp || '-- Semua Kelompok --';
+            closeCurrentActivity();
+        };
+
+        window.openExpColsPickerModal = () => {
+            const allCols = [
+                { id: "status_tugas", label: "Status Tugas" },
+                { id: "nomor_induk", label: "No. Induk" },
+                { id: "nama_lengkap", label: "Nama Lengkap" },
+                { id: "penempatan_kelompok", label: "Kelompok" },
+                { id: "tanggal_mulai_tugas", label: "Mulai Tugas" },
+                { id: "tanggal_selesai_tugas", label: "Selesai Tugas" },
+                { id: "daerah_asal", label: "Daerah Asal" },
+                { id: "no_telp_orang_tua", label: "Telp Ortu" }
+            ];
+
+            let itemsHTML = allCols.map(c => {
+                const isChecked = selectedExpCols.includes(c.id);
+                return `
+                    <button onclick="toggleExpColSelection('${c.id}')" class="w-full p-2.5 rounded-xl text-xs font-medium flex justify-between items-center ${isChecked ? 'bg-sky-500/15 text-sky-500 font-bold' : 'dark:bg-slate-900 bg-slate-100'}">
+                        <span>${c.label}</span>
+                        <span>${isChecked ? '✓' : ''}</span>
+                    </button>
+                `;
+            }).join('');
+
+            const html = `
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b dark:border-slate-700 border-slate-200 pb-2">Pilih Kolom Diekspor</h3>
+                    <div class="space-y-1.5 max-h-[50vh] overflow-y-auto">
+                        ${itemsHTML}
+                    </div>
+                    <button onclick="closeCurrentActivity()" class="w-full mt-2 py-2 bg-sky-500 text-white rounded-xl text-xs font-bold">Selesai</button>
+                </div>
+            `;
+            pushModalInstance('modal-exp-cols-picker', html);
+        };
+
+        window.toggleExpColSelection = (colId) => {
+            if (selectedExpCols.includes(colId)) {
+                if (selectedExpCols.length > 1) {
+                    selectedExpCols = selectedExpCols.filter(c => c !== colId);
+                }
+            } else {
+                selectedExpCols.push(colId);
+            }
+            closeCurrentActivity(false);
+            openExpColsPickerModal();
+        };
+
         window.processAdvancedExport = (format) => {
-            const desa = document.getElementById('expDesaSelect').value;
-            const klp = document.getElementById('expKelompokSelect').value;
-
-            const selectedCols = Array.from(document.querySelectorAll('.expCol:checked')).map(c => c.value);
-
-            if (selectedCols.length === 0) {
+            if (selectedExpCols.length === 0) {
                 return showModal({ type: 'error', title: 'Pilih Kolom', message: 'Minimal pilih 1 kolom untuk diekspor.' });
             }
 
             let filtered = dataList.filter(item => {
                 let matchDesa = true;
-                if (desa) {
-                    matchDesa = MASTER_DESA[desa] && MASTER_DESA[desa].includes(item.penempatan_kelompok);
+                if (selectedExpDesa) {
+                    matchDesa = MASTER_DESA[selectedExpDesa] && MASTER_DESA[selectedExpDesa].includes(item.penempatan_kelompok);
                 }
                 let matchKlp = true;
-                if (klp) matchKlp = item.penempatan_kelompok === klp;
+                if (selectedExpKelompok) matchKlp = item.penempatan_kelompok === selectedExpKelompok;
 
                 return matchDesa && matchKlp;
             });
@@ -1242,7 +1381,7 @@
 
             const expData = filtered.map((item, index) => {
                 let row = { "No": index + 1 };
-                selectedCols.forEach(col => {
+                selectedExpCols.forEach(col => {
                     let val = item[col] || '-';
                     if (col === 'nama_lengkap' || col === 'penempatan_kelompok' || col === 'daerah_asal') val = toTitleCase(val);
                     row[fieldLabels[col] || col] = val;
@@ -1254,7 +1393,7 @@
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Ekspor Biodata");
 
-            closePopupModal(true);
+            closeCurrentActivity();
 
             if (format === 'csv') {
                 XLSX.writeFile(wb, `Ekspor_Biodata_${Date.now()}.csv`, { bookType: 'csv' });
@@ -1332,7 +1471,7 @@
             }
 
             btn.disabled = true;
-            showSplashScreen();
+            showSaveLoading(); // Menampilkan indikator loading di tengah layar
 
             try {
                 let fotoUrl = document.getElementById('existing_foto_url').value || null;
@@ -1380,20 +1519,24 @@
                 if (editId) {
                     const { error } = await supabase.from('muballigh_biodata').update(payload).eq('id', editId);
                     if (error) throw error;
+                    hideSaveLoading();
                     showModal({ type: 'success', title: 'Berhasil', message: 'Data berhasil diperbarui.' });
                 } else {
                     const { error } = await supabase.from('muballigh_biodata').insert([payload]);
                     if (error) throw error;
+                    hideSaveLoading();
                     showModal({ type: 'success', title: 'Berhasil', message: 'Data berhasil ditambahkan.' });
                 }
 
-                resetForm(false);
-                fetchBiodata();
+                resetForm();
+                await fetchBiodata();
                 switchTab('daftar');
 
             } catch (err) {
+                hideSaveLoading();
                 showModal({ type: 'error', title: 'Gagal', message: err.message });
             } finally {
+                hideSaveLoading();
                 btn.disabled = false;
             }
         });
@@ -1430,24 +1573,91 @@
         }
 
         window.viewData = (id) => {
-            const item = dataList.find(d => d.id === id);
-            if (!item) return;
-            populatePrintArea(item);
-            document.getElementById('modalViewContent').innerHTML = document.getElementById('printArea').innerHTML;
-            
-            history.pushState({ modalOpen: true }, "");
-            document.getElementById('viewModalOverlay').classList.remove('hidden');
-        };
+			const item = dataList.find(d => d.id === id);
+			if (!item) return;
+			
+			// Isi dulu data untuk area cetak fungsional
+			populatePrintArea(item);
 
-        window.closeViewModal = (triggerBack = true) => {
-            const overlay = document.getElementById('viewModalOverlay');
-            if (!overlay.classList.contains('hidden')) {
-                overlay.classList.add('hidden');
-                if (triggerBack && history.state && history.state.modalOpen) {
-                    history.back();
-                }
-            }
-        };
+			// Tampilan khusus Preview Mobile Card yang rapi & ringkas
+			const mobilePreviewHTML = `
+				<div class="space-y-4 text-slate-800 dark:text-slate-100">
+					<!-- Header Ringkasan & Tombol Close -->
+					<div class="flex justify-between items-center border-b dark:border-slate-700 border-slate-200 pb-2.5">
+						<div class="flex items-center gap-2">
+							<span class="text-xs bg-sky-500/10 text-sky-500 font-bold px-2.5 py-0.5 rounded-full border border-sky-500/20">
+								${item.nomor_induk || 'NO-ID'}
+							</span>
+							<span class="text-xs font-bold ${getStatusTugas(item) === 'AKTIF' ? 'text-emerald-500' : 'text-amber-500'}">
+								● ${getStatusTugas(item)}
+							</span>
+						</div>
+						<button onclick="closeCurrentActivity()" class="text-slate-400 hover:text-slate-200 text-sm font-bold px-2 py-1">✕</button>
+					</div>
+
+					<!-- Profile Card Identitas -->
+					<div class="flex items-start gap-3.5 bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+						<img src="${item.foto_url || 'https://via.placeholder.com/120x160?text=3x4'}" class="w-16 h-20 object-cover rounded-xl border border-slate-300 dark:border-slate-700 shrink-0 shadow-sm">
+						<div class="space-y-1 min-w-0 flex-1">
+							<h4 class="text-sm font-bold text-slate-900 dark:text-white leading-snug">${toTitleCase(item.nama_lengkap)}</h4>
+							<p class="text-[11px] text-slate-500 dark:text-slate-400">Panggilan: <strong class="text-slate-700 dark:text-slate-200">${toTitleCase(item.nama_panggilan) || '-'}</strong></p>
+							<p class="text-[11px] text-slate-500 dark:text-slate-400">TTL: <span class="text-slate-700 dark:text-slate-200">${toTitleCase(item.tempat_lahir) || '-'}, ${formatDate(item.tanggal_lahir)}</span></p>
+							<p class="text-[11px] text-slate-500 dark:text-slate-400">Pendidikan: <span class="text-slate-700 dark:text-slate-200">${item.pendidikan_terakhir || '-'}</span></p>
+						</div>
+					</div>
+
+					<!-- Grid Ringkasan Informasi Utama -->
+					<div class="space-y-2.5 text-xs">
+						<!-- Penempatan Tugas -->
+						<div class="p-3 bg-sky-500/10 border border-sky-500/20 rounded-2xl space-y-1">
+							<p class="text-[10px] font-bold uppercase tracking-wider text-sky-500">📍 Penempatan Tugas Tawangmangu</p>
+							<p class="font-bold text-slate-800 dark:text-slate-100">${toTitleCase(item.penempatan_kelompok) || '-'}</p>
+							<p class="text-[10px] text-slate-500 dark:text-slate-400">Periode: ${formatDate(item.tanggal_mulai_tugas)} s/d ${formatDate(item.tanggal_selesai_tugas)}</p>
+						</div>
+
+						<!-- Daerah Asal -->
+						<div class="p-3 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
+							<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🏠 Daerah Asal</p>
+							<p class="font-semibold text-slate-700 dark:text-slate-200">Klp. ${toTitleCase(item.kelompok_asal) || '-'}, Desa ${toTitleCase(item.desa_asal) || '-'}</p>
+							<p class="text-[10px] text-slate-500 dark:text-slate-400">Daerah: ${toTitleCase(item.daerah_asal) || '-'} | Alumni: ${toTitleCase(item.alumni_pondok) || '-'}</p>
+						</div>
+
+						<!-- Alamat Domisili -->
+						<div class="p-3 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-1">
+							<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🏡 Alamat Domisili</p>
+							<p class="text-slate-700 dark:text-slate-200 leading-snug">Dk. ${toTitleCase(item.alamat_desa)}, RT/RW ${item.alamat_rt_rw || '-'}, Kec. ${toTitleCase(item.alamat_kecamatan)}, Kab. ${toTitleCase(item.alamat_kabupaten)}</p>
+						</div>
+
+						<!-- Orang Tua & Kesehatan -->
+						<div class="grid grid-cols-2 gap-2">
+							<div class="p-2.5 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
+								<p class="text-[9px] font-bold text-slate-400 uppercase">👨‍👩‍👦 Orang Tua</p>
+								<p class="font-semibold truncate text-[11px] text-slate-700 dark:text-slate-200">${toTitleCase(item.nama_ayah) || '-'}</p>
+								<p class="text-[10px] text-slate-500 truncate">${item.no_telp_orang_tua || '-'}</p>
+							</div>
+							<div class="p-2.5 dark:bg-slate-900/40 bg-slate-50 border border-slate-200 dark:border-slate-800 rounded-xl space-y-0.5">
+								<p class="text-[9px] font-bold text-slate-400 uppercase">🏥 Riw. Kesehatan</p>
+								<p class="font-semibold truncate text-[11px] text-slate-700 dark:text-slate-200">${toTitleCase(item.penyakit_diderita) || 'Sehat'}</p>
+								<p class="text-[10px] text-slate-500 truncate">Tugasan Ke-${item.tugasan_ke || 1}</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Action Buttons -->
+					<div class="flex items-center justify-end gap-2 pt-2 border-t dark:border-slate-700 border-slate-200">
+						<button onclick="closeCurrentActivity()" class="px-3.5 py-2 dark:bg-slate-700 bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl active:scale-95 transition-all">
+							Tutup
+						</button>
+						<button onclick="printData('${item.id}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl active:scale-95 transition-all flex items-center gap-1.5 shadow-md">
+							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+							<span>Cetak Lengkap</span>
+						</button>
+					</div>
+				</div>
+			`;
+
+			pushModalInstance(`modal-view-${id}`, mobilePreviewHTML);
+		};
 
         window.printData = (id) => {
             const item = dataList.find(d => d.id === id);
@@ -1517,7 +1727,7 @@
             switchTab('input');
         };
 
-        window.resetForm = (triggerBack = true) => {
+        window.resetForm = () => {
             document.getElementById('biodataForm').reset();
             document.getElementById('edit_id').value = '';
             document.getElementById('existing_foto_url').value = '';
@@ -1551,7 +1761,7 @@
             });
         };
 
-        // INITAL LOAD
+        // INITIAL LOAD
         document.addEventListener('DOMContentLoaded', fetchBiodata);
     </script>
 </body>
